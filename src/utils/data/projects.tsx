@@ -1,13 +1,13 @@
 import type { Project } from "@/types";
 
 export const arrProjects: Project[] = [
-  {
-    href: "https://cafuntalk.com",
-    name: "CafunTalk",
-    desc: "Bate-papo moderno, sem distrações, privado e sem histórico",
-    tech: ["React", "Typescript", "Tailwind", "Express"],
-    img: "./src/projects/cafuntalk.webp",
-  },
+  // {
+  //   href: "https://cafuntalk.com",
+  //   name: "CafunTalk",
+  //   desc: "Bate-papo moderno, sem distrações, privado e sem histórico",
+  //   tech: ["React", "Typescript", "Tailwind", "Express"],
+  //   img: "./src/projects/cafuntalk.webp",
+  // },
   {
     href: "https://www.youtube.com/shorts/0fSoHjAadas",
     name: "SOS Queimadas",
