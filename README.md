@@ -1,4 +1,4 @@
-<img alt="logo" src="https://coelhomarcus.com/src/icons/favicon.ico">
+<img alt="logo" src="https://marcuscoelho.com/src/icons/favicon.ico">
 
 ##
 
