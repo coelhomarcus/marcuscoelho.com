@@ -10,9 +10,8 @@ import {
   ViteIcon,
   NextJSIcon,
   PostgreSQLIcon,
-  JavaIcon,
-  SpringBootIcon,
   FigmaIcon,
+  BunIcon,
 } from "@/lib/icons";
 
 export const arrWorks: Work[] = [
@@ -48,8 +47,7 @@ export const arrSkills: SkillType[] = [
   { icon: TailwindIcon, name: "Tailwind CSS" },
   { icon: ExpressIcon, name: "Express" },
   { icon: NodeIcon, name: "Node.js" },
-  { icon: JavaIcon, name: "Java" },
-  { icon: SpringBootIcon, name: "Spring Boot" },
+  { icon: BunIcon, name: "Bun" },
   { icon: PostgreSQLIcon, name: "PostgreSQL" },
   { icon: FigmaIcon, name: "Figma" },
 ];
