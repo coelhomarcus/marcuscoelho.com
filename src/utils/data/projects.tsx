@@ -19,9 +19,9 @@ export const arrProjects: Project[] = [
 
 export const arrSideProjects: Project[] = [
   {
-    href: "https://dictionary-marcus.netlify.app/",
+    href: "https://dictionary.marcuscoelho.com/",
     name: "Dictionary",
-    desc: "Dicionário Inglês moderno",
+    desc: "Dicionário Inglês - Simples & Moderno",
     tech: ["React", "Typescripot", "Tailwind"],
     favicon: "https://dictionary-marcus.netlify.app/logo.svg",
   },
