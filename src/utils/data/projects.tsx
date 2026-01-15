@@ -23,7 +23,7 @@ export const arrSideProjects: Project[] = [
     name: "Dictionary",
     desc: "Dicionário Inglês - Simples & Moderno",
     tech: ["React", "Typescripot", "Tailwind"],
-    favicon: "https://dictionary-marcus.netlify.app/logo.svg",
+    favicon: "https://dictionary.marcuscoelho.com/logo.svg",
   },
   {
     href: "https://github.com/coelhomarcus/lunebox-backend",
