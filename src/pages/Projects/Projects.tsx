@@ -43,6 +43,7 @@ const Projects = () => {
             <ProjectCard
               key={index}
               favicon={project.favicon}
+              linkPreview={project.linkPreview}
               href={project.href}
               name={project.name}
               desc={project.desc}

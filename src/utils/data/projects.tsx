@@ -20,6 +20,7 @@ export const arrProjects: Project[] = [
 export const arrSideProjects: Project[] = [
   {
     href: "https://dictionary.marcuscoelho.com/",
+    linkPreview: "dictionary.marcuscoelho.com",
     name: "Dictionary",
     desc: "Dicionário Inglês - Simples & Moderno",
     tech: ["React", "Typescripot", "Tailwind"],
@@ -31,6 +32,30 @@ export const arrSideProjects: Project[] = [
     desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
     tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
     favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
+  },
+  {
+    href: "https://marcuscoelho.com/",
+    linkPreview: "marcuscoelho.com 📌",
+    name: "Portfolio",
+    desc: "Meu Portfólio Pessoal",
+    tech: ["React", "Typescript", "Tailwind", "MDX"],
+    favicon: "https://marcuscoelho.com/src/icons/favicon.ico",
+  },
+  {
+    href: "https://old.marcuscoelho.com/",
+    name: "Portfolio Antigo",
+    linkPreview: "old.marcuscoelho.com",
+    desc: "Meu primeiro portfolio feito em React",
+    tech: ["React", "JSX", "CSS"],
+    favicon: "https://old.marcuscoelho.com/favicon/favicon.ico",
+  },
+  {
+    href: "https://blob-temp.vercel.app/",
+    name: "Blob",
+    linkPreview: "blob-temp.vercel.app",
+    desc: "Site de previsão meteorológica",
+    tech: ["Next.js", "Tailwind", "API"],
+    favicon: "https://blob-temp.vercel.app/blob.png ",
   },
   {
     href: "https://marketplace.visualstudio.com/items?itemName=coelhomarcus.bakaneo",
@@ -47,12 +72,5 @@ export const arrSideProjects: Project[] = [
     tech: ["C#", "Unity", "Blender"],
     favicon:
       "https://img.itch.zone/aW1nLzE4NjA1Mjg2LnBuZw==/32x32%23/LXf4e4.png",
-  },
-  {
-    href: "https://blob-temp.vercel.app/",
-    name: "Blob",
-    desc: "Site de previsão meteorológica",
-    tech: ["Next.js", "Tailwind", "API"],
-    favicon: "https://blob-temp.vercel.app/blob.png ",
   },
 ];

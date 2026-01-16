@@ -11,6 +11,7 @@ const ProjectCard = ({
   tech = [],
   img,
   favicon,
+  linkPreview,
 }: ProjectCardProps) => {
   return (
     <a
@@ -45,6 +46,11 @@ const ProjectCard = ({
             />
           </span>
         </div>
+        {linkPreview && (
+          <p className="text-xs text-muted-foreground/70 italic mb-1 flex-grow">
+            {linkPreview}
+          </p>
+        )}
         <p className="text-sm text-muted-foreground mb-3 flex-grow">{desc}</p>
         {tech && tech.length > 0 && (
           <div className="flex gap-2 flex-wrap mt-auto">

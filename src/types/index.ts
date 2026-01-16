@@ -3,6 +3,7 @@ import type { IconType } from "@/lib/icons";
 
 export interface Project {
   href: string;
+  linkPreview?: string;
   name: string;
   desc: string;
   tech: string[];
@@ -42,6 +43,7 @@ export interface Page {
 
 export interface ProjectCardProps {
   href: string;
+  linkPreview?: string;
   name: string;
   desc: string;
   tech?: string[];
