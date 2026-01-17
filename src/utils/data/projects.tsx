@@ -19,19 +19,20 @@ export const arrProjects: Project[] = [
 
 export const arrSideProjects: Project[] = [
   {
+    href: "https://crop.marcuscoelho.com",
+    linkPreview: "crop.marcuscoelho.com",
+    name: "Crop",
+    desc: "Site para fazer Recortes em Imagens e Gifs",
+    tech: ["React", "Typescript", "Tailwind", "Node", "Express", "Mono Repo"],
+    favicon: "https://crop.marcuscoelho.com/favicon.ico",
+  },
+  {
     href: "https://dictionary.marcuscoelho.com/",
     linkPreview: "dictionary.marcuscoelho.com",
     name: "Dictionary",
     desc: "Dicionário Inglês - Simples & Moderno",
-    tech: ["React", "Typescripot", "Tailwind"],
+    tech: ["React", "Typescript", "Tailwind"],
     favicon: "https://dictionary.marcuscoelho.com/logo.svg",
-  },
-  {
-    href: "https://github.com/coelhomarcus/lunebox-backend",
-    name: "LuneBox - Backend",
-    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
-    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
-    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
   },
   {
     href: "https://marcuscoelho.com/",
@@ -40,6 +41,13 @@ export const arrSideProjects: Project[] = [
     desc: "Meu Portfólio Pessoal",
     tech: ["React", "Typescript", "Tailwind", "MDX"],
     favicon: "https://marcuscoelho.com/src/icons/favicon.ico",
+  },
+  {
+    href: "https://github.com/coelhomarcus/lunebox-backend",
+    name: "LuneBox - Backend",
+    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
+    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
+    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
   },
   {
     href: "https://old.marcuscoelho.com/",
@@ -53,7 +61,7 @@ export const arrSideProjects: Project[] = [
     href: "https://blob-temp.vercel.app/",
     name: "Blob",
     linkPreview: "blob-temp.vercel.app",
-    desc: "Site de previsão meteorológica",
+    desc: "Site de previsão meteorológica, feito para um desafio de um dia na SIAPESQ",
     tech: ["Next.js", "Tailwind", "API"],
     favicon: "https://blob-temp.vercel.app/blob.png ",
   },
@@ -68,7 +76,7 @@ export const arrSideProjects: Project[] = [
   {
     href: "https://coelhomarcus.itch.io/mailman",
     name: "Mailman",
-    desc: "Protótipo de jogo de terror retrô",
+    desc: "Protótipo de jogo retrô de terror",
     tech: ["C#", "Unity", "Blender"],
     favicon:
       "https://img.itch.zone/aW1nLzE4NjA1Mjg2LnBuZw==/32x32%23/LXf4e4.png",
