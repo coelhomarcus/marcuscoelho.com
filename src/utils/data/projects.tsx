@@ -43,8 +43,8 @@ export const arrSideProjects: Project[] = [
     favicon: "https://marcuscoelho.com/src/icons/favicon.ico",
   },
   {
-    href: "https://github.com/coelhomarcus/lunebox-backend",
-    name: "LuneBox - Backend",
+    href: "https://github.com/coelhomarcus/simplemedia-backend",
+    name: "Simple Media - Backend",
     desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
     tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
     favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
