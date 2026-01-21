@@ -9,6 +9,13 @@ export const arrProjects: Project[] = [
   //   img: "./src/projects/cafuntalk.webp",
   // },
   {
+    href: "https://studio-2n.blipe.cloud/",
+    name: "Studio 2N",
+    desc: "Projeto Real de Agendamentos para uma Barbearia Local",
+    tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
+    img: "./src/projects/2n-studio.webp",
+  },
+  {
     href: "https://www.youtube.com/shorts/0fSoHjAadas",
     name: "SOS Queimadas",
     desc: "Aplicativo IOS para conscientização e prevenção de queimadas",
