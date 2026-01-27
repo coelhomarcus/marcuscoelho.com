@@ -24,6 +24,8 @@ const Projects = () => {
           return (
             <ProjectCard
               key={index}
+              favicon={project.favicon}
+              linkPreview={project.linkPreview}
               href={project.href}
               name={project.name}
               desc={project.desc}
@@ -34,7 +36,7 @@ const Projects = () => {
         })}
       </div>
       <p className="text-muted-foreground text-sm mb-4">
-        Projetos que fiz por diversão.
+        Outros projetos que fiz...
       </p>
       <div className="gap-4 mb-8 grid grid-cols-1 md:grid-cols-2">
         {sideProjects.map((project, index) => {

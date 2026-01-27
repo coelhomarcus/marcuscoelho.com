@@ -1,30 +1,14 @@
 import type { Project } from "@/types";
 
 export const arrProjects: Project[] = [
-  // {
-  //   href: "https://cafuntalk.com",
-  //   name: "CafunTalk",
-  //   desc: "Bate-papo moderno, sem distrações, privado e sem histórico",
-  //   tech: ["React", "Typescript", "Tailwind", "Express"],
-  //   img: "./src/projects/cafuntalk.webp",
-  // },
   {
     href: "https://studio-2n.blipe.cloud/",
+    linkPreview: "studio-2n.blipe.cloud",
     name: "Studio 2N",
     desc: "Projeto Real de Agendamentos para uma Barbearia Local",
     tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
     img: "./src/projects/2n-studio.webp",
   },
-  {
-    href: "https://www.youtube.com/shorts/0fSoHjAadas",
-    name: "SOS Queimadas",
-    desc: "Aplicativo IOS para conscientização e prevenção de queimadas",
-    tech: ["Swift", "MapKit", "IoT", "API"],
-    img: "./src/projects/sosqueimadas.webp",
-  },
-];
-
-export const arrSideProjects: Project[] = [
   {
     href: "https://crop.marcuscoelho.com",
     linkPreview: "crop.marcuscoelho.com",
@@ -32,6 +16,7 @@ export const arrSideProjects: Project[] = [
     desc: "Site para fazer Recortes em Imagens e Gifs",
     tech: ["React", "Typescript", "Tailwind", "Node", "Express", "Mono Repo"],
     favicon: "https://crop.marcuscoelho.com/favicon.ico",
+    img: "./src/projects/crop.webp",
   },
   {
     href: "https://dictionary.marcuscoelho.com/",
@@ -40,6 +25,7 @@ export const arrSideProjects: Project[] = [
     desc: "Dicionário Inglês - Simples & Moderno",
     tech: ["React", "Typescript", "Tailwind"],
     favicon: "https://dictionary.marcuscoelho.com/logo.svg",
+    img: "./src/projects/dictionary.webp",
   },
   {
     href: "https://marcuscoelho.com/",
@@ -48,13 +34,15 @@ export const arrSideProjects: Project[] = [
     desc: "Meu Portfólio Pessoal",
     tech: ["React", "Typescript", "Tailwind", "MDX"],
     favicon: "https://marcuscoelho.com/src/icons/favicon.ico",
+    img: "./src/projects/portfolio.webp",
   },
   {
-    href: "https://github.com/coelhomarcus/simplemedia-backend",
-    name: "Simple Media - Backend",
-    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
-    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
-    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
+    href: "https://www.youtube.com/shorts/0fSoHjAadas",
+    linkPreview: "Video Preview",
+    name: "SOS Queimadas",
+    desc: "Aplicativo IOS para conscientização e prevenção de queimadas",
+    tech: ["Swift", "MapKit", "IoT", "API"],
+    img: "./src/projects/sosqueimadas.webp",
   },
   {
     href: "https://old.marcuscoelho.com/",
@@ -63,6 +51,17 @@ export const arrSideProjects: Project[] = [
     desc: "Meu primeiro portfolio feito em React",
     tech: ["React", "JSX", "CSS"],
     favicon: "https://old.marcuscoelho.com/favicon/favicon.ico",
+    img: "./src/projects/old-portfolio.webp",
+  },
+];
+
+export const arrSideProjects: Project[] = [
+  {
+    href: "https://github.com/coelhomarcus/simplemedia-backend",
+    name: "Simple Media - Backend",
+    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
+    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
+    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
   },
   {
     href: "https://blob-temp.vercel.app/",
