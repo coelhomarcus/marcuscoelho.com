@@ -30,7 +30,7 @@ const ProjectCard = ({
             <img
               src={img}
               alt="Project Image"
-              className="object-cover hover:scale-[1.05] duration-100 w-full h-full"
+              className="group-hover:scale-[1.03] duration-100 w-full h-full"
             />
           </AspectRatio>
         )}

@@ -7,6 +7,7 @@ export const arrProjects: Project[] = [
     name: "Studio 2N",
     desc: "Projeto Real de Agendamentos para uma Barbearia Local",
     tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
+    favicon: "https://studio-2n.blipe.cloud/Logo.png",
     img: "./src/projects/2n-studio.webp",
   },
   {
