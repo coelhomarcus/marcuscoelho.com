@@ -24,6 +24,14 @@ export const arrWorks: Work[] = [
       "Desenvolvedor no PET-Saúde/I&SD, programa em parceria entre a UNIFESSPA e o Ministério da Saúde, com foco na transformação digital do SUS, participando de iniciativas de inovação e desenvolvimento de soluções para a saúde pública.",
   },
   {
+    company:
+      "Logibot AI: Plataforma de Auxilio no Ensino de Lógica de Programação",
+    role: "Developer",
+    duration: "2025 - Presente",
+    logo: "/src/works/logibot.svg",
+    about: "",
+  },
+  {
     company: "Exception Jr",
     role: "Full Stack Developer",
     duration: "2024 - Presente",

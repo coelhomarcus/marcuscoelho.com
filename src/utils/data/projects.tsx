@@ -54,16 +54,6 @@ export const arrProjects: Project[] = [
     favicon: "https://old.marcuscoelho.com/favicon/favicon.ico",
     img: "./src/projects/old-portfolio.webp",
   },
-];
-
-export const arrSideProjects: Project[] = [
-  {
-    href: "https://github.com/coelhomarcus/simplemedia-backend",
-    name: "Simple Media - Backend",
-    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
-    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
-    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
-  },
   {
     href: "https://blob-temp.vercel.app/",
     name: "Blob",
@@ -71,14 +61,42 @@ export const arrSideProjects: Project[] = [
     desc: "Site de previsão meteorológica, feito para um desafio de um dia na SIAPESQ",
     tech: ["Next.js", "Tailwind", "API"],
     favicon: "https://blob-temp.vercel.app/blob.png ",
+    img: "./src/projects/blob.webp",
+  },
+  {
+    href: "https://coelhomarcus.github.io/catype/",
+    name: "Catype",
+    linkPreview: "coelhomarcus.github.io/catype",
+    desc: "Site de teste de digitação - protótipo",
+    tech: ["HTML", "CSS", "JavaScript"],
+    favicon: "https://coelhomarcus.github.io/catype/img/cat.png",
+    img: "./src/projects/catype.webp",
+  },
+  {
+    href: "https://coelhomarcus.github.io/bunnybash/",
+    name: "Bunny Bash",
+    linkPreview: "coelhomarcus.github.io/bunnybash",
+    desc: "Site que simula um Terminal",
+    tech: ["HTML", "CSS", "JavaScript"],
+    favicon: "https://coelhomarcus.github.io/bunnybash/img/rabbit.png",
+    img: "./src/projects/bunnybash.webp",
+  },
+  {
+    href: "https://github.com/coelhomarcus/simplemedia-backend",
+    name: "Simple Media - Backend",
+    desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
+    tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
+    favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
+    img: "./src/projects/simplemedia-backend.webp",
   },
   {
     href: "https://marketplace.visualstudio.com/items?itemName=coelhomarcus.bakaneo",
     name: "BakaNeo",
     desc: "Tema Dark para VS Code",
-    tech: ["Theme"],
+    tech: ["VSCODE", "Theme"],
     favicon:
       "https://coelhomarcus.gallerycdn.vsassets.io/extensions/coelhomarcus/bakaneo/1.1.6/1744053185368/Microsoft.VisualStudio.Services.Icons.Default",
+    img: "./src/projects/bakaneo.webp",
   },
   {
     href: "https://coelhomarcus.itch.io/mailman",
@@ -87,5 +105,6 @@ export const arrSideProjects: Project[] = [
     tech: ["C#", "Unity", "Blender"],
     favicon:
       "https://img.itch.zone/aW1nLzE4NjA1Mjg2LnBuZw==/32x32%23/LXf4e4.png",
+    img: "./src/projects/mailman.webp",
   },
 ];

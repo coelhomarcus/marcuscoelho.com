@@ -1,10 +1,9 @@
-import { arrProjects, arrSideProjects } from "../../utils/data/projects";
+import { arrProjects } from "../../utils/data/projects";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import PageTitle from "@/components/PageTitle/PageTitle";
 
 const Projects = () => {
   const projects = arrProjects;
-  const sideProjects = arrSideProjects;
 
   return (
     <div className="text-foreground">
@@ -31,24 +30,6 @@ const Projects = () => {
               desc={project.desc}
               tech={project.tech}
               img={project.img}
-            />
-          );
-        })}
-      </div>
-      <p className="text-muted-foreground text-sm mb-4">
-        Outros projetos que fiz...
-      </p>
-      <div className="gap-4 mb-8 grid grid-cols-1 md:grid-cols-2">
-        {sideProjects.map((project, index) => {
-          return (
-            <ProjectCard
-              key={index}
-              favicon={project.favicon}
-              linkPreview={project.linkPreview}
-              href={project.href}
-              name={project.name}
-              desc={project.desc}
-              tech={project.tech}
             />
           );
         })}
