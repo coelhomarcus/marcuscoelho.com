@@ -70,12 +70,7 @@ const others: Page[] = [
    },
 ];
 
-interface SidebarDrawerProps {
-   isDark: boolean;
-   toggleTheme: () => void;
-}
-
-const SidebarDrawer = ({ isDark, toggleTheme }: SidebarDrawerProps) => {
+const SidebarDrawer = () => {
    const [isOpen, setIsOpen] = React.useState(false);
 
    return (
@@ -116,7 +111,7 @@ const SidebarDrawer = ({ isDark, toggleTheme }: SidebarDrawerProps) => {
             <Drawer.Content className="bg-background text-foreground fixed right-0 top-0 z-100 flex h-full w-[90vw] flex-col border border-border sm:w-[70vw] lg:w-[400px]">
                <div className="flex flex-col h-full overflow-hidden">
                   <div className="flex justify-between items-center p-6 pb-4 flex-shrink-0">
-                     <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+                     <ThemeToggle />
                      <Drawer.Close className="p-2 hover:text-muted-foreground rounded-md transition-colors cursor-pointer">
                         <CloseIcon className="size-5" />
                      </Drawer.Close>

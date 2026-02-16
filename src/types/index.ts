@@ -9,6 +9,7 @@ export interface Project {
   tech: string[];
   img?: string;
   favicon?: string;
+  featured?: boolean;
 }
 
 export interface Work {
@@ -49,6 +50,7 @@ export interface ProjectCardProps {
   tech?: string[];
   img?: string;
   favicon?: string;
+  featured?: boolean;
 }
 
 export interface PageTitleProps {

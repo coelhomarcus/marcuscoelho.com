@@ -16,7 +16,7 @@ const ProjectCard = ({
   return (
     <a
       href={href}
-      className="group relative block p-3 transition-all duration-100
+      className="group relative block p-3 h-full transition-all duration-100
             border border-border hover:bg-muted/40 rounded"
       rel="noreferrer noopener"
       target="_blank"
@@ -47,7 +47,7 @@ const ProjectCard = ({
           </span>
         </div>
         {linkPreview && (
-          <p className="text-xs text-muted-foreground/70 italic mb-1 flex-grow">
+          <p className="text-xs text-muted-foreground/70 italic mb-1">
             {linkPreview}
           </p>
         )}

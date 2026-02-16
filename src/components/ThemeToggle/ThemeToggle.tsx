@@ -1,14 +1,29 @@
 import { LightModeIcon, DarkModeIcon } from "@/lib/icons";
 
-interface ThemeToggleProps {
-   isDark: boolean;
-   toggleTheme: () => void;
-}
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
-const ThemeToggle = ({ isDark, toggleTheme }: ThemeToggleProps) => {
+const ThemeToggle = () => {
+   const { setTheme, resolvedTheme } = useTheme();
+   const [mounted, setMounted] = useState(false);
+
+   useEffect(() => {
+      setMounted(true);
+   }, []);
+
+   if (!mounted) {
+      return (
+         <button className="p-2 rounded-md hover:bg-muted transition-all duration-100 group cursor-pointer">
+            <div className="w-5 h-5" />
+         </button>
+      );
+   }
+
+   const isDark = resolvedTheme === "dark";
+
    return (
       <button
-         onClick={toggleTheme}
+         onClick={() => setTheme(isDark ? "light" : "dark")}
          className="p-2 rounded-md hover:bg-muted transition-all duration-100 group cursor-pointer"
          aria-label={`Mudar para tema ${isDark ? "claro" : "escuro"}`}
       >

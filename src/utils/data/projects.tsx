@@ -9,6 +9,7 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
     favicon: "https://studio-2n.blipe.cloud/Logo.png",
     img: "./src/projects/2n-studio.webp",
+    featured: true,
   },
   {
     href: "https://crop.marcuscoelho.com",
@@ -18,6 +19,7 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind", "Node", "Express", "Mono Repo"],
     favicon: "https://crop.marcuscoelho.com/favicon.ico",
     img: "./src/projects/crop.webp",
+    featured: true,
   },
   {
     href: "https://dictionary.marcuscoelho.com/",
@@ -27,6 +29,7 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind"],
     favicon: "https://dictionary.marcuscoelho.com/logo.svg",
     img: "./src/projects/dictionary.webp",
+    featured: true,
   },
   {
     href: "https://marcuscoelho.com/",
