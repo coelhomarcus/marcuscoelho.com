@@ -1,4 +1,4 @@
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useState } from "react";
 import { CopyIcon, CheckIcon } from "@/lib/icons";
