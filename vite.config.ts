@@ -20,7 +20,7 @@ export default defineConfig({
             }
             return "vendor";
           }
-          if (id.includes("src/utils/posts/") && id.endsWith(".mdx")) {
+          if (id.includes("src/pages/Blog/posts/") && id.endsWith(".mdx")) {
             const fileName = id.split("/").pop()?.replace(".mdx", "") || "post";
             return `posts/${fileName}`;
           }

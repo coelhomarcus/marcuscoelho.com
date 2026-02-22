@@ -1,4 +1,4 @@
-import { arrWorks } from "@/utils/data/works";
+import { arrWorks } from "@/data/works";
 import { LayersIcon } from "@/lib/icons";
 import { motion } from "motion/react";
 

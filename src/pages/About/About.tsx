@@ -7,7 +7,7 @@ import WorksExperience from "@/components/WorksExperience/WorksExperience";
 import Skills from "@/components/Skills/Skills";
 import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
 import ProjectCard from "@/components/ProjectCard/ProjectCard";
-import { arrProjects } from "@/utils/data/projects";
+import { arrProjects } from "@/data/projects";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
@@ -73,7 +73,9 @@ const About = () => {
       >
         <div className="flex items-center gap-2 text-foreground justify-between mb-2">
           <h2 className="text-base font-semibold">Projetos em Destaque</h2>
-          <RocketIcon className="text-base text-muted-foreground" />
+          <Link to="/projects">
+            <RocketIcon className="text-base text-muted-foreground hover:text-foreground" />
+          </Link>
         </div>
         <div className="gap-4 mb-3 grid grid-cols-1 sm:grid-cols-3">
           {featuredProjects.slice(0, 4).map((project, index) => (

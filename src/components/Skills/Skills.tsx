@@ -1,4 +1,4 @@
-import { arrSkills } from "@/utils/data/works";
+import { arrSkills } from "@/data/works";
 import { LibraryIcon } from "@/lib/icons";
 import { motion } from "motion/react";
 

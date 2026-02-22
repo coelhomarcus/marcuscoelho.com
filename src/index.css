@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 @import "./theme.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -11,8 +10,7 @@
     }
 
     html {
-        overflow-y: scroll !important;
-        padding-right: 0px !important;
+        overflow-y: scroll;
     }
 
     body {

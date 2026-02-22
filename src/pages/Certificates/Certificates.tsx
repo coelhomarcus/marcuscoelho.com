@@ -1,4 +1,4 @@
-import { arrCertificates } from "@/utils/data/certificates";
+import { arrCertificates } from "@/data/certificates";
 import SimpleCard from "@/components/SimpleCard/SimpleCard";
 import PageTitle from "@/components/PageTitle/PageTitle";
 

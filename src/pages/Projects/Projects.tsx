@@ -1,4 +1,4 @@
-import { arrProjects } from "../../utils/data/projects";
+import { arrProjects } from "../../data/projects";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
