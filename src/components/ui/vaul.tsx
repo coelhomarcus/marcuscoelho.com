@@ -26,6 +26,7 @@ const navigation: Page[] = [
   { name: "Sobre", href: "/", icon: PersonIcon },
   { name: "Projetos", href: "/projects", icon: LayersIcon },
   { name: "Blog", href: "/blog", icon: BookmarkIcon },
+  { name: "Contato", href: "/contact", icon: MailIcon },
   {
     name: "Curriculo",
     href: "https://docs.google.com/document/d/1wgOhwh-1YT-LRog9j1tvxzBVKfraoSzps1AiBGuSx9A/export?format=pdf",

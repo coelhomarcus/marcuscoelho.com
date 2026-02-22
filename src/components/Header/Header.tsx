@@ -32,6 +32,8 @@ const Header = () => {
                <HeaderLink title="Projetos" to="/projects" />
                <SlashIcon className="text-foreground/50" />
                <HeaderLink title="Blog" to="/blog" />
+               <SlashIcon className="text-foreground/50" />
+               <HeaderLink title="Contato" to="/contact" />
             </div>
             <SidebarDrawer />
          </div>

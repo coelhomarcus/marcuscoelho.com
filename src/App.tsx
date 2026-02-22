@@ -4,6 +4,7 @@ import Projects from "./pages/Projects/Projects";
 import Blog from "./pages/Blog/Blog";
 import PostPage from "./pages/Blog/[slug]";
 import Certificates from "./pages/Certificates/Certificates";
+import Contact from "./pages/Contact/Contact";
 
 import { Routes, Route, useLocation } from "react-router";
 import NotFound from "./components/NotFound/NotFound";
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<PostPage />} />
         <Route path="/certificates" element={<Certificates />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
