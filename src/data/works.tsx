@@ -34,7 +34,7 @@ export const arrWorks: Work[] = [
   {
     company: "Exception Jr",
     role: "Full Stack Developer",
-    duration: "2024 - Presente",
+    duration: "02/07/2024 - 31/01/2026",
     logo: "/src/works/exceptionjr.webp",
     about:
       "Na Exception, atuo como desenvolvedor fullstack, contribuindo para a criação de soluções web modernas. Minhas responsabilidades envolvem desde o desenvolvimento de interfaces responsivas até a implementação de lógicas de negócio e integrações com APIs. No dia a dia, utilizo tecnologias como React, Next.js, Node.js, TypeScript, JavaScript, Bancos SQL e NoSQL para construir aplicações robustas, escaláveis e de fácil manutenção.",
