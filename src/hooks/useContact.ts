@@ -24,6 +24,9 @@ export const useContact = () => {
 
   const setField = (field: keyof ContactForm, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setStatus((prev) =>
+      prev === "success" || prev === "error" ? "idle" : prev,
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
