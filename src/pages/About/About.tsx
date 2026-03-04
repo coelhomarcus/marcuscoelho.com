@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import WorksExperience from "@/components/WorksExperience/WorksExperience";
 import Skills from "@/components/Skills/Skills";
 import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
+import GitHubStats from "@/components/GitHubStats/GitHubStats";
 import ProjectCard from "@/components/ProjectCard/ProjectCard";
 import { arrProjects } from "@/data/projects";
 
@@ -91,13 +92,6 @@ const About = () => {
             />
           ))}
         </div>
-        <Link
-          to="/projects"
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1"
-        >
-          Ver todos os projetos
-          <ExternalLinkIcon className="size-3" />
-        </Link>
       </motion.div>
 
       <motion.div
@@ -106,6 +100,14 @@ const About = () => {
         className="mt-6"
       >
         <GitHubGraph />
+      </motion.div>
+
+      <motion.div
+        {...fadeUp}
+        transition={{ ...fadeUp.transition, delay: 0.3 }}
+        className="mt-2"
+      >
+        <GitHubStats />
       </motion.div>
     </main>
   );
