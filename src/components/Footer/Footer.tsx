@@ -1,42 +1,53 @@
-import ContactLink from "../ContactLink/ContactLink";
-
-import { GithubIcon, LinkedinIcon, ResumeIcon } from "@/lib/icons";
+﻿import {
+  RxGithubLogo as GithubIcon,
+  RxLinkedinLogo as LinkedinIcon,
+} from "react-icons/rx";
+import { LuMail as MailIcon } from "react-icons/lu";
 
 const Footer = () => {
-   return (
-      <div className="flex justify-between border-t mt-4 pt-4 border-border">
-         <div className="flex gap-3 text-foreground">
-            <ContactLink
-               title="Github"
-               Icon={GithubIcon}
-               href="https://github.com/coelhomarcus"
-               rel="noreferrer noopener"
-               target="_blank"
-            />
-            <ContactLink
-               title="Linkedin"
-               Icon={LinkedinIcon}
-               href="https://www.linkedin.com/in/coelhomarcus/"
-               rel="noreferrer noopener"
-               target="_blank"
-            />
-            <ContactLink
-               title="CV"
-               Icon={ResumeIcon}
-               href="https://docs.google.com/document/d/1wgOhwh-1YT-LRog9j1tvxzBVKfraoSzps1AiBGuSx9A/export?format=pdf"
-               download
-            />
-         </div>
-         <a
-            href="https://github.com/coelhomarcus"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-foreground hover:text-accent-foreground hidden sm:block"
-         >
-            @coelhomarcus
-         </a>
+  return (
+    <footer className="flex justify-between items-center border-t border-zinc-700/50 pt-4 mt-4">
+      <div className="flex items-center gap-1 text-zinc-500">
+        <SocialLink href="mailto:marcusrangelcoelho@gmail.com" label="Email">
+          <MailIcon className="size-4" />
+        </SocialLink>
+        <SocialLink href="https://github.com/coelhomarcus" label="GitHub">
+          <GithubIcon className="size-4" />
+        </SocialLink>
+        <SocialLink
+          href="https://www.linkedin.com/in/coelhomarcus/"
+          label="LinkedIn"
+        >
+          <LinkedinIcon className="size-4" />
+        </SocialLink>
       </div>
-   );
+      <span className="text-xs text-zinc-500">
+        © {new Date().getFullYear()} Marcus Coelho
+      </span>
+    </footer>
+  );
 };
+
+function SocialLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="p-1.5 rounded-md hover:text-zinc-100 transition-colors"
+    >
+      {children}
+    </a>
+  );
+}
 
 export default Footer;

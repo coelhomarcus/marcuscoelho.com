@@ -1,12 +1,10 @@
 @import "tailwindcss";
-@import "./theme.css";
 
-@custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
 
 @layer base {
   * {
-    @apply border-border outline-0;
+    @apply border-zinc-700 outline-0;
   }
 
   html {
@@ -18,11 +16,24 @@
   }
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 @layer utilities {
+  .animate-marquee {
+    animation: marquee 45s linear infinite;
+  }
+
   .scrollbar {
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: #3f3f46 transparent;
   }
 
   .scrollbar::-webkit-scrollbar {
@@ -32,7 +43,7 @@
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background: var(--border) !important;
+    background: #3f3f46 !important;
     border-radius: 6px !important;
   }
 
@@ -50,7 +61,7 @@
 
   .scrollbar-container {
     position: relative;
-    background-color: var(--popover);
+    background-color: #000;
     height: auto;
     max-height: 40vh;
   }
@@ -67,7 +78,7 @@
   }
 
   .scrollbar-content::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: #3f3f46;
     border-radius: 6px;
   }
 }
@@ -84,7 +95,7 @@
     position: absolute;
     opacity: 0;
     transition: opacity 0.2s;
-    color: var(--muted-foreground);
+    color: #71717a;
   }
 
   h1 .heading-link::before {
@@ -130,14 +141,14 @@
   .prose-content blockquote {
     margin: 1.5rem 0;
     padding: 1rem 1.25rem;
-    border-left: 4px solid var(--border);
-    background-color: var(--muted);
+    border-left: 4px solid #3f3f46;
+    background-color: #27272a;
     font-style: italic;
   }
 
   .prose-content code {
     padding: 0.125rem 0.25rem;
-    background-color: var(--muted);
+    background-color: #27272a;
     border-radius: 0.25rem;
     font-size: 0.875rem;
   }
@@ -168,12 +179,3 @@
       background-color 0.2s ease;
   }
 }
-
-/* ::selection {
-    background-color: var(--primary) / 0.3;
-    color: var(--primary-foreground);
-}
-
-a::selection {
-    color: var(--primary-foreground);
-} */

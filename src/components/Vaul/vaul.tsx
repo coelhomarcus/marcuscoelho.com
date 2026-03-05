@@ -1,26 +1,25 @@
-import React, { useEffect, useCallback } from "react";
+﻿import React, { useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router";
 import type { Page, SidebarLinkProps } from "@/types";
 
 import {
-  PersonIcon,
-  ExternalLinkIcon,
-  ResumeIcon,
-  CloseIcon,
-  BookmarkIcon,
-  LayersIcon,
-  RocketIcon,
-  MailIcon,
-  GithubIcon,
-  LinkedinIcon,
-  TwitterIcon,
-  SideBarOffIcon,
-  SideBarIcon,
-  DownloadIcon,
-} from "@/lib/icons";
-
-import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
+  RxPerson as PersonIcon,
+  RxArrowTopRight as ExternalLinkIcon,
+  RxReader as ResumeIcon,
+  RxCross1 as CloseIcon,
+  RxBookmark as BookmarkIcon,
+  RxLayers as LayersIcon,
+  RxRocket as RocketIcon,
+  RxGithubLogo as GithubIcon,
+  RxLinkedinLogo as LinkedinIcon,
+  RxDownload as DownloadIcon,
+} from "react-icons/rx";
+import { LuMail as MailIcon } from "react-icons/lu";
+import {
+  VscLayoutSidebarRightOff as SideBarOffIcon,
+  VscLayoutSidebarRight as SideBarIcon,
+} from "react-icons/vsc";
 
 const navigation: Page[] = [
   { name: "Sobre", href: "/", icon: PersonIcon },
@@ -53,12 +52,6 @@ const socials: Page[] = [
     name: "Linkedin",
     href: "https://www.linkedin.com/in/coelhomarcus/",
     icon: LinkedinIcon,
-    external: true,
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com/coelhoincode",
-    icon: TwitterIcon,
     external: true,
   },
 ];
@@ -103,17 +96,17 @@ const SidebarDrawer = () => {
   return (
     <>
       <button
-        className="hover:*:text-foreground rounded-md transition-all cursor-pointer"
+        className="hover:*:text-zinc-100 rounded-md transition-all cursor-pointer"
         aria-label="Abrir menu"
         onClick={() => setIsOpen(true)}
       >
         {isOpen ? (
-          <SideBarIcon className="w-5 h-5 hidden md:block text-muted-foreground" />
+          <SideBarIcon className="w-5 h-5 hidden md:block text-zinc-500" />
         ) : (
-          <SideBarOffIcon className="w-5 h-5 hidden md:block text-muted-foreground" />
+          <SideBarOffIcon className="w-5 h-5 hidden md:block text-zinc-500" />
         )}
         <svg
-          className="w-5 h-5 block md:hidden text-muted-foreground"
+          className="w-5 h-5 block md:hidden text-zinc-500"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -131,7 +124,6 @@ const SidebarDrawer = () => {
 
       {createPortal(
         <>
-          {/* Overlay */}
           <div
             className={`fixed inset-0 bg-black/20 z-99 transition-opacity duration-200 ${
               isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -140,9 +132,8 @@ const SidebarDrawer = () => {
             aria-hidden="true"
           />
 
-          {/* Drawer */}
           <div
-            className={`bg-background text-foreground fixed right-0 top-0 z-100 flex h-full w-[90vw] flex-col border border-border sm:w-[70vw] lg:w-[400px] transition-transform duration-200 ease-out ${
+            className={`bg-black text-zinc-100 fixed right-0 top-0 z-100 flex h-full w-[90vw] flex-col border border-zinc-700 sm:w-[70vw] lg:w-[400px] transition-transform duration-200 ease-out ${
               isOpen ? "translate-x-0" : "translate-x-full"
             }`}
             role="dialog"
@@ -150,11 +141,10 @@ const SidebarDrawer = () => {
             data-drawer-content
           >
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="flex justify-between items-center p-6 pb-4 flex-shrink-0">
-                <ThemeToggle />
+              <div className="flex justify-end items-center p-6 pb-4 flex-shrink-0">
                 <button
                   onClick={close}
-                  className="p-2 hover:text-muted-foreground rounded-md transition-colors cursor-pointer"
+                  className="p-2 hover:text-zinc-500 rounded-md transition-colors cursor-pointer"
                 >
                   <CloseIcon className="size-5" />
                 </button>
@@ -164,9 +154,8 @@ const SidebarDrawer = () => {
                 className="flex flex-col space-y-8 flex-1 overflow-y-auto overflow-x-hidden px-6 py-4 scrollbar"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
-                {/* Navegação Principal */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
                     Navegação
                   </h3>
                   <div className="space-y-1">
@@ -180,9 +169,8 @@ const SidebarDrawer = () => {
                   </div>
                 </div>
 
-                {/* Redes Sociais */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
                     Contato
                   </h3>
                   <div className="space-y-1">
@@ -196,9 +184,8 @@ const SidebarDrawer = () => {
                   </div>
                 </div>
 
-                {/* Outros Links */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
                     Outros
                   </h3>
                   <div className="space-y-1">
@@ -238,17 +225,17 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
     return (
       <button
         onClick={item.download ? handleDownload : undefined}
-        className="flex items-center justify-between p-3 rounded-md hover:bg-muted transition-colors group w-full text-left cursor-pointer"
+        className="flex items-center justify-between p-3 rounded-md hover:bg-zinc-800 transition-colors group w-full text-left cursor-pointer"
       >
         {item.download ? (
           <>
             <div className="flex items-center space-x-3">
-              <Icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-              <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+              <Icon className="w-5 h-5 text-zinc-500 group-hover:text-zinc-100 transition-colors" />
+              <span className="text-sm font-medium text-zinc-500 group-hover:text-zinc-100 transition-colors">
                 {item.name}
               </span>
             </div>
-            <DownloadIcon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+            <DownloadIcon className="w-5 h-5 text-zinc-500 group-hover:text-zinc-100 transition-colors" />
           </>
         ) : (
           <a
@@ -259,12 +246,12 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
             onClick={onClose}
           >
             <div className="flex items-center space-x-3">
-              <Icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-              <span className="text-sm text-muted-foreground font-medium group-hover:text-foreground transition-colors">
+              <Icon className="w-5 h-5 text-zinc-500 group-hover:text-zinc-100 transition-colors" />
+              <span className="text-sm text-zinc-500 font-medium group-hover:text-zinc-100 transition-colors">
                 {item.name}
               </span>
             </div>
-            <ExternalLinkIcon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+            <ExternalLinkIcon className="w-5 h-5 text-zinc-500 group-hover:text-zinc-100 transition-colors" />
           </a>
         )}
       </button>
@@ -278,8 +265,8 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
       className={({ isActive }) =>
         `flex items-center space-x-3 p-3 rounded-md transition-colors group ${
           isActive
-            ? "bg-muted text-foreground border"
-            : "hover:bg-muted text-muted-foreground border border-transparent"
+            ? "bg-zinc-800 text-zinc-100 border"
+            : "hover:bg-zinc-800 text-zinc-500 border border-transparent"
         }`
       }
     >
@@ -288,13 +275,13 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
           <Icon
             className={`w-5 h-5 transition-colors ${
               isActive
-                ? "text-foreground"
-                : "text-muted-foreground group-hover:text-foreground"
+                ? "text-zinc-100"
+                : "text-zinc-500 group-hover:text-zinc-100"
             }`}
           />
           <span
             className={`text-sm font-medium transition-colors ${
-              isActive ? "text-foreground" : "group-hover:text-foreground"
+              isActive ? "text-zinc-100" : "group-hover:text-zinc-100"
             }`}
           >
             {item.name}

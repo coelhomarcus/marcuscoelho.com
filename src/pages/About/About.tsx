@@ -1,14 +1,12 @@
-import PageTitle from "@/components/PageTitle/PageTitle";
-import { ExternalLinkIcon, RocketIcon } from "@/lib/icons";
+﻿import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
-import { Link } from "react-router";
 
+import HeroSection from "@/components/HeroSection/HeroSection";
 import WorksExperience from "@/components/WorksExperience/WorksExperience";
 import Skills from "@/components/Skills/Skills";
 import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
 import GitHubStats from "@/components/GitHubStats/GitHubStats";
-import ProjectCard from "@/components/ProjectCard/ProjectCard";
-import { arrProjects } from "@/data/projects";
+import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
@@ -17,47 +15,20 @@ const fadeUp = {
 };
 
 const About = () => {
-  const featuredProjects = arrProjects.filter((p) => p.featured);
-
   return (
-    <main className="text-foreground">
+    <main className="text-zinc-100 space-y-6">
       <PageTitle title="Marcus Coelho" />
 
-      <motion.div {...fadeUp} className="mb-6">
-        <h1 className="text-xl font-semibold mb-1">Marcus Coelho</h1>
-        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
-          <span className="flex items-center gap-1.5">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-green-500" />
-            </span>
-            Disponível
-          </span>
-          <span className="text-border">|</span>
-          <span>Marabá, PA</span>
-          <span className="text-border">|</span>
-          <span>UNIFESSPA [7/8]</span>
-        </div>
-        <p className="text-muted-foreground text-base font-medium leading-relaxed">
-          Olá! Sou estudante de Sistemas de Informação na UNIFESSPA,
-          desenvolvedor no projeto PET-Saúde: Inovação e Saúde Digital no SUS,
-          do Ministério da Saúde, e também participo de pesquisas com LLMs
-          voltadas à análise de desempenho de discentes. No meu tempo livre,
-          gosto de explorar novas tecnologias, desenvolver projetos pessoais e
-          brincar com meu gato. Se quiser saber mais sobre minha trajetória,{" "}
-          <a
-            className="text-foreground hover:underline hover:text-accent-foreground transition-colors"
-            href="https://docs.google.com/document/d/1wgOhwh-1YT-LRog9j1tvxzBVKfraoSzps1AiBGuSx9A/export?format=pdf"
-            download
-          >
-            veja meu currículo
-            <ExternalLinkIcon className="inline ml-0.5" />
-          </a>
-        </p>
+      <motion.div {...fadeUp}>
+        <HeroSection />
       </motion.div>
 
       <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
         <Skills />
+      </motion.div>
+
+      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }}>
+        <ProjectsMarquee />
       </motion.div>
 
       <motion.div
@@ -69,44 +40,10 @@ const About = () => {
 
       <motion.div
         {...fadeUp}
-        transition={{ ...fadeUp.transition, delay: 0.2 }}
-        className="mt-6"
-      >
-        <div className="flex items-center gap-2 text-foreground justify-between mb-2">
-          <h2 className="text-base font-semibold">Projetos em Destaque</h2>
-          <Link to="/projects">
-            <RocketIcon className="text-base text-muted-foreground hover:text-foreground" />
-          </Link>
-        </div>
-        <div className="gap-4 mb-3 grid grid-cols-1 sm:grid-cols-3">
-          {featuredProjects.slice(0, 4).map((project, index) => (
-            <ProjectCard
-              key={index}
-              favicon={project.favicon}
-              linkPreview={project.linkPreview}
-              href={project.href}
-              name={project.name}
-              desc={project.desc}
-              tech={[project.tech[0], project.tech[1], project.tech[2]]}
-              img={project.img}
-            />
-          ))}
-        </div>
-      </motion.div>
-
-      <motion.div
-        {...fadeUp}
         transition={{ ...fadeUp.transition, delay: 0.25 }}
-        className="mt-6"
+        className="flex flex-col gap-3"
       >
         <GitHubGraph />
-      </motion.div>
-
-      <motion.div
-        {...fadeUp}
-        transition={{ ...fadeUp.transition, delay: 0.3 }}
-        className="mt-2"
-      >
         <GitHubStats />
       </motion.div>
     </main>

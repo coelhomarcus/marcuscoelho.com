@@ -1,7 +1,14 @@
-import { Link } from "react-router";
+﻿import { Link } from "react-router";
 import type { BlogCardProps } from "@/types";
-import { arrBlog } from "./posts/_posts";
+import { blogPostsData } from "./blogPostsData";
 import PageTitle from "@/components/PageTitle/PageTitle";
+import { motion } from "motion/react";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: "easeOut" },
+};
 
 const BlogCard = ({ slug, title, date, desc }: BlogCardProps) => {
   return (
@@ -9,7 +16,7 @@ const BlogCard = ({ slug, title, date, desc }: BlogCardProps) => {
       <div className="flex flex-col h-full">
         <div className="flex flex-col gap-2 sm:gap-0 sm:flex-row justify-between">
           <div className="flex gap-6">
-            <div className="flex items-center text-xs text-muted-foreground">
+            <div className="flex items-center text-xs text-zinc-500">
               <span className="font-medium cursor-default w-[70px] font-mono">
                 {date}
               </span>
@@ -17,12 +24,12 @@ const BlogCard = ({ slug, title, date, desc }: BlogCardProps) => {
             <Link
               to={`/blog/${slug}`}
               key={slug}
-              className="text-base font-normal text-muted-foreground underline decoration-muted-foreground hover:decoration-foreground hover:text-foreground tracking-wide cursor-pointer"
+              className="text-base font-normal text-zinc-400 underline decoration-zinc-500 hover:decoration-zinc-100 hover:text-zinc-100 tracking-wide cursor-pointer"
             >
               {title}
             </Link>
           </div>
-          <div className="items-center text-xs text-muted-foreground hidden sm:flex">
+          <div className="items-center text-xs text-zinc-500 hidden sm:flex">
             <span className="font-medium">{desc}</span>
           </div>
         </div>
@@ -33,30 +40,50 @@ const BlogCard = ({ slug, title, date, desc }: BlogCardProps) => {
 
 const Blog = () => {
   return (
-    <div className="text-foreground">
+    <main className="text-zinc-100 space-y-6">
       <PageTitle title="Blog" suffix />
-      <h1 className="text-xl font-semibold mb-2">Blog</h1>
-      <p className="text-muted-foreground text-sm mb-4">
-        Meus pensamentos e anotações.
-      </p>
-      <div className="space-y-4">
-        {arrBlog.length > 0 ? (
-          arrBlog.map((post) => (
-            <BlogCard
+
+      <motion.div {...fadeUp}>
+        <div className="flex flex-col gap-1 pt-4">
+          <h1 className="text-2xl sm:text-3xl font-bold leading-tight">Blog</h1>
+          <p className="text-zinc-400 text-sm leading-relaxed">
+            Meus pensamentos e anotações.
+          </p>
+        </div>
+      </motion.div>
+
+      <motion.div
+        {...fadeUp}
+        transition={{ ...fadeUp.transition, delay: 0.1 }}
+        className="space-y-4"
+      >
+        {blogPostsData.length > 0 ? (
+          blogPostsData.map((post, index) => (
+            <motion.div
               key={post.slug}
-              slug={post.slug}
-              title={post.title}
-              date={post.date}
-              desc={post.desc}
-            />
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.35,
+                delay: 0.15 + index * 0.06,
+                ease: "easeOut",
+              }}
+            >
+              <BlogCard
+                slug={post.slug}
+                title={post.title}
+                date={post.date}
+                desc={post.desc}
+              />
+            </motion.div>
           ))
         ) : (
-          <p className="text-muted-foreground text-xs text-center py-4">
+          <p className="text-zinc-500 text-xs text-center py-4">
             Nenhum post encontrado.
           </p>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </main>
   );
 };
 

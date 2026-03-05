@@ -1,44 +1,43 @@
-import { arrWorks } from "@/data/works";
-import { LayersIcon } from "@/lib/icons";
+﻿import { arrWorks } from "@/data/works";
 import { motion } from "motion/react";
 
 function WorksExperience() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 text-foreground justify-between">
-        <p className="text-base font-semibold">Experiência</p>
-        <LayersIcon className="text-base text-muted-foreground" />
-      </div>
-      <div className="space-y-4">
+      <h2 className="text-base font-semibold text-zinc-300">Experiência</h2>
+      <div className="space-y-3">
         {arrWorks.map((work, index) => (
           <motion.div
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.35,
               delay: index * 0.08,
               ease: "easeOut",
             }}
-            className="flex flex-col sm:flex-row gap-2 justify-between sm:items-center"
+            className="group flex gap-3 p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 transition-colors"
             key={work.company}
           >
-            <div className="flex gap-2 flex-col sm:flex-row">
-              <img
-                src={work.logo}
-                alt={work.company}
-                className="size-6 sm:size-10 object-cover rounded"
-              />
-              <span>
-                <div>{work.company}</div>
-                <p className="text-[12px] sm:text-sm text-muted-foreground font-medium">
-                  {work.role}
+            <img
+              src={work.logo}
+              alt={work.company}
+              className="size-10 object-cover rounded-md shrink-0 mt-0.5"
+            />
+            <div className="flex flex-col gap-1 min-w-0 flex-1">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5">
+                <h3 className="text-sm font-medium text-zinc-200 leading-snug">
+                  {work.company}
+                </h3>
+                <span className="text-xs text-zinc-500 whitespace-nowrap">
+                  {work.duration}
+                </span>
+              </div>
+              <p className="text-xs text-zinc-400">{work.role}</p>
+              {work.about && (
+                <p className="text-xs text-zinc-500/70 leading-relaxed mt-1">
+                  {work.about}
                 </p>
-              </span>
-            </div>
-            <div>
-              <p className="text-[12px] sm:text-sm text-muted-foreground">
-                {work.duration}
-              </p>
+              )}
             </div>
           </motion.div>
         ))}

@@ -1,6 +1,6 @@
-import { useGitHubStats } from "@/hooks/useGitHubStats";
+﻿import { useGitHubStats } from "@/hooks/useGitHubStats";
 
-function StatCard({
+function StatItem({
   label,
   value,
   sub,
@@ -10,24 +10,28 @@ function StatCard({
   sub?: string;
 }) {
   return (
-    <div className="flex flex-col gap-0.5 p-3 rounded border border-border">
-      <span className="text-[11px] text-muted-foreground uppercase tracking-wide">
+    <div className="flex flex-col gap-0.5 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 p-3">
+      <span className="text-[11px] text-zinc-500 uppercase tracking-wide">
         {label}
       </span>
-      <span className="text-lg font-semibold text-foreground leading-tight">
+      <span className="text-lg font-semibold text-zinc-200 leading-tight">
         {value}
       </span>
-      {sub && <span className="text-[11px] text-muted-foreground">{sub}</span>}
+      {sub && <span className="text-[11px] text-zinc-500">{sub}</span>}
     </div>
   );
 }
 
-function StatCardSkeleton() {
+function StatsGridSkeleton() {
   return (
-    <div className="flex flex-col gap-1.5 p-3 rounded border border-border animate-pulse">
-      <div className="h-3 w-16 rounded bg-muted" />
-      <div className="h-5 w-10 rounded bg-muted" />
-      <div className="h-3 w-20 rounded bg-muted" />
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {Array.from({ length: 4 }, (_, i) => (
+        <div key={i} className="flex flex-col gap-1.5 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 p-3 animate-pulse">
+          <div className="h-3 w-16 rounded bg-zinc-800" />
+          <div className="h-5 w-10 rounded bg-zinc-800" />
+          <div className="h-3 w-20 rounded bg-zinc-800" />
+        </div>
+      ))}
     </div>
   );
 }
@@ -38,13 +42,12 @@ function LanguageBar({
   languages: { name: string; percentage: number; color: string }[];
 }) {
   return (
-    <div className="flex flex-col gap-2 p-3 rounded border border-border">
-      <span className="text-[11px] text-muted-foreground uppercase tracking-wide">
+    <div className="flex flex-col gap-2 p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30">
+      <span className="text-[11px] text-zinc-500 uppercase tracking-wide">
         Linguagens mais usadas
       </span>
 
-      {/* Bar */}
-      <div className="flex h-2 rounded-full overflow-hidden gap-[2px]">
+      <div className="flex h-2 rounded-xs overflow-hidden gap-[2px]">
         {languages.map((lang) => (
           <div
             key={lang.name}
@@ -54,12 +57,11 @@ function LanguageBar({
               backgroundColor: lang.color,
               minWidth: 4,
             }}
-            className="rounded-full"
+            className="rounded-xs"
           />
         ))}
       </div>
 
-      {/* Labels */}
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         {languages.map((lang) => (
           <div key={lang.name} className="flex items-center gap-1.5">
@@ -67,9 +69,9 @@ function LanguageBar({
               className="size-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: lang.color }}
             />
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[11px] text-zinc-500">
               {lang.name}{" "}
-              <span className="text-foreground font-medium">
+              <span className="text-zinc-200 font-medium">
                 {lang.percentage}%
               </span>
             </span>
@@ -82,12 +84,12 @@ function LanguageBar({
 
 function LanguageBarSkeleton() {
   return (
-    <div className="flex flex-col gap-2 p-3 rounded border border-border animate-pulse">
-      <div className="h-3 w-32 rounded bg-muted" />
-      <div className="h-2 w-full rounded-full bg-muted" />
+    <div className="flex flex-col gap-2 p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 animate-pulse">
+      <div className="h-3 w-32 rounded bg-zinc-800" />
+      <div className="h-2 w-full rounded-full bg-zinc-800" />
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         {Array.from({ length: 5 }, (_, i) => (
-          <div key={i} className="h-3 w-14 rounded bg-muted" />
+          <div key={i} className="h-3 w-14 rounded bg-zinc-800" />
         ))}
       </div>
     </div>
@@ -100,36 +102,34 @@ function GitHubStats() {
   if (error && !isLoading) return null;
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Stat cards grid */}
+    <div className="flex flex-col gap-3">
       {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {Array.from({ length: 4 }, (_, i) => (
-            <StatCardSkeleton key={i} />
-          ))}
-        </div>
+        <StatsGridSkeleton />
       ) : data ? (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <StatCard
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatItem
             label="Streak"
             value={data.currentStreak}
             sub="dias seguidos"
           />
-          <StatCard
+          <StatItem
             label="Stars"
             value={data.totalStars}
             sub="total em repos"
           />
-          <StatCard
+          <StatItem
             label="PRs Merged"
             value={data.mergedPRs}
             sub="pull requests"
           />
-          <StatCard label="Issues" value={data.closedIssues} sub="fechadas" />
+          <StatItem
+            label="Issues"
+            value={data.closedIssues}
+            sub="fechadas"
+          />
         </div>
       ) : null}
 
-      {/* Languages bar */}
       {isLoading ? (
         <LanguageBarSkeleton />
       ) : data ? (

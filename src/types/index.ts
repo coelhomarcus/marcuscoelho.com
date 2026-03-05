@@ -1,5 +1,5 @@
 import { AnchorHTMLAttributes } from "react";
-import type { IconType } from "@/lib/icons";
+import type { IconType } from "react-icons";
 
 export interface Project {
   href: string;

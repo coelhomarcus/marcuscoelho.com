@@ -1,4 +1,4 @@
-import { arrCertificates } from "@/data/certificates";
+﻿import { arrCertificates } from "@/data/certificates";
 import SimpleCard from "@/components/SimpleCard/SimpleCard";
 import PageTitle from "@/components/PageTitle/PageTitle";
 
@@ -6,10 +6,10 @@ const Certificates = () => {
   const certificates = arrCertificates;
 
   return (
-    <div className="text-foreground">
+    <div className="text-zinc-100">
       <PageTitle title="Certificados" suffix />
       <h1 className="text-xl font-semibold mb-2">Certificados</h1>
-      <p className="text-muted-foreground text-sm mb-4">
+      <p className="text-zinc-500 text-sm mb-4">
         Aqui estão algumas das certificações que conquistei ao longo da minha
         jornada.
       </p>

@@ -27,7 +27,7 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <div className="px-4 py-4 sm:px-6 sm:py-8 min-h-[100vh] space-y-3 max-w-[900px] mx-auto">
+    <div className="max-w-5xl mx-auto px-4 py-4 sm:px-6 sm:py-8 min-h-[100vh] space-y-3">
       <ScrollToTop />
       <Header />
       <AnimatePresence mode="wait" initial={false}>

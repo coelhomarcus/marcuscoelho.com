@@ -1,67 +1,21 @@
-import { useRef, useState, useEffect, useCallback } from "react";
-import { GithubIcon } from "@/lib/icons";
-import { useTheme } from "next-themes";
+﻿import { useRef, useState, useEffect, useCallback } from "react";
 import {
   useGitHubCalendar,
   type ContributionLevel,
-  type ContributionWeek,
 } from "@/hooks/useGitHubCalendar";
+import { RxGithubLogo as GithubIcon } from "react-icons/rx";
 
 const GAP = 3;
-const MONTH_LABEL_HEIGHT = 16;
 const MIN_CELL = 10;
-const MAX_CELL = 14;
 const WEEKS_TOTAL = 53;
 
-const MONTHS = [
-  "Jan",
-  "Fev",
-  "Mar",
-  "Abr",
-  "Mai",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Set",
-  "Out",
-  "Nov",
-  "Dez",
-];
-
-const COLORS: Record<"light" | "dark", Record<ContributionLevel, string>> = {
-  light: {
-    NONE: "#ebedf0",
-    FIRST_QUARTILE: "#9be9a8",
-    SECOND_QUARTILE: "#40c463",
-    THIRD_QUARTILE: "#30a14e",
-    FOURTH_QUARTILE: "#216e39",
-  },
-  dark: {
-    NONE: "#181818",
-    FIRST_QUARTILE: "#0e4429",
-    SECOND_QUARTILE: "#006d32",
-    THIRD_QUARTILE: "#26a641",
-    FOURTH_QUARTILE: "#39d353",
-  },
+const COLORS: Record<ContributionLevel, string> = {
+  NONE: "#181818",
+  FIRST_QUARTILE: "#0e4429",
+  SECOND_QUARTILE: "#006d32",
+  THIRD_QUARTILE: "#26a641",
+  FOURTH_QUARTILE: "#39d353",
 };
-
-function getMonthLabels(weeks: ContributionWeek[], cellSize: number) {
-  const labels: { month: string; left: number }[] = [];
-  let prevMonth = -1;
-  weeks.forEach((week, weekIdx) => {
-    const firstDay = week.contributionDays[0];
-    if (!firstDay) return;
-    const month = new Date(firstDay.date + "T12:00:00").getMonth();
-    if (month !== prevMonth) {
-      labels.push({
-        month: MONTHS[month],
-        left: weekIdx * (cellSize + GAP),
-      });
-      prevMonth = month;
-    }
-  });
-  return labels;
-}
 
 function CalendarSkeleton({
   cellSize,
@@ -77,12 +31,10 @@ function CalendarSkeleton({
       className="flex flex-col select-none animate-pulse"
       style={{ gap: GAP }}
     >
-      {/* Grid skeleton */}
       <div
         className="github-calendar-scroll"
         style={{ flex: 1, overflowX: "hidden", overflowY: "hidden" }}
       >
-        <div style={{ height: MONTH_LABEL_HEIGHT }} />
         <div style={{ display: "flex", gap: GAP, width: skeletonGridWidth }}>
           {Array.from({ length: WEEKS_TOTAL }, (_, wi) => (
             <div
@@ -110,12 +62,6 @@ function CalendarSkeleton({
           ))}
         </div>
       </div>
-
-      {/* Footer skeleton */}
-      <div className="flex items-center justify-between mt-1 gap-1">
-        <div className="h-3 w-40 rounded bg-muted" />
-        <div className="h-3 w-24 rounded bg-muted" />
-      </div>
     </div>
   );
 }
@@ -124,13 +70,11 @@ function GitHubGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(12);
-  const { resolvedTheme } = useTheme();
   const { data, isLoading, error } = useGitHubCalendar();
 
-  const theme = (resolvedTheme === "dark" ? "dark" : "light") as
-    | "light"
-    | "dark";
-  const colors = COLORS[theme];
+  const colors = COLORS;
+
+  const weeksCount = data ? data.weeks.length : WEEKS_TOTAL;
 
   const scrollToEnd = useCallback(() => {
     const el = scrollRef.current;
@@ -143,52 +87,45 @@ function GitHubGraph() {
 
     const obs = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width;
-      const ideal = (width - (WEEKS_TOTAL + 1) * GAP) / WEEKS_TOTAL;
-      setCellSize(Math.max(MIN_CELL, Math.min(MAX_CELL, ideal)));
+      const ideal = (width - (weeksCount - 1) * GAP) / weeksCount;
+      setCellSize(Math.max(MIN_CELL, ideal));
       requestAnimationFrame(scrollToEnd);
     });
 
     obs.observe(el);
     return () => obs.disconnect();
-  }, [scrollToEnd]);
+  }, [scrollToEnd, weeksCount]);
 
-  // Scroll to the right (most recent) whenever data loads
   useEffect(() => {
     if (data) requestAnimationFrame(scrollToEnd);
   }, [data, scrollToEnd]);
 
   const gridWidth = data ? data.weeks.length * (cellSize + GAP) - GAP : 0;
 
-  const placeholderH = 7 * MIN_CELL + 6 * GAP + MONTH_LABEL_HEIGHT + 32;
-
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2 text-foreground justify-between">
-        <h2 className="text-base font-semibold">GitHub</h2>
-        <a
-          href="https://github.com/coelhomarcus"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <GithubIcon className="text-base text-muted-foreground hover:text-foreground" />
-        </a>
-      </div>
+    <div className="flex flex-col gap-3">
+      <a
+        href="https://github.com/coelhomarcus"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 text-base font-semibold text-zinc-300 hover:text-zinc-100 hover:underline transition-colors"
+      >
+        <GithubIcon className="size-4" />
+        github.com/coelhomarcus
+      </a>
 
-      <div ref={containerRef} className="border border-border rounded p-3">
+      <div
+        ref={containerRef}
+        className="border border-zinc-700/50 bg-zinc-800/30 rounded-[8px] p-3"
+      >
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}
 
         {error && !isLoading && (
-          <div
-            className="flex items-center justify-center text-sm text-muted-foreground"
-            style={{ height: placeholderH }}
-          >
-            Erro ao carregar dados do GitHub
-          </div>
+          <CalendarSkeleton cellSize={cellSize} colors={colors} />
         )}
 
         {data && !isLoading && (
           <div className="flex flex-col select-none" style={{ gap: GAP }}>
-            {/* Scrollable area: month labels + week columns */}
             <div
               ref={scrollRef}
               className="github-calendar-scroll"
@@ -197,25 +134,6 @@ function GitHubGraph() {
                 overflowY: "hidden",
               }}
             >
-              {/* Month labels */}
-              <div
-                className="relative"
-                style={{ height: MONTH_LABEL_HEIGHT, width: gridWidth }}
-              >
-                {getMonthLabels(data.weeks, cellSize).map(
-                  ({ month, left }, i) => (
-                    <span
-                      key={i}
-                      className="absolute text-[10px] text-muted-foreground leading-none"
-                      style={{ left, top: 2 }}
-                    >
-                      {month}
-                    </span>
-                  ),
-                )}
-              </div>
-
-              {/* Weeks grid */}
               <div
                 style={{
                   display: "flex",
@@ -249,38 +167,6 @@ function GitHubGraph() {
                     ))}
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Footer: total + legend */}
-            <div className="flex items-center justify-between mt-1 text-[10px] text-muted-foreground flex-wrap gap-1">
-              <span>
-                {data.totalContributions.toLocaleString("pt-BR")} contribuições
-                no último ano
-              </span>
-              <div className="flex items-center gap-1">
-                <span>Menos</span>
-                {(
-                  [
-                    "NONE",
-                    "FIRST_QUARTILE",
-                    "SECOND_QUARTILE",
-                    "THIRD_QUARTILE",
-                    "FOURTH_QUARTILE",
-                  ] as ContributionLevel[]
-                ).map((level) => (
-                  <div
-                    key={level}
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: 2,
-                      backgroundColor: colors[level],
-                      flexShrink: 0,
-                    }}
-                  />
-                ))}
-                <span>Mais</span>
               </div>
             </div>
           </div>

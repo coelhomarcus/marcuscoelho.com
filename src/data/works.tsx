@@ -1,18 +1,18 @@
 import type { Work } from "@/types";
+import type { IconType } from "react-icons";
 import {
-  type IconType,
-  ReactIcon,
-  TypeScriptIcon,
-  JavaScriptIcon,
-  TailwindIcon,
-  ExpressIcon,
-  NodeIcon,
-  ViteIcon,
-  NextJSIcon,
-  PostgreSQLIcon,
-  FigmaIcon,
-  BunIcon,
-} from "@/lib/icons";
+  SiReact as ReactIcon,
+  SiTypescript as TypeScriptIcon,
+  SiJavascript as JavaScriptIcon,
+  SiTailwindcss as TailwindIcon,
+  SiExpress as ExpressIcon,
+  SiNodedotjs as NodeIcon,
+  SiVite as ViteIcon,
+  SiNextdotjs as NextJSIcon,
+  SiPostgresql as PostgreSQLIcon,
+  SiBun as BunIcon,
+} from "react-icons/si";
+import { BiLogoFigma as FigmaIcon } from "react-icons/bi";
 
 export const arrWorks: Work[] = [
   {
@@ -20,8 +20,7 @@ export const arrWorks: Work[] = [
     role: "Developer",
     duration: "2025 - Presente",
     logo: "/src/works/petsaude.webp",
-    about:
-      "Desenvolvedor no PET-Saúde/I&SD, programa em parceria entre a UNIFESSPA e o Ministério da Saúde, com foco na transformação digital do SUS, participando de iniciativas de inovação e desenvolvimento de soluções para a saúde pública.",
+    about: "",
   },
   {
     company:
@@ -37,7 +36,7 @@ export const arrWorks: Work[] = [
     duration: "02/07/2024 - 31/01/2026",
     logo: "/src/works/exceptionjr.webp",
     about:
-      "Na Exception, atuo como desenvolvedor fullstack, contribuindo para a criação de soluções web modernas. Minhas responsabilidades envolvem desde o desenvolvimento de interfaces responsivas até a implementação de lógicas de negócio e integrações com APIs. No dia a dia, utilizo tecnologias como React, Next.js, Node.js, TypeScript, JavaScript, Bancos SQL e NoSQL para construir aplicações robustas, escaláveis e de fácil manutenção.",
+      "Na Exception, atuei como dev fullstack, contribuindo para a criação de soluções web modernas. Minhas responsabilidades envolvem desde o desenvolvimento de interfaces responsivas até a implementação de lógicas de negócio e integrações com APIs. No dia a dia, utilizei tecnologias como React, Next.js, Node.js, TypeScript, JavaScript e Bancos SQL.",
   },
 ];
 

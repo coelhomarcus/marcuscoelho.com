@@ -1,16 +1,27 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { useParams, Link, useLocation } from "react-router";
 import PageTitle from "@/components/PageTitle/PageTitle";
+import { motion } from "motion/react";
 
-import { BackIcon, CommitIcon } from "@/lib/icons";
+import {
+  RxChevronLeft as BackIcon,
+  RxCommit as CommitIcon,
+} from "react-icons/rx";
 
-import { arrBlog, loadPost } from "./posts/_posts";
+import { loadPost } from "./posts/_posts";
+import { blogPostsData } from "./blogPostsData";
 import components from "../../lib/components";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: "easeOut" },
+};
 
 const Post = () => {
   const { slug } = useParams();
-  const post = arrBlog.find((p) => p.slug === slug);
+  const post = blogPostsData.find((p) => p.slug === slug);
   const [MDXComponent, setMDXComponent] = useState<React.ComponentType | null>(
     null,
   );
@@ -35,79 +46,86 @@ const Post = () => {
   if (!MDXComponent)
     return (
       <div className="flex items-center justify-center">
-        <CommitIcon className="text-muted-foreground animate-[spin_3s_linear_infinite] duration-100 size-6 mt-10" />
+        <CommitIcon className="text-zinc-500 animate-[spin_3s_linear_infinite] duration-100 size-6 mt-10" />
       </div>
     );
 
   if (!post) return <PostNotFound />;
 
   return (
-    <div className="text-foreground w-full">
+    <main className="text-zinc-100 space-y-6">
       {post && <PageTitle title={post.title} />}
 
-      <div className="mt-4 flex justify-between mb-2 pb-2 border-b border-border/80">
-        <Link
-          to="/blog"
-          className="text-sm text-muted-foreground hover:text-foreground transition-all duration-100 flex items-center gap-2"
-        >
-          <BackIcon className="inline" /> Voltar
-        </Link>
-        <button
-          className="flex items-center gap-8 cursor-pointer hover:text-muted-foreground"
-          onClick={() => {
-            const currentUrl = window.location.href;
-            navigator.clipboard.writeText(currentUrl);
-            setTitleClicked(true);
-            setTimeout(() => {
-              setTitleClicked(false);
-              console.log("teste");
-            }, 1000);
-          }}
-        >
-          {titleClicked ? "Link Copiado!" : post.title}
-        </button>
-        <div className="hidden sm:flex sm:gap-0 items-center text-muted-foreground text-xs font-mono">
-          <span>{post.date}</span>
+      <motion.div {...fadeUp}>
+        <div className="flex justify-between items-center pb-3 border-b border-zinc-700/50">
+          <Link
+            to="/blog"
+            className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors duration-100 flex items-center gap-2"
+          >
+            <BackIcon className="inline" /> Voltar
+          </Link>
+          <button
+            className="flex items-center gap-8 cursor-pointer text-zinc-100 hover:text-zinc-400 transition-colors duration-100"
+            onClick={() => {
+              const currentUrl = window.location.href;
+              navigator.clipboard.writeText(currentUrl);
+              setTitleClicked(true);
+              setTimeout(() => {
+                setTitleClicked(false);
+              }, 1000);
+            }}
+          >
+            {titleClicked ? "Link Copiado!" : post.title}
+          </button>
+          <div className="hidden sm:flex items-center text-zinc-500 text-xs font-mono">
+            <span>{post.date}</span>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      <MDXProvider components={components}>
-        <article className="prose max-w-full">
-          <ScrollToHashOnLoad />
-          <MDXComponent />
-        </article>
-      </MDXProvider>
-    </div>
+      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+        <MDXProvider components={components}>
+          <article className="prose max-w-full">
+            <ScrollToHashOnLoad />
+            <MDXComponent />
+          </article>
+        </MDXProvider>
+      </motion.div>
+    </main>
   );
 };
 
 function PostNotFound() {
   return (
-    <div className="flex flex-col justify-center mt-10 items-center gap-2">
-      <h1 className="text-center text-xl font-medium text-foreground">
-        Esse post não existe!
-      </h1>
-      <p className="text-center text-sm text-muted-foreground mb-2">
-        Talvez ele tenha sido removido ou nunca existiu.
-      </p>
+    <main className="text-zinc-100 space-y-6">
+      <motion.div {...fadeUp}>
+        <div className="flex flex-col justify-center mt-10 items-center gap-2">
+          <h1 className="text-center text-2xl sm:text-3xl font-bold text-zinc-100">
+            Esse post não existe!
+          </h1>
+          <p className="text-center text-sm text-zinc-400 mb-2 leading-relaxed">
+            Talvez ele tenha sido removido ou nunca existiu.
+          </p>
 
-      <div className="relative w-50 h-50 self-center mb-3">
-        <div className="absolute inset-0 w-full h-full bg-muted animate-pulse rounded-xl" />
-        <img
-          loading="lazy"
-          src="https://i.pinimg.com/736x/07/24/a3/0724a3febab29fbb247abde72d51d184.jpg"
-          alt="Imagem de personagem confuso"
-          className="absolute inset-0 w-full h-full object-cover select-none rounded-xl"
-        />
-      </div>
+          <div className="relative w-50 h-50 self-center mb-3">
+            <div className="absolute inset-0 w-full h-full bg-zinc-800 animate-pulse rounded-xl" />
+            <img
+              loading="lazy"
+              src="https://i.pinimg.com/736x/07/24/a3/0724a3febab29fbb247abde72d51d184.jpg"
+              alt="Imagem de personagem confuso"
+              className="absolute inset-0 w-full h-full object-cover select-none rounded-xl"
+            />
+          </div>
 
-      <Link
-        to="/blog"
-        className="text-xs px-4 py-2 border border-border text-muted-foreground hover:text-foreground transition-all duration-100"
-      >
-        Voltar pro Blog
-      </Link>
-    </div>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors"
+          >
+            Voltar pro Blog
+          </Link>
+        </div>
+      </motion.div>
+    </main>
   );
 }
 
