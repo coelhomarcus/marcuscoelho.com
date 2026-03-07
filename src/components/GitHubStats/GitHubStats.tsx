@@ -1,4 +1,5 @@
 ﻿import { useGitHubStats } from "@/hooks/useGitHubStats";
+import { useGitHubCalendar } from "@/hooks/useGitHubCalendar";
 
 function StatItem({
   label,
@@ -98,6 +99,7 @@ function LanguageBarSkeleton() {
 
 function GitHubStats() {
   const { data, isLoading, error } = useGitHubStats();
+  const { data: calendarData } = useGitHubCalendar();
 
   if (error && !isLoading) return null;
 
@@ -108,9 +110,9 @@ function GitHubStats() {
       ) : data ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <StatItem
-            label="Streak"
-            value={data.currentStreak}
-            sub="dias seguidos"
+            label="Contribuições"
+            value={calendarData?.totalContributions ?? "—"}
+            sub="no último ano"
           />
           <StatItem
             label="Stars"

@@ -11,7 +11,6 @@ export interface GitHubStatsData {
   totalStars: number;
   mergedPRs: number;
   closedIssues: number;
-  currentStreak: number;
   lastCommitDate: string;
   lastCommitRepo: string;
   languages: Language[];
