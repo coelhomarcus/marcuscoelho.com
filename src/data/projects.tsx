@@ -8,7 +8,7 @@ export const arrProjects: Project[] = [
     desc: "Projeto Real de Agendamentos para uma Barbearia Local",
     tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
     favicon: "https://studio-2n.blipe.cloud/Logo.png",
-    img: "./src/projects/2n-studio.webp",
+    img: "./assets/projects/2n-studio.webp",
     featured: true,
   },
   {
@@ -18,7 +18,7 @@ export const arrProjects: Project[] = [
     desc: "Site para fazer Recortes em Imagens e Gifs",
     tech: ["React", "Typescript", "Tailwind", "Node", "Express", "Mono Repo"],
     favicon: "https://crop.marcuscoelho.com/favicon.ico",
-    img: "./src/projects/crop.webp",
+    img: "./assets/projects/crop.webp",
     featured: true,
   },
   {
@@ -28,7 +28,7 @@ export const arrProjects: Project[] = [
     desc: "Dicionário Inglês - Simples & Moderno",
     tech: ["React", "Typescript", "Tailwind"],
     favicon: "https://dictionary.marcuscoelho.com/logo.svg",
-    img: "./src/projects/dictionary.webp",
+    img: "./assets/projects/dictionary.webp",
     featured: true,
   },
   {
@@ -37,8 +37,8 @@ export const arrProjects: Project[] = [
     name: "Portfolio",
     desc: "Meu Portfólio Pessoal",
     tech: ["React", "Typescript", "Tailwind", "MDX"],
-    favicon: "https://marcuscoelho.com/src/icons/favicon.ico",
-    img: "./src/projects/portfolio.webp",
+    favicon: "https://marcuscoelho.com/assets/icons/favicon.ico",
+    img: "./assets/projects/portfolio.webp",
   },
   {
     href: "https://www.youtube.com/shorts/0fSoHjAadas",
@@ -46,7 +46,7 @@ export const arrProjects: Project[] = [
     name: "SOS Queimadas",
     desc: "Aplicativo IOS para conscientização e prevenção de queimadas",
     tech: ["Swift", "MapKit", "IoT", "API"],
-    img: "./src/projects/sosqueimadas.webp",
+    img: "./assets/projects/sosqueimadas.webp",
   },
   {
     href: "https://old.marcuscoelho.com/",
@@ -55,7 +55,7 @@ export const arrProjects: Project[] = [
     desc: "Meu primeiro portfolio feito em React",
     tech: ["React", "JSX", "CSS"],
     favicon: "https://old.marcuscoelho.com/favicon/favicon.ico",
-    img: "./src/projects/old-portfolio.webp",
+    img: "./assets/projects/old-portfolio.webp",
   },
   {
     href: "https://blob-temp.vercel.app/",
@@ -64,7 +64,7 @@ export const arrProjects: Project[] = [
     desc: "Site de previsão meteorológica, feito para um desafio de um dia na SIAPESQ",
     tech: ["Next.js", "Tailwind", "API"],
     favicon: "https://blob-temp.vercel.app/blob.png ",
-    img: "./src/projects/blob.webp",
+    img: "./assets/projects/blob.webp",
   },
   {
     href: "https://coelhomarcus.github.io/catype/",
@@ -73,7 +73,7 @@ export const arrProjects: Project[] = [
     desc: "Site de teste de digitação - protótipo",
     tech: ["HTML", "CSS", "JavaScript"],
     favicon: "https://coelhomarcus.github.io/catype/img/cat.png",
-    img: "./src/projects/catype.webp",
+    img: "./assets/projects/catype.webp",
   },
   {
     href: "https://coelhomarcus.github.io/bunnybash/",
@@ -82,7 +82,7 @@ export const arrProjects: Project[] = [
     desc: "Site que simula um Terminal",
     tech: ["HTML", "CSS", "JavaScript"],
     favicon: "https://coelhomarcus.github.io/bunnybash/img/rabbit.png",
-    img: "./src/projects/bunnybash.webp",
+    img: "./assets/projects/bunnybash.webp",
   },
   {
     href: "https://github.com/coelhomarcus/simplemedia-backend",
@@ -90,7 +90,7 @@ export const arrProjects: Project[] = [
     desc: "Backend de uma plataforma simples de videos com autenticação, comunidade e mais...",
     tech: ["Bun", "ElysiaJS", "Drizzle", "BetterAuth", "Zod"],
     favicon: "https://cdn-icons-png.flaticon.com/256/679/679821.png",
-    img: "./src/projects/simplemedia-backend.webp",
+    img: "./assets/projects/simplemedia-backend.webp",
   },
   {
     href: "https://marketplace.visualstudio.com/items?itemName=coelhomarcus.bakaneo",
@@ -99,7 +99,7 @@ export const arrProjects: Project[] = [
     tech: ["VSCODE", "Theme"],
     favicon:
       "https://coelhomarcus.gallerycdn.vsassets.io/extensions/coelhomarcus/bakaneo/1.1.6/1744053185368/Microsoft.VisualStudio.Services.Icons.Default",
-    img: "./src/projects/bakaneo.webp",
+    img: "./assets/projects/bakaneo.webp",
   },
   {
     href: "https://coelhomarcus.itch.io/mailman",
@@ -108,6 +108,6 @@ export const arrProjects: Project[] = [
     tech: ["C#", "Unity", "Blender"],
     favicon:
       "https://img.itch.zone/aW1nLzE4NjA1Mjg2LnBuZw==/32x32%23/LXf4e4.png",
-    img: "./src/projects/mailman.webp",
+    img: "./assets/projects/mailman.webp",
   },
 ];

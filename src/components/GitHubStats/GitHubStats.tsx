@@ -27,7 +27,10 @@ function StatsGridSkeleton() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       {Array.from({ length: 4 }, (_, i) => (
-        <div key={i} className="flex flex-col gap-1.5 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 p-3 animate-pulse">
+        <div
+          key={i}
+          className="flex flex-col gap-1.5 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 p-3 animate-pulse"
+        >
           <div className="h-3 w-16 rounded bg-zinc-800" />
           <div className="h-5 w-10 rounded bg-zinc-800" />
           <div className="h-3 w-20 rounded bg-zinc-800" />
@@ -124,11 +127,7 @@ function GitHubStats() {
             value={data.mergedPRs}
             sub="pull requests"
           />
-          <StatItem
-            label="Issues"
-            value={data.closedIssues}
-            sub="fechadas"
-          />
+          <StatItem label="Issues" value={data.closedIssues} sub="fechadas" />
         </div>
       ) : null}
 

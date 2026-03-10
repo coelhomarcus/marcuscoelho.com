@@ -1,7 +1,7 @@
 ﻿import { Link, NavLink } from "react-router";
 import type { HeaderLinkProps } from "@/types";
 
-import SidebarDrawer from "@/components/Vaul/vaul";
+import SidebarDrawer from "@/components/Vaul/Vaul";
 
 import {
   RxGithubLogo as GithubIcon,
@@ -16,7 +16,7 @@ const Header = () => {
         to="/"
         className="text-zinc-100 font-medium text-sm hover:opacity-80 transition-opacity flex items-center rounded-sm"
       >
-        <img src="/src/profile.webp" className="size-5 mr-2 inline" /> Marcus
+        <img src="/assets/profile.webp" className="size-5 mr-2 inline" /> Marcus
         Coelho
       </Link>
 

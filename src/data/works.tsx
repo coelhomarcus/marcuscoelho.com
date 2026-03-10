@@ -19,7 +19,7 @@ export const arrWorks: Work[] = [
     company: "PET-Saúde: Inovação e Saúde Digital no SUS",
     role: "Developer",
     duration: "2025 - Presente",
-    logo: "/src/works/petsaude.webp",
+    logo: "/assets/works/petsaude.webp",
     about: "",
   },
   {
@@ -27,14 +27,14 @@ export const arrWorks: Work[] = [
       "Logibot AI: Plataforma de Auxilio no Ensino de Lógica de Programação",
     role: "Developer",
     duration: "2025 - Presente",
-    logo: "/src/works/logibot.svg",
+    logo: "/assets/works/logibot.svg",
     about: "",
   },
   {
     company: "Exception Jr",
     role: "Full Stack Developer",
     duration: "02/07/2024 - 31/01/2026",
-    logo: "/src/works/exceptionjr.webp",
+    logo: "/assets/works/exceptionjr.webp",
     about:
       "Na Exception, atuei como dev fullstack, contribuindo para a criação de soluções web modernas. Minhas responsabilidades envolvem desde o desenvolvimento de interfaces responsivas até a implementação de lógicas de negócio e integrações com APIs. No dia a dia, utilizei tecnologias como React, Next.js, Node.js, TypeScript, JavaScript e Bancos SQL.",
   },

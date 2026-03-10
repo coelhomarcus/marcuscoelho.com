@@ -1,6 +1,6 @@
 ﻿import { Link } from "react-router";
 import type { BlogCardProps } from "@/types";
-import { blogPostsData } from "./blogPostsData";
+import { blogPostsData } from "@/data/blogPostsData";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
 

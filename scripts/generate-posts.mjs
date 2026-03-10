@@ -74,7 +74,7 @@ function generateBlogData() {
 
   lines.push("];", "");
   fs.writeFileSync(
-    path.join(srcDir, "Blog/blogPostsData.ts"),
+    path.resolve(srcDir, "../data/blogPostsData.ts"),
     lines.join("\n"),
   );
   console.log(`Blog: generated ${posts.length} post(s).`);

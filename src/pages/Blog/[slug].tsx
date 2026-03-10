@@ -10,8 +10,8 @@ import {
 } from "react-icons/rx";
 
 import { loadPost } from "./posts/_posts";
-import { blogPostsData } from "./blogPostsData";
-import components from "../../lib/components";
+import { blogPostsData } from "@/data/blogPostsData";
+import components from "../../lib/mdx-components";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
