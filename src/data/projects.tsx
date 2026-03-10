@@ -29,7 +29,6 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind"],
     favicon: "https://dictionary.marcuscoelho.com/logo.svg",
     img: "./assets/projects/dictionary.webp",
-    featured: true,
   },
   {
     href: "https://marcuscoelho.com/",
@@ -39,6 +38,7 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind", "MDX"],
     favicon: "https://marcuscoelho.com/assets/icons/favicon.ico",
     img: "./assets/projects/portfolio.webp",
+    featured: true,
   },
   {
     href: "https://www.youtube.com/shorts/0fSoHjAadas",
