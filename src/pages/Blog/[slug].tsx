@@ -3,10 +3,12 @@ import { MDXProvider } from "@mdx-js/react";
 import { useParams, Link, useLocation } from "react-router";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
+import { useToast } from "@/components/Toast/Toast";
 
 import {
   RxChevronLeft as BackIcon,
   RxCommit as CommitIcon,
+  RxLink2 as LinkIcon,
 } from "react-icons/rx";
 
 import { loadPost } from "./posts/_posts";
@@ -25,7 +27,7 @@ const Post = () => {
   const [MDXComponent, setMDXComponent] = useState<React.ComponentType | null>(
     null,
   );
-  const [titleClicked, setTitleClicked] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!slug) return;
@@ -53,37 +55,62 @@ const Post = () => {
   if (!post) return <PostNotFound />;
 
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100">
       {post && <PageTitle title={post.title} />}
 
       <motion.div {...fadeUp}>
-        <div className="flex justify-between items-center pb-3 border-b border-zinc-700/50">
-          <Link
-            to="/blog"
-            className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors duration-100 flex items-center gap-2"
-          >
-            <BackIcon className="inline" /> Voltar
-          </Link>
-          <button
-            className="flex items-center gap-8 cursor-pointer text-zinc-100 hover:text-zinc-400 transition-colors duration-100"
-            onClick={() => {
-              const currentUrl = window.location.href;
-              navigator.clipboard.writeText(currentUrl);
-              setTitleClicked(true);
-              setTimeout(() => {
-                setTitleClicked(false);
-              }, 1000);
-            }}
-          >
-            {titleClicked ? "Link Copiado!" : post.title}
-          </button>
-          <div className="hidden sm:flex items-center text-zinc-500 text-xs font-mono">
-            <span>{post.date}</span>
+        <Link
+          to="/blog"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors duration-200 mb-8"
+        >
+          <BackIcon className="size-4" /> Voltar aos articles
+        </Link>
+      </motion.div>
+
+      <motion.div
+        {...fadeUp}
+        transition={{ ...fadeUp.transition, delay: 0.06 }}
+      >
+        <div className="relative mb-10 overflow-hidden rounded-xl bg-black">
+          {post.banner && (
+            <div className="absolute right-0 top-0 w-[50%] h-full">
+              <img
+                src={post.banner}
+                alt="Banner"
+                className="absolute inset-0 w-full h-full object-cover object-right select-none"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/90" />
+            </div>
+          )}
+          <div className={`relative ${post.banner ? "py-4" : ""}`}>
+            <h1 className="font-[Times_New_Roman] italic text-4xl sm:text-5xl md:text-6xl text-zinc-100 leading-[1.1] mb-5">
+              {post.title}
+            </h1>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-zinc-500 font-mono">
+                {post.date}
+              </span>
+              <span className="text-zinc-700">·</span>
+              <span className="text-sm text-zinc-500">{post.desc}</span>
+              <span className="text-zinc-700">·</span>
+              <button
+                className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors duration-200 cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast("Link copiado!");
+                }}
+              >
+                <LinkIcon className="size-3.5" /> Copiar link
+              </button>
+            </div>
           </div>
         </div>
       </motion.div>
 
-      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+      <motion.div
+        {...fadeUp}
+        transition={{ ...fadeUp.transition, delay: 0.12 }}
+      >
         <MDXProvider components={components}>
           <article className="prose max-w-full">
             <ScrollToHashOnLoad />

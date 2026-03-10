@@ -1,25 +1,9 @@
-﻿import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useState } from "react";
-import {
-  RxClipboardCopy as CopyIcon,
-  RxCheck as CheckIcon,
-} from "react-icons/rx";
+import { RxClipboardCopy as CopyIcon } from "react-icons/rx";
+import { useToast } from "@/components/Toast/Toast";
 
-import type { CopyHookReturn, HeadingProps, PreComponentProps } from "@/types";
-
-const useCopyWithFeedback = (duration = 1300): CopyHookReturn => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const handleCopy = () => {
-    setIsCopied(true);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, duration);
-  };
-
-  return { isCopied, handleCopy };
-};
+import type { HeadingProps, PreComponentProps } from "@/types";
 
 import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
 import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
@@ -43,7 +27,6 @@ const createHeadingClickHandler =
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-
       history.pushState(null, "", `#${id}`);
     }
 
@@ -57,137 +40,143 @@ const createHeadingClickHandler =
 
 const components = {
   h1: function H1Component(props: HeadingProps) {
-    const { isCopied: isLinkCopied, handleCopy } = useCopyWithFeedback();
+    const { toast } = useToast();
     const id = slugify(String(props.children));
 
     return (
       <h1
         id={id}
-        className="scroll-mt-20 text-2xl md:text-3xl font-bold mt-6 mb-4 first:mt-0 border-b"
+        className="scroll-mt-20 font-[Times_New_Roman] italic text-3xl md:text-4xl mt-10 mb-5 first:mt-0 pb-3 border-b border-zinc-800"
       >
         <a
           href={`#${id}`}
-          className="heading-link text-zinc-100 no-underline font-bold hover:text-blue-500 active:text-zinc-500 cursor-pointer select-none transition-colors"
-          onClick={createHeadingClickHandler(id, handleCopy)}
+          className="heading-link text-zinc-100 no-underline hover:text-zinc-300 active:text-zinc-500 cursor-pointer select-none transition-colors duration-200"
+          onClick={createHeadingClickHandler(id, () =>
+            toast("Link da seção copiado!"),
+          )}
         >
-          {isLinkCopied ? "Link copiado!" : props.children}
+          {props.children}
         </a>
       </h1>
     );
   },
   h2: function H2Component(props: HeadingProps) {
-    const { isCopied: isLinkCopied, handleCopy } = useCopyWithFeedback();
+    const { toast } = useToast();
     const id = slugify(String(props.children));
 
     return (
       <h2
         id={id}
-        className="scroll-mt-20 text-xl md:text-2xl font-semibold mt-6 mb-3 border-b"
+        className="scroll-mt-20 font-[Times_New_Roman] italic text-2xl md:text-3xl mt-8 mb-4 pb-2 border-b border-zinc-800/60"
       >
         <a
           href={`#${id}`}
-          className="heading-link text-zinc-100 no-underline font-semibold hover:text-blue-500 active:text-zinc-500 cursor-pointer select-none transition-colors"
-          onClick={createHeadingClickHandler(id, handleCopy)}
+          className="heading-link text-zinc-100 no-underline hover:text-zinc-300 active:text-zinc-500 cursor-pointer select-none transition-colors duration-200"
+          onClick={createHeadingClickHandler(id, () =>
+            toast("Link da seção copiado!"),
+          )}
         >
-          {isLinkCopied ? "Link copiado!" : props.children}
+          {props.children}
         </a>
       </h2>
     );
   },
   h3: function H3Component(props: HeadingProps) {
-    const { isCopied: isLinkCopied, handleCopy } = useCopyWithFeedback();
+    const { toast } = useToast();
     const id = slugify(String(props.children));
 
     return (
       <h3
         id={id}
-        className="scroll-mt-20 text-lg md:text-xl font-medium mt-5 mb-2"
+        className="scroll-mt-20 font-[Times_New_Roman] italic text-xl md:text-2xl mt-6 mb-3"
       >
         <a
           href={`#${id}`}
-          className="heading-link text-zinc-100 no-underline font-medium hover:text-blue-500 active:text-zinc-500 cursor-pointer select-none transition-colors"
-          onClick={createHeadingClickHandler(id, handleCopy)}
+          className="heading-link text-zinc-200 no-underline hover:text-zinc-300 active:text-zinc-500 cursor-pointer select-none transition-colors duration-200"
+          onClick={createHeadingClickHandler(id, () =>
+            toast("Link da seção copiado!"),
+          )}
         >
-          {isLinkCopied ? "Link copiado!" : props.children}
+          {props.children}
         </a>
       </h3>
     );
   },
   h4: function H4Component(props: HeadingProps) {
-    const { isCopied: isLinkCopied, handleCopy } = useCopyWithFeedback();
+    const { toast } = useToast();
     const id = slugify(String(props.children));
 
     return (
       <h4
         id={id}
-        className="scroll-mt-20 text-base md:text-lg font-medium mt-4 mb-2"
+        className="scroll-mt-20 text-lg md:text-xl font-semibold mt-5 mb-2 text-zinc-200"
       >
         <a
           href={`#${id}`}
-          className="heading-link text-zinc-100 no-underline font-medium hover:text-blue-500 active:text-zinc-500 cursor-pointer select-none transition-colors"
-          onClick={createHeadingClickHandler(id, handleCopy)}
+          className="heading-link text-zinc-200 no-underline hover:text-zinc-300 active:text-zinc-500 cursor-pointer select-none transition-colors duration-200"
+          onClick={createHeadingClickHandler(id, () =>
+            toast("Link da seção copiado!"),
+          )}
         >
-          {isLinkCopied ? "Link copiado!" : props.children}
+          {props.children}
         </a>
       </h4>
     );
   },
   p: (props: React.HTMLProps<HTMLParagraphElement>) => (
     <p
-      className="text-zinc-500 mb-4 leading-relaxed font-medium"
+      className="text-zinc-400 mb-5 leading-[1.8] text-[15px]"
       {...props}
     />
   ),
   a: (props: React.HTMLProps<HTMLAnchorElement>) => (
-    <span>
-      [
-      <a
-        className="group prose-base font-medium text-blue-500 underline hover:text-blue-500/80"
-        target="_blank"
-        {...props}
-      >
-        {props.children}
-      </a>
-      ]
-    </span>
+    <a
+      className="text-zinc-200 underline decoration-zinc-600 underline-offset-3 hover:decoration-zinc-300 transition-colors duration-200"
+      target="_blank"
+      {...props}
+    >
+      {props.children}
+    </a>
   ),
   ul: (props: React.HTMLProps<HTMLUListElement>) => (
-    <ul className="text-zinc-500 mb-4 pl-6 space-y-1" {...props} />
+    <ul
+      className="text-zinc-400 mb-5 pl-6 space-y-2 list-disc marker:text-zinc-600"
+      {...props}
+    />
   ),
   li: (props: React.HTMLProps<HTMLLIElement>) => (
-    <li className="text-zinc-500 leading-relaxed" {...props} />
+    <li className="text-zinc-400 leading-[1.7] text-[15px]" {...props} />
   ),
   code: (props: React.HTMLProps<HTMLElement>) => (
     <span
-      className="text-sm text-zinc-500 px-1.5 py-0.5 bg-zinc-800 border border-zinc-900 rounded-md font-mono"
+      className="text-sm text-zinc-300 px-1.5 py-0.5 bg-zinc-800/80 border border-zinc-700/50 rounded-md font-mono"
       {...props}
     />
   ),
 
   pre: function PreComponent({ children, ...rest }: PreComponentProps) {
-    const { isCopied, handleCopy } = useCopyWithFeedback();
+    const { toast } = useToast();
     const child = children.props;
     const language = child.className?.replace("language-", "") || "text";
     const code = child.children.trim?.() || "";
 
     const handleCopyCode = () => {
       navigator.clipboard.writeText(code);
-      handleCopy();
+      toast("Código copiado!");
     };
 
     return (
-      <div className="relative group my-6">
-        <button
-          onClick={handleCopyCode}
-          className="absolute top-2 right-2 p-1 m-1 bg-transparent text-[#909090] hover:text-white active:scale-90 transition-colors focus:opacity-100 cursor-pointer rounded-md"
-          aria-label="Copiar código"
-        >
-          {isCopied ? (
-            <CheckIcon className="w-4 h-4 text-lime-300" />
-          ) : (
-            <CopyIcon className="w-4 h-4" />
-          )}
-        </button>
+      <div className="relative group my-8 rounded-xl overflow-hidden border border-zinc-800">
+        <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/80 border-b border-zinc-800">
+          <span className="text-xs text-zinc-500 font-mono">{language}</span>
+          <button
+            onClick={handleCopyCode}
+            className="p-1 text-zinc-500 hover:text-zinc-200 active:scale-90 transition-colors cursor-pointer rounded-md"
+            aria-label="Copiar código"
+          >
+            <CopyIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
         <SyntaxHighlighter
           language={language}
           style={theme}
@@ -195,9 +184,10 @@ const components = {
             background: "",
             padding: "1.25rem",
             fontSize: "0.875rem",
-            lineHeight: "1.5",
+            lineHeight: "1.6",
+            margin: 0,
           }}
-          className="rounded-md !bg-black !border !border-zinc-700 scrollbar scrollbar-content"
+          className="!bg-black/60 scrollbar scrollbar-content !rounded-none !border-0"
           {...rest}
         >
           {code}
@@ -206,19 +196,22 @@ const components = {
     );
   },
   strong: (props: React.ComponentProps<"strong">) => (
-    <strong className="text-zinc-100 font-medium" {...props} />
+    <strong className="text-zinc-100 font-semibold" {...props} />
   ),
   blockquote: (props: React.HTMLProps<HTMLQuoteElement>) => (
     <blockquote
-      className="border-l-4 border-zinc-700 pl-4 py-2 my-6 bg-zinc-800/50 text-zinc-500 italic"
+      className="border-l-2 border-zinc-600 pl-5 py-3 my-8 text-zinc-400 italic text-[15px] leading-[1.7]"
       {...props}
     />
   ),
   ol: (props: React.OlHTMLAttributes<HTMLOListElement>) => (
     <ol
-      className="text-zinc-500 mb-4 pl-6 space-y-1 list-decimal"
+      className="text-zinc-400 mb-5 pl-6 space-y-2 list-decimal marker:text-zinc-600"
       {...props}
     />
+  ),
+  hr: () => (
+    <hr className="border-none my-10 flex justify-center before:content-['···'] before:text-zinc-600 before:tracking-[0.5em] before:text-lg" />
   ),
 };
 

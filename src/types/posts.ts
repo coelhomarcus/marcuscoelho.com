@@ -4,6 +4,7 @@ export interface BlogFrontmatter {
   date: string;
   desc: string;
   tags?: string[];
+  banner?: string;
 }
 
 export interface DiaryFrontmatter {

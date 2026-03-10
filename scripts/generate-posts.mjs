@@ -48,6 +48,7 @@ function generateBlogData() {
         date: fm.date || "",
         desc: fm.desc || "",
         tags: fm.tags || undefined,
+        banner: fm.banner || undefined,
       };
     })
     .filter(Boolean)
@@ -69,6 +70,7 @@ function generateBlogData() {
       lines.push(
         `    tags: ${JSON.stringify(p.tags.split(",").map((t) => t.trim()))},`,
       );
+    if (p.banner) lines.push(`    banner: ${JSON.stringify(p.banner)},`);
     lines.push("  },");
   }
 

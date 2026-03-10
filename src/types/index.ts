@@ -76,6 +76,7 @@ export interface BlogCardProps {
   date: string;
   desc: string;
   tags?: string[];
+  banner?: string;
 }
 
 export interface SidebarLinkProps {
