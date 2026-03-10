@@ -133,7 +133,7 @@ const SidebarDrawer = () => {
           />
 
           <div
-            className={`bg-black text-zinc-100 fixed right-0 top-0 z-100 flex h-full w-[90vw] flex-col border border-zinc-700 sm:w-[70vw] lg:w-[400px] transition-transform duration-200 ease-out ${
+            className={`bg-black text-zinc-100 fixed right-0 top-0 z-100 flex h-full w-[90vw] flex-col border-l border-zinc-900 sm:w-[70vw] lg:w-[400px] transition-transform duration-200 ease-out ${
               isOpen ? "translate-x-0" : "translate-x-full"
             }`}
             role="dialog"

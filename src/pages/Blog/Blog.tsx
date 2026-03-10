@@ -4,11 +4,14 @@ import { blogPostsData } from "@/data/blogPostsData";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
 
+
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.4, ease: "easeOut" },
 };
+
+const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
 
 const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
   return (
@@ -17,12 +20,16 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
       className="group block rounded-xl border border-zinc-800 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 overflow-hidden relative group"
     >
       {banner && (
-        <div className="absolute right-0 top-0 w-[40%] h-full ">
+        <div className="absolute right-0 top-0 w-[40%] h-full">
           <img
             src={banner}
             alt="Banner"
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover object-right select-none"
+            className="absolute inset-0 w-full h-full object-cover object-right select-none grayscale contrast-150 brightness-110 group-hover:grayscale-0 group-hover:contrast-100 group-hover:brightness-100 transition-all duration-500"
+          />
+          <div
+            className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"
+            style={{ backgroundImage: DITHER_PATTERN, mixBlendMode: "multiply" }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/70 to-transparent transition-colors duration-200 group-hover:from-zinc-900 group-hover:via-zinc-900/70" />
         </div>

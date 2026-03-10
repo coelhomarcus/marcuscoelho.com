@@ -1,12 +1,12 @@
-<img alt="logo" src="https://marcuscoelho.com/src/icons/favicon.ico">
+<img alt="logo" src="https://marcuscoelho.com/assets/icons/favicon.ico">
 
 ##
 
-Bem-vindo ao meu site pessoal!
+Site pessoal, minimalista, direto ao ponto.
 
-um projeto minimalista feito para testar meus conhecimentos e apresentar um pouco sobre mim.
+Feito para apresentar quem sou, o que construo e o que penso.
 
-## 🖊️ Stack
+## Stack
 
 <p>
 <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=plastic&logo=react&logoColor=black" />
@@ -14,20 +14,25 @@ um projeto minimalista feito para testar meus conhecimentos e apresentar um pouc
 <img alt="Tailwind CSS" src="https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?style=plastic&logo=tailwindcss&logoColor=white" />
 <img alt="Vite" src="https://img.shields.io/badge/-Vite-646CFF?style=plastic&logo=vite&logoColor=white" />
 <img alt="React Router" src="https://img.shields.io/badge/-React%20Router-CA4245?style=plastic&logo=reactrouter&logoColor=white" />
+<img alt="Motion" src="https://img.shields.io/badge/-Motion-EE0000?style=plastic&logo=framer&logoColor=white" />
 <img alt="MDX" src="https://img.shields.io/badge/-MDX-1B1F24?style=plastic&logo=mdx&logoColor=white" />
-<img alt="ESLint" src="https://img.shields.io/badge/-ESLint-4B32C3?style=plastic&logo=eslint&logoColor=white" />
 <p/>
 
-## 📂 O que você vai encontrar
+## Seções
 
-O site é dividido em três seções principais:
+- `Sobre` — quem sou, skills e um pouco da minha trajetória.
+- `Projetos` — trabalhos e ideias que saíram do papel.
+- `Blog` — textos, estudos e pensamentos sobre programação e tecnologia.
+- `Certificados` — cursos e certificações.
+- `Contato` — formulário para entrar em contato.
 
--   `Sobre` - Um pouco sobre mim e skills.
--   `Projetos` - Alguns dos trabalhos e ideias que já coloquei em prática.
--   `Blog` - Textos, estudos e pensamentos sobre programação e tecnologia.
+## Posts
 
-Além disso, há seções extras e minhas redes sociais.
+Os posts são escritos em MDX e gerados automaticamente via script (`scripts/generate-posts.mjs`) antes do build. Basta criar um arquivo `.mdx` com frontmatter e ele aparece no blog.
 
-## 🛠️ Contribuições e Feedback
+## Rodando localmente
 
-Achou algum bug ou tem uma sugestão de melhoria? Fique à vontade para entrar em contato!
+```bash
+npm install
+npm run dev
+```
