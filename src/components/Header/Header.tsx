@@ -1,7 +1,7 @@
 ﻿import { Link, NavLink } from "react-router";
 import type { HeaderLinkProps } from "@/types";
 
-import SidebarDrawer from "@/components/Vaul/Vaul";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 import {
   RxGithubLogo as GithubIcon,
@@ -42,7 +42,7 @@ const Header = () => {
             <LinkedinIcon className="size-4" />
           </SocialLink>
         </div>
-        <SidebarDrawer />
+        <Sidebar />
       </div>
     </header>
   );
