@@ -2,13 +2,12 @@ import type { Project } from "@/types";
 
 export const arrProjects: Project[] = [
   {
-    href: "https://studio-2n.blipe.cloud/",
-    linkPreview: "studio-2n.blipe.cloud",
-    name: "Studio 2N",
-    desc: "Projeto Real de Agendamentos para uma Barbearia Local",
-    tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
-    favicon: "https://studio-2n.blipe.cloud/Logo.png",
-    img: "./assets/projects/2n-studio.webp",
+    href: "https://github.com/coelhomarcus/dbunny",
+    name: "DBunny",
+    desc: "Cliente Banco de Dados PostgreSQL feito com React e Rust",
+    tech: ["React", "Typescript", "Tailwind", "Tauri", "Rust"],
+    favicon: "https://raw.githubusercontent.com/coelhomarcus/dbunny/main/web/public/icon.svg",
+    img: "./assets/projects/dbunny.webp",
     featured: true,
   },
   {
@@ -19,6 +18,16 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind", "Node", "Express", "Mono Repo"],
     favicon: "https://crop.marcuscoelho.com/favicon.ico",
     img: "./assets/projects/crop.webp",
+    featured: true,
+  },
+  {
+    href: "https://studio-2n.blipe.cloud/",
+    linkPreview: "studio-2n.blipe.cloud",
+    name: "Studio 2N",
+    desc: "Projeto Real de Agendamentos para uma Barbearia Local",
+    tech: ["React", "Typescript", "Tailwind", "Express", "WAHA"],
+    favicon: "https://studio-2n.blipe.cloud/Logo.png",
+    img: "./assets/projects/2n-studio.webp",
     featured: true,
   },
   {
@@ -38,7 +47,6 @@ export const arrProjects: Project[] = [
     tech: ["React", "Typescript", "Tailwind", "MDX"],
     favicon: "https://marcuscoelho.com/assets/icons/favicon.ico",
     img: "./assets/projects/portfolio.webp",
-    featured: true,
   },
   {
     href: "https://www.youtube.com/shorts/0fSoHjAadas",
