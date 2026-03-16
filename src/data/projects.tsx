@@ -31,7 +31,7 @@ export const arrProjects: Project[] = [
     featured: true,
   },
   {
-    href: "https://dictionary.marcuscoelho.com/",
+    href: "https://dictionary-marcus.vercel.app/",
     linkPreview: "dictionary.marcuscoelho.com",
     name: "Dictionary",
     desc: "Dicionário Inglês - Simples & Moderno",
@@ -57,7 +57,7 @@ export const arrProjects: Project[] = [
     img: "./assets/projects/sosqueimadas.webp",
   },
   {
-    href: "https://old.marcuscoelho.com/",
+    href: "https://old-portfolio-marcus.vercel.app",
     name: "Portfolio Antigo",
     linkPreview: "old.marcuscoelho.com",
     desc: "Meu primeiro portfolio feito em React",
