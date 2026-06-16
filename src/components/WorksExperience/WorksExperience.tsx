@@ -34,7 +34,7 @@ function WorksExperience() {
               </div>
               <p className="text-xs text-zinc-400">{work.role}</p>
               {work.about && (
-                <p className="text-xs text-zinc-500/70 leading-relaxed mt-1">
+                <p className="text-xs text-zinc-500/90 leading-relaxed mt-1">
                   {work.about}
                 </p>
               )}

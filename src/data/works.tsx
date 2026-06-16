@@ -9,6 +9,8 @@ import {
   SiNodedotjs as NodeIcon,
   SiVite as ViteIcon,
   SiNextdotjs as NextJSIcon,
+  SiOpenjdk as JavaIcon,
+  SiSpring as SpringIcon,
   SiPostgresql as PostgreSQLIcon,
   SiBun as BunIcon,
 } from "react-icons/si";
@@ -20,7 +22,8 @@ export const arrWorks: Work[] = [
     role: "Developer",
     duration: "2025 - Presente",
     logo: "/assets/works/petsaude.webp",
-    about: "",
+    about:
+      "Projeto de inovação em parceria entre a UNIFESSPA e o Ministério da Saúde, voltado à transformação digital no SUS. A iniciativa tem como objetivo digitalizar e automatizar processos em unidades de saúde, melhorando a eficiência do atendimento, a organização interna dos funcionários e a experiência dos pacientes. No projeto, atuo em etapas como visitas técnicas ao posto de saúde, entrevistas com usuários, coleta e análise de requisitos, prototipação e desenvolvimento do sistema.",
   },
   {
     company:
@@ -28,7 +31,8 @@ export const arrWorks: Work[] = [
     role: "Developer",
     duration: "2025 - Presente",
     logo: "/assets/works/logibot.svg",
-    about: "",
+    about:
+      "Projeto de pesquisa e desenvolvimento de uma plataforma educacional voltada ao ensino de lógica de programação com o uso de inteligência artificial. A proposta é criar um ambiente interativo onde os alunos possam aprender, praticar e tirar dúvidas com o apoio de um chatbot inteligente. A plataforma também conta com dashboards para que professores acompanhem o progresso das turmas e de alunos individualmente, além de uma área de quizzes, permitindo que os docentes criem atividades avaliativas e acompanhem o desempenho dos estudantes.",
   },
   {
     company: "Exception Jr",
@@ -36,7 +40,7 @@ export const arrWorks: Work[] = [
     duration: "02/07/2024 - 31/01/2026",
     logo: "/assets/works/exceptionjr.webp",
     about:
-      "Na Exception, atuei como dev fullstack, contribuindo para a criação de soluções web modernas. Minhas responsabilidades envolvem desde o desenvolvimento de interfaces responsivas até a implementação de lógicas de negócio e integrações com APIs. No dia a dia, utilizei tecnologias como React, Next.js, Node.js, TypeScript, JavaScript e Bancos SQL.",
+      "Na Exception Jr, atuei como desenvolvedor fullstack, contribuindo para a criação de soluções web modernas e funcionais. Minhas responsabilidades envolveram o desenvolvimento de interfaces responsivas, implementação de lógicas de negócio, integrações com APIs e uso de bancos de dados SQL. Durante minha atuação, participei do projeto Conecta Canaã, desenvolvido em parceria com a Prefeitura de Canaã dos Carajás, com foco na digitalização de serviços públicos. A solução permitia que a população registrasse ocorrências urbanas, como buracos em vias públicas, postes com falhas e outras irregularidades, aproximando os cidadãos da gestão municipal.",
   },
 ];
 
@@ -52,9 +56,11 @@ export const arrSkills: SkillType[] = [
   { icon: TypeScriptIcon, name: "TypeScript" },
   { icon: JavaScriptIcon, name: "JavaScript" },
   { icon: TailwindIcon, name: "Tailwind CSS" },
-  { icon: ExpressIcon, name: "Express" },
+  { icon: JavaIcon, name: "Java" },
+  { icon: SpringIcon, name: "Spring" },
   { icon: NodeIcon, name: "Node.js" },
   { icon: BunIcon, name: "Bun" },
+  { icon: ExpressIcon, name: "Express" },
   { icon: PostgreSQLIcon, name: "PostgreSQL" },
   { icon: FigmaIcon, name: "Figma" },
 ];
