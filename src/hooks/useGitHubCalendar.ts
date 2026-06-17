@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import config from "@/data/config";
+import { getMockGitHubCalendar } from "@/data/mockGitHubCalendar";
 
 export type ContributionLevel =
   | "NONE"
@@ -31,6 +32,12 @@ export function useGitHubCalendar() {
 
   useEffect(() => {
     let cancelled = false;
+
+    if (config.isDev) {
+      setData(getMockGitHubCalendar());
+      setIsLoading(false);
+      return;
+    }
 
     async function fetchContributions() {
       try {

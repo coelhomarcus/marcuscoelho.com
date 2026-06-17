@@ -31,7 +31,7 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
             className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"
             style={{ backgroundImage: DITHER_PATTERN, mixBlendMode: "multiply" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/70 to-transparent transition-colors duration-200 group-hover:from-zinc-900 group-hover:via-zinc-900/70" />
+          <div className="absolute inset-0 bg-linear-to-r from-zinc-950 via-zinc-950/70 to-transparent transition-colors duration-200 group-hover:from-zinc-900 group-hover:via-zinc-900/70" />
         </div>
       )}
       <div className="relative flex flex-col gap-3 p-5 sm:p-6">

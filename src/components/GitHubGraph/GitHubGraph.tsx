@@ -4,6 +4,7 @@ import {
   type ContributionLevel,
 } from "@/hooks/useGitHubCalendar";
 import { RxGithubLogo as GithubIcon } from "react-icons/rx";
+import { Tooltip } from "@/components/Tooltip/Tooltip";
 
 const GAP = 3;
 const MIN_CELL = 10;
@@ -108,7 +109,7 @@ function GitHubGraph() {
         href="https://github.com/coelhomarcus"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-base font-semibold text-zinc-300 hover:text-zinc-100 hover:underline transition-colors"
+        className="inline-flex items-center w-fit gap-2 text-base font-semibold text-zinc-300 hover:text-zinc-100 hover:underline transition-colors"
       >
         <GithubIcon className="size-4" />
         github.com/coelhomarcus
@@ -116,7 +117,7 @@ function GitHubGraph() {
 
       <div
         ref={containerRef}
-        className="border border-zinc-700/50 bg-zinc-800/30 rounded-[8px] p-3"
+        className="border border-zinc-700/50 bg-zinc-800/30 rounded-lg p-3"
       >
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}
 
@@ -132,6 +133,8 @@ function GitHubGraph() {
               style={{
                 overflowX: "auto",
                 overflowY: "hidden",
+                padding: cellSize * 0.4,
+                margin: -cellSize * 0.4,
               }}
             >
               <div
@@ -152,18 +155,21 @@ function GitHubGraph() {
                     }}
                   >
                     {week.contributionDays.map((day, di) => (
-                      <div
+                      <Tooltip
                         key={di}
-                        title={`${day.contributionCount} contribuição${day.contributionCount !== 1 ? "s" : ""} em ${new Date(day.date + "T12:00:00").toLocaleDateString("pt-BR", { day: "numeric", month: "short", year: "numeric" })}`}
-                        style={{
-                          width: cellSize,
-                          height: cellSize,
-                          borderRadius: Math.max(2, cellSize * 0.15),
-                          backgroundColor: colors[day.contributionLevel],
-                          cursor: "default",
-                          flexShrink: 0,
-                        }}
-                      />
+                        content={`${day.contributionCount} contribuição${day.contributionCount !== 1 ? "s" : ""} em ${new Date(day.date + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })}`}
+                      >
+                        <div
+                          className="gh-cell"
+                          style={{
+                            width: cellSize,
+                            height: cellSize,
+                            borderRadius: Math.max(2, cellSize * 0.15),
+                            backgroundColor: colors[day.contributionLevel],
+                            flexShrink: 0,
+                          }}
+                        />
+                      </Tooltip>
                     ))}
                   </div>
                 ))}

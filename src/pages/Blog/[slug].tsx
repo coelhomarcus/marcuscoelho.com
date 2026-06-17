@@ -79,7 +79,7 @@ const Post = () => {
                 alt="Banner"
                 className="absolute inset-0 w-full h-full object-cover object-right select-none"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/90" />
+              <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-black/90" />
             </div>
           )}
           <div className={`relative ${post.banner ? "py-4" : ""}`}>
@@ -146,7 +146,7 @@ function PostNotFound() {
 
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors"
           >
             Voltar pro Blog
           </Link>
