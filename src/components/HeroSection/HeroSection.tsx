@@ -11,7 +11,7 @@
         </h1>
 
         <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-          Estudante de Sistemas de Informação na UNIFESSPA [7/8] e desenvolvedor
+          Estudante de Sistemas de Informação na UNIFESSPA [8/8] e desenvolvedor
           no projeto PET-Saúde: Inovação e Saúde Digital no SUS, pelo Ministério
           da Saúde.
           <br />
