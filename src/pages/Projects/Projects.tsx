@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { arrProjects } from "../../data/projects";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
+import ProjectModal from "../../components/ProjectModal/ProjectModal";
 import PageTitle from "@/components/PageTitle/PageTitle";
+import type { Project } from "@/types";
 import { motion } from "motion/react";
 
 const fadeUp = {
@@ -9,9 +12,9 @@ const fadeUp = {
   transition: { duration: 0.4, ease: "easeOut" },
 };
 
-const sorted = [...arrProjects].sort((a, b) => Number(b.featured ?? 0) - Number(a.featured ?? 0));
-
 const Projects = () => {
+  const [selected, setSelected] = useState<Project | null>(null);
+
   return (
     <main className="text-zinc-100 space-y-6">
       <PageTitle title="Projetos" suffix />
@@ -32,7 +35,7 @@ const Projects = () => {
         transition={{ ...fadeUp.transition, delay: 0.1 }}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {sorted.map((project, index) => (
+          {arrProjects.map((project, index) => (
             <motion.div
               key={project.name}
               className="h-full"
@@ -46,17 +49,20 @@ const Projects = () => {
             >
               <ProjectCard
                 favicon={project.favicon}
+                link={project.link}
                 linkPreview={project.linkPreview}
-                href={project.href}
                 name={project.name}
                 desc={project.desc}
                 tech={project.tech}
-                img={project.img}
+                images={project.images}
+                onClick={() => setSelected(project)}
               />
             </motion.div>
           ))}
         </div>
       </motion.div>
+
+      <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </main>
   );
 };

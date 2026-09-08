@@ -1,13 +1,14 @@
 ﻿import { arrProjects } from "@/data/projects";
+import { projectAsset } from "@/lib/utils";
 import { RxArrowTopRight as ExternalLinkIcon } from "react-icons/rx";
 
 const ProjectsMarquee = () => {
   const projects = arrProjects.map((p) => ({
-    src: p.img,
+    src: p.images?.[0] ? projectAsset(p.images[0]) : undefined,
     name: p.name,
     desc: p.desc,
     tech: p.tech,
-    href: p.href,
+    href: p.link ?? p.repo,
   }));
 
   const duplicated = [...projects, ...projects];

@@ -1,27 +1,34 @@
 import type { ProjectCardProps } from "@/types";
+import { formatLinkPreview, projectAsset } from "@/lib/utils";
 
-import { RxArrowTopRight as ExternalLinkIcon } from "react-icons/rx";
+import {
+  RxArrowTopRight as ExternalLinkIcon,
+  RxGlobe as GlobeIcon,
+} from "react-icons/rx";
 
 const ProjectCard = ({
-  href,
   name,
   desc,
   tech = [],
-  img,
+  images,
   favicon,
+  link,
   linkPreview,
+  onClick,
 }: ProjectCardProps) => {
+  const preview = linkPreview ?? (link ? formatLinkPreview(link) : undefined);
+  const cover = images?.[0];
+
   return (
-    <a
-      href={href}
-      className="group flex flex-col h-full p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 transition-colors"
-      rel="noreferrer noopener"
-      target="_blank"
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex flex-col h-full w-full text-left p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 transition-colors cursor-pointer"
     >
-      {img && (
+      {cover && (
         <div className="aspect-[8/5] mb-3 overflow-clip rounded transition-all">
           <img
-            src={img}
+            src={projectAsset(cover)}
             alt={name}
             className="group-hover:scale-[1.03] duration-200 w-full h-full object-cover"
           />
@@ -30,16 +37,22 @@ const ProjectCard = ({
       <div className="flex justify-between items-start mb-1.5">
         <div className="text-sm font-medium text-zinc-200 flex gap-2 items-center">
           {favicon ? (
-            <img className="size-4 rounded-sm" src={favicon} alt="" />
-          ) : null}
+            <img
+              className="size-4 rounded-sm"
+              src={projectAsset(favicon)}
+              alt=""
+            />
+          ) : (
+            <GlobeIcon className="size-4 text-zinc-500" />
+          )}
           {name}
         </div>
         <span className="opacity-50 group-hover:opacity-90 transition-opacity">
           <ExternalLinkIcon width={14} height={14} className="text-zinc-500" />
         </span>
       </div>
-      {linkPreview && (
-        <p className="text-xs text-zinc-500/70 italic mb-1">{linkPreview}</p>
+      {preview && (
+        <p className="text-xs text-zinc-500/70 italic mb-1">{preview}</p>
       )}
       <p className="text-xs text-zinc-500 mb-3 flex-grow leading-relaxed">
         {desc}
@@ -56,7 +69,7 @@ const ProjectCard = ({
           ))}
         </div>
       )}
-    </a>
+    </button>
   );
 };
 

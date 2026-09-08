@@ -2,14 +2,14 @@ import { AnchorHTMLAttributes } from "react";
 import type { IconType } from "react-icons";
 
 export interface Project {
-  href: string;
-  linkPreview?: string;
   name: string;
   desc: string;
+  link?: string;
+  linkPreview?: string;
+  repo?: string;
   tech: string[];
-  img?: string;
   favicon?: string;
-  featured?: boolean;
+  images?: string[];
 }
 
 export interface Work {
@@ -43,14 +43,19 @@ export interface Page {
 }
 
 export interface ProjectCardProps {
-  href: string;
-  linkPreview?: string;
   name: string;
   desc: string;
+  link?: string;
+  linkPreview?: string;
   tech?: string[];
-  img?: string;
   favicon?: string;
-  featured?: boolean;
+  images?: string[];
+  onClick?: () => void;
+}
+
+export interface ProjectModalProps {
+  project: Project | null;
+  onClose: () => void;
 }
 
 export interface PageTitleProps {
