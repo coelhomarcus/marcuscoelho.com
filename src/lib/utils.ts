@@ -28,6 +28,10 @@ export function normalizeGitHubRepoUrl(url: string) {
     .toLowerCase();
 }
 
+export function githubRepoUrl(repo: string) {
+  return `https://github.com/${normalizeGitHubRepoUrl(repo)}`;
+}
+
 export const IMG_PREFIX = "/assets/projects/";
 
 export function projectAsset(path: string) {
