@@ -154,12 +154,10 @@ function GitHubGraph() {
                       flexShrink: 0,
                     }}
                   >
-                    {week.contributionDays.map((day, di) => (
-                      <Tooltip
-                        key={di}
-                        content={`${day.contributionCount} contribuição${day.contributionCount !== 1 ? "s" : ""} em ${new Date(day.date + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })}`}
-                      >
+                    {week.contributionDays.map((day, di) => {
+                      const cell = (
                         <div
+                          key={di}
                           className="gh-cell"
                           style={{
                             width: cellSize,
@@ -169,8 +167,19 @@ function GitHubGraph() {
                             flexShrink: 0,
                           }}
                         />
-                      </Tooltip>
-                    ))}
+                      );
+
+                      if (day.contributionCount === 0) return cell;
+
+                      return (
+                        <Tooltip
+                          key={di}
+                          content={`${day.contributionCount} contribuição${day.contributionCount !== 1 ? "s" : ""} em ${new Date(day.date + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })}`}
+                        >
+                          {cell}
+                        </Tooltip>
+                      );
+                    })}
                   </div>
                 ))}
               </div>
