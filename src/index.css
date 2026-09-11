@@ -52,28 +52,6 @@ html {
     background: transparent !important;
   }
 
-  .github-calendar-scroll {
-    scrollbar-width: none;
-  }
-
-  .github-calendar-scroll::-webkit-scrollbar {
-    display: none;
-  }
-
-  .gh-cell {
-    transition:
-      transform 0.13s ease,
-      box-shadow 0.13s ease;
-    transform-origin: center;
-    will-change: transform;
-  }
-
-  .gh-cell:hover {
-    transform: scale(1.55);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
-  }
-
   .scrollbar-container {
     position: relative;
     background-color: #000;

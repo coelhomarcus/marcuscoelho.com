@@ -2,15 +2,22 @@ import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import type { ProjectModalProps } from "@/types";
-import { formatLinkPreview, projectAsset } from "@/lib/utils";
+import {
+  formatCompactNumber,
+  formatLinkPreview,
+  formatMonthYear,
+  projectAsset,
+} from "@/lib/utils";
 
 import {
   RxCross1 as CloseIcon,
   RxChevronLeft as ChevronLeftIcon,
   RxChevronRight as ChevronRightIcon,
   RxArrowTopRight as ExternalLinkIcon,
+  RxCalendar as CalendarIcon,
   RxGithubLogo as GithubIcon,
   RxGlobe as GlobeIcon,
+  RxStar as StarIcon,
 } from "react-icons/rx";
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
@@ -24,6 +31,8 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
     ? (project.linkPreview ??
       (project.link ? formatLinkPreview(project.link) : undefined))
     : undefined;
+  const hasStars =
+    typeof project?.repoStars === "number" && project.repoStars > 0;
 
   const prev = useCallback(() => {
     setIndex((i) => (i - 1 + images.length) % images.length);
@@ -178,6 +187,23 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   <p className="text-xs text-zinc-500/70 italic mb-2">
                     {preview}
                   </p>
+                )}
+
+                {(hasStars || project.repoCreatedAt) && (
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-xs text-zinc-500">
+                    {hasStars && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <StarIcon className="size-3.5 text-zinc-400" />
+                        {formatCompactNumber(project.repoStars!)} stars
+                      </span>
+                    )}
+                    {project.repoCreatedAt && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <CalendarIcon className="size-3.5 text-zinc-400" />
+                        Criado em {formatMonthYear(project.repoCreatedAt)}
+                      </span>
+                    )}
+                  </div>
                 )}
 
                 <p className="text-sm text-zinc-400 leading-relaxed mb-5">

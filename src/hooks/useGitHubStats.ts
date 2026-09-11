@@ -7,6 +7,14 @@ export interface Language {
   color: string;
 }
 
+export interface GitHubRepository {
+  name: string;
+  nameWithOwner: string;
+  url: string;
+  stargazerCount: number;
+  createdAt: string;
+}
+
 export interface GitHubStatsData {
   totalStars: number;
   mergedPRs: number;
@@ -14,6 +22,7 @@ export interface GitHubStatsData {
   lastCommitDate: string;
   lastCommitRepo: string;
   languages: Language[];
+  repositories?: GitHubRepository[];
   cachedAt: string;
 }
 

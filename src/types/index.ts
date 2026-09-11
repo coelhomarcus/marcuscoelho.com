@@ -7,6 +7,8 @@ export interface Project {
   link?: string;
   linkPreview?: string;
   repo?: string;
+  repoStars?: number;
+  repoCreatedAt?: string;
   tech: string[];
   favicon?: string;
   images?: string[];
@@ -47,6 +49,8 @@ export interface ProjectCardProps {
   desc: string;
   link?: string;
   linkPreview?: string;
+  repoStars?: number;
+  repoCreatedAt?: string;
   tech?: string[];
   favicon?: string;
   images?: string[];

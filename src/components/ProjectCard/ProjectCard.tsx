@@ -1,9 +1,16 @@
 import type { ProjectCardProps } from "@/types";
-import { formatLinkPreview, projectAsset } from "@/lib/utils";
+import {
+  formatCompactNumber,
+  formatLinkPreview,
+  formatMonthYear,
+  projectAsset,
+} from "@/lib/utils";
 
 import {
   RxArrowTopRight as ExternalLinkIcon,
+  RxCalendar as CalendarIcon,
   RxGlobe as GlobeIcon,
+  RxStar as StarIcon,
 } from "react-icons/rx";
 
 const ProjectCard = ({
@@ -14,10 +21,13 @@ const ProjectCard = ({
   favicon,
   link,
   linkPreview,
+  repoStars,
+  repoCreatedAt,
   onClick,
 }: ProjectCardProps) => {
   const preview = linkPreview ?? (link ? formatLinkPreview(link) : undefined);
   const cover = images?.[0];
+  const hasStars = typeof repoStars === "number" && repoStars > 0;
 
   return (
     <button
@@ -53,6 +63,22 @@ const ProjectCard = ({
       </div>
       {preview && (
         <p className="text-xs text-zinc-500/70 italic mb-1">{preview}</p>
+      )}
+      {(hasStars || repoCreatedAt) && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] text-zinc-500">
+          {hasStars && (
+            <span className="inline-flex items-center gap-1">
+              <StarIcon className="size-3.5 text-zinc-400" />
+              {formatCompactNumber(repoStars)}
+            </span>
+          )}
+          {repoCreatedAt && (
+            <span className="inline-flex items-center gap-1">
+              <CalendarIcon className="size-3.5 text-zinc-400" />
+              {formatMonthYear(repoCreatedAt)}
+            </span>
+          )}
+        </div>
       )}
       <p className="text-xs text-zinc-500 mb-3 flex-grow leading-relaxed">
         {desc}
