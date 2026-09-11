@@ -1,4 +1,6 @@
-﻿const HeroSection = () => {
+﻿import DiaTextReveal from "@/components/DiaTextReveal/DiaTextReveal";
+
+const HeroSection = () => {
   return (
     <div className="min-h-[150px]">
       <div className="flex flex-col justify-center gap-8 pt-10 pb-4">
@@ -6,7 +8,7 @@
           Desenvolvedor
           <br />
           <span className="font-[Times_New_Roman] italic text-5xl">
-            Full Stack.
+            <DiaTextReveal text="Full Stack." />
           </span>
         </h1>
 
