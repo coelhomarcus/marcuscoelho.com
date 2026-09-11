@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import config from "@/data/config";
+import { createRequestCache } from "@/lib/requestCache";
 
 export interface Language {
   name: string;
@@ -26,6 +27,16 @@ export interface GitHubStatsData {
   cachedAt: string;
 }
 
+const statsCache = createRequestCache<GitHubStatsData>();
+
+function loadGitHubStats() {
+  return statsCache.load(async () => {
+    const res = await fetch(`${config.API_URL}/github/stats`);
+    if (!res.ok) throw new Error("Falha ao buscar stats do GitHub");
+    return (await res.json()) as GitHubStatsData;
+  });
+}
+
 export function useGitHubStats() {
   const [data, setData] = useState<GitHubStatsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,20 +45,18 @@ export function useGitHubStats() {
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchStats() {
-      try {
-        const res = await fetch(`${config.API_URL}/github/stats`);
-        if (!res.ok) throw new Error("Falha ao buscar stats do GitHub");
-        const json = (await res.json()) as GitHubStatsData;
+    loadGitHubStats()
+      .then((json) => {
         if (!cancelled) setData(json);
-      } catch (err) {
-        if (!cancelled) setError((err as Error).message);
-      } finally {
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Falha ao buscar stats do GitHub");
+        }
+      })
+      .finally(() => {
         if (!cancelled) setIsLoading(false);
-      }
-    }
-
-    fetchStats();
+      });
 
     return () => {
       cancelled = true;

@@ -3,7 +3,7 @@ import { MDXProvider } from "@mdx-js/react";
 import { useParams, Link, useLocation } from "react-router";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
-import { useToast } from "@/components/Toast/Toast";
+import { useToast } from "@/components/Toast/ToastContext";
 
 import {
   RxChevronLeft as BackIcon,

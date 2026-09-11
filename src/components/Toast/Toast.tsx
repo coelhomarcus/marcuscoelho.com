@@ -1,14 +1,7 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { RxCheck as CheckIcon } from "react-icons/rx";
-
-interface ToastContextType {
-  toast: (message: string) => void;
-}
-
-const ToastContext = createContext<ToastContextType>({ toast: () => {} });
-
-export const useToast = () => useContext(ToastContext);
+import { ToastContext } from "./ToastContext";
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<{ id: number; message: string }[]>([]);

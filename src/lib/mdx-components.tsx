@@ -1,7 +1,7 @@
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { RxClipboardCopy as CopyIcon } from "react-icons/rx";
-import { useToast } from "@/components/Toast/Toast";
+import { useToast } from "@/components/Toast/ToastContext";
 
 import type { HeadingProps, PreComponentProps } from "@/types";
 
