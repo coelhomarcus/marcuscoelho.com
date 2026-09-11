@@ -37,8 +37,11 @@ const STATS_QUERY = `
       repositories(first: 100, ownerAffiliations: OWNER, orderBy: { field: PUSHED_AT, direction: DESC }) {
         nodes {
           name
+          nameWithOwner
+          url
           isPrivate
           stargazerCount
+          createdAt
           pushedAt
           languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
             edges {
@@ -197,6 +200,16 @@ export async function refreshGitHubStats() {
       color,
     }));
 
+  const repositories = user.repositories.nodes
+    .filter((repo: any) => !repo.isPrivate)
+    .map((repo: any) => ({
+      name: repo.name,
+      nameWithOwner: repo.nameWithOwner,
+      url: repo.url,
+      stargazerCount: repo.stargazerCount,
+      createdAt: repo.createdAt,
+    }));
+
   // Streak
   const calendarWeeks = user.contributionsCollection.contributionCalendar.weeks;
   const currentStreak = calculateStreak(calendarWeeks);
@@ -209,6 +222,7 @@ export async function refreshGitHubStats() {
     lastCommitDate,
     lastCommitRepo,
     languages,
+    repositories,
   };
 
   await db.insert(githubStats).values(stats);

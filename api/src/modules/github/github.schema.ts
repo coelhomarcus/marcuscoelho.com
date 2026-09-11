@@ -23,5 +23,6 @@ export const githubStats = pgTable("github_stats", {
   lastCommitDate: text("last_commit_date").notNull(),
   lastCommitRepo: text("last_commit_repo").notNull(),
   languages: jsonb("languages").notNull(),
+  repositories: jsonb("repositories").notNull().default([]),
   cachedAt: timestamp("cached_at").defaultNow().notNull(),
 });

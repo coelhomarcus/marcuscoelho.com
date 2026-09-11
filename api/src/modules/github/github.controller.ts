@@ -45,6 +45,7 @@ export async function handleGetStats(req: Request, res: Response) {
     lastCommitDate: data.lastCommitDate,
     lastCommitRepo: data.lastCommitRepo,
     languages: data.languages,
+    repositories: data.repositories,
     cachedAt: data.cachedAt,
   });
 }
