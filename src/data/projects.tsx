@@ -77,6 +77,7 @@ export const arrProjects: Project[] = [
     name: "BakaNeo",
     desc: "Tema Dark para VS Code",
     link: "https://marketplace.visualstudio.com/items?itemName=coelhomarcus.bakaneo",
+    linkPreview: "coelhomarcus.bakaneo",
     repo: "coelhomarcus/bakaneo-theme",
     tech: ["VSCODE", "Theme"],
     favicon: "bakaneo/favicon.png",
