@@ -1,10 +1,14 @@
 import { db } from "../../config/database";
 import { env } from "../../config/env";
 import { githubContributions, githubStats } from "./github.schema";
-import { desc } from "drizzle-orm";
+import { contributionsDataSchema, parseGitHubResponse, statsDataSchema, type ContributionsData, type StatsData } from "./github.validation";
+import { AppError } from "../../shared/errors";
+import { desc, eq } from "drizzle-orm";
+import type { ZodType } from "zod";
 
 const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 const GITHUB_USERNAME = "coelhomarcus";
+const GITHUB_REQUEST_TIMEOUT_MS = 10_000;
 
 const CONTRIBUTIONS_QUERY = `
   query {
@@ -88,7 +92,6 @@ function calculateStreak(
   }
 
   for (const day of allDays) {
-    const dayDate = new Date(day.date + "T12:00:00");
     const expected = expectedDate.toISOString().split("T")[0];
 
     if (day.date > expected) continue;
@@ -105,29 +108,130 @@ function calculateStreak(
   return streak;
 }
 
-export async function refreshGitHubContributions() {
-  const response = await fetch(GITHUB_GRAPHQL_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query: CONTRIBUTIONS_QUERY }),
-  });
+function errorDetails(error: unknown) {
+  return error instanceof Error
+    ? { name: error.name, message: error.message, stack: error.stack }
+    : { error };
+}
 
-  if (!response.ok) {
-    throw new Error(
-      `GitHub API error: ${response.status} ${response.statusText}`,
+async function fetchGitHub(operation: string, query: string): Promise<unknown> {
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    GITHUB_REQUEST_TIMEOUT_MS,
+  );
+  const startedAt = Date.now();
+
+  try {
+    const response = await fetch(GITHUB_GRAPHQL_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+      signal: controller.signal,
+    });
+    const durationMs = Date.now() - startedAt;
+
+    if (!response.ok) {
+      const responseBody = await response.text().catch(() => "");
+      console.error(`[GitHub] ${operation} falhou`, {
+        status: response.status,
+        statusText: response.statusText,
+        durationMs,
+        responseBody: responseBody.slice(0, 300),
+      });
+      throw new AppError(
+        502,
+        "GITHUB_UNAVAILABLE",
+        "Não foi possível consultar o GitHub",
+      );
+    }
+
+    const payload: unknown = await response.json();
+    console.info(`[GitHub] ${operation} concluído`, {
+      status: response.status,
+      durationMs,
+    });
+    return payload;
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+
+    const durationMs = Date.now() - startedAt;
+    if (controller.signal.aborted) {
+      console.error(`[GitHub] ${operation} excedeu o timeout`, {
+        timeoutMs: GITHUB_REQUEST_TIMEOUT_MS,
+        durationMs,
+      });
+      throw new AppError(
+        504,
+        "GITHUB_TIMEOUT",
+        "O GitHub demorou demais para responder",
+      );
+    }
+
+    console.error(`[GitHub] ${operation} gerou um erro`, {
+      durationMs,
+      ...errorDetails(error),
+    });
+    throw new AppError(
+      502,
+      "GITHUB_UNAVAILABLE",
+      "Não foi possível consultar o GitHub",
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function parseGitHubData<T>(
+  payload: unknown,
+  schema: ZodType<T>,
+  operation: string,
+): T {
+  try {
+    return parseGitHubResponse(payload, schema, operation);
+  } catch (error) {
+    console.error(`[GitHub] ${operation} retornou dados inválidos`, {
+      ...errorDetails(error),
+    });
+    throw new AppError(
+      502,
+      "GITHUB_INVALID_RESPONSE",
+      "O GitHub retornou uma resposta inválida",
     );
   }
+}
 
-  const json = (await response.json()) as any;
-  const calendar = json.data.user.contributionsCollection.contributionCalendar;
-
-  await db.insert(githubContributions).values({
+export async function refreshGitHubContributions() {
+  const payload = await fetchGitHub("contribuições", CONTRIBUTIONS_QUERY);
+  const data = parseGitHubData<ContributionsData>(
+    payload,
+    contributionsDataSchema,
+    "contribuições",
+  );
+  const calendar = data.user.contributionsCollection.contributionCalendar;
+  const values = {
     totalContributions: calendar.totalContributions,
     weeks: calendar.weeks,
-  });
+    cachedAt: new Date(),
+  };
+
+  const [latest] = await db
+    .select({ id: githubContributions.id })
+    .from(githubContributions)
+    .orderBy(desc(githubContributions.id))
+    .limit(1);
+
+  if (latest) {
+    await db
+      .update(githubContributions)
+      .set(values)
+      .where(eq(githubContributions.id, latest.id));
+  } else {
+    await db.insert(githubContributions).values(values);
+  }
 
   console.log(
     `[GitHub] Contributions cache atualizado: ${calendar.totalContributions} contribuições`,
@@ -137,27 +241,13 @@ export async function refreshGitHubContributions() {
 }
 
 export async function refreshGitHubStats() {
-  const response = await fetch(GITHUB_GRAPHQL_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query: STATS_QUERY }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `GitHub API error: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const json = (await response.json()) as any;
-  const user = json.data.user;
+  const payload = await fetchGitHub("estatísticas", STATS_QUERY);
+  const data = parseGitHubData<StatsData>(payload, statsDataSchema, "estatísticas");
+  const user = data.user;
 
   // Total stars
   const totalStars = user.repositories.nodes.reduce(
-    (acc: number, repo: any) => acc + repo.stargazerCount,
+    (acc, repo) => acc + repo.stargazerCount,
     0,
   );
 
@@ -191,18 +281,21 @@ export async function refreshGitHubStats() {
     (a, b) => a + b.size,
     0,
   );
-  const languages = Array.from(langMap.entries())
-    .sort((a, b) => b[1].size - a[1].size)
-    .slice(0, 8)
-    .map(([name, { size, color }]) => ({
-      name,
-      percentage: Math.round((size / totalSize) * 1000) / 10,
-      color,
-    }));
+  const languages =
+    totalSize === 0
+      ? []
+      : Array.from(langMap.entries())
+          .sort((a, b) => b[1].size - a[1].size)
+          .slice(0, 8)
+          .map(([name, { size, color }]) => ({
+            name,
+            percentage: Math.round((size / totalSize) * 1000) / 10,
+            color,
+          }));
 
   const repositories = user.repositories.nodes
-    .filter((repo: any) => !repo.isPrivate)
-    .map((repo: any) => ({
+    .filter((repo) => !repo.isPrivate)
+    .map((repo) => ({
       name: repo.name,
       nameWithOwner: repo.nameWithOwner,
       url: repo.url,
@@ -225,7 +318,20 @@ export async function refreshGitHubStats() {
     repositories,
   };
 
-  await db.insert(githubStats).values(stats);
+  const [latest] = await db
+    .select({ id: githubStats.id })
+    .from(githubStats)
+    .orderBy(desc(githubStats.id))
+    .limit(1);
+
+  if (latest) {
+    await db
+      .update(githubStats)
+      .set({ ...stats, cachedAt: new Date() })
+      .where(eq(githubStats.id, latest.id));
+  } else {
+    await db.insert(githubStats).values(stats);
+  }
 
   console.log(
     `[GitHub] Stats cache atualizado: ${totalStars} stars, ${mergedPRs} PRs, ${closedIssues} issues, ${currentStreak} streak`,
