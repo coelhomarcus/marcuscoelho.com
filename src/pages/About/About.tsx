@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import HeroSection from "@/components/HeroSection/HeroSection";
 import WorksExperience from "@/components/WorksExperience/WorksExperience";
 import Skills from "@/components/Skills/Skills";
-import GitHubActivity from "@/components/GitHubActivity/GitHubActivity";
+import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
 import GitHubStats from "@/components/GitHubStats/GitHubStats";
 import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
 
@@ -43,7 +43,7 @@ const About = () => {
         transition={{ ...fadeUp.transition, delay: 0.25 }}
         className="flex flex-col gap-3"
       >
-        <GitHubActivity />
+        <GitHubGraph />
         <GitHubStats />
       </motion.div>
     </main>
