@@ -1,12 +1,10 @@
-import { useMemo, useState } from "react";
-import { arrProjects } from "../../data/projects";
+import { useState } from "react";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import ProjectModal from "../../components/ProjectModal/ProjectModal";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import type { Project } from "@/types";
 import { motion } from "motion/react";
-import { useGitHubStats } from "@/hooks/useGitHubStats";
-import { normalizeGitHubRepoUrl } from "@/lib/utils";
+import { useProjects } from "@/hooks/useProjects";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
@@ -16,29 +14,7 @@ const fadeUp = {
 
 const Projects = () => {
   const [selected, setSelected] = useState<Project | null>(null);
-  const { data: githubStats } = useGitHubStats();
-
-  const projects = useMemo(() => {
-    const repos = new Map(
-      (githubStats?.repositories ?? []).map((repo) => [
-        normalizeGitHubRepoUrl(repo.url),
-        repo,
-      ]),
-    );
-
-    return arrProjects.map((project) => {
-      if (!project.repo) return project;
-
-      const repo = repos.get(normalizeGitHubRepoUrl(project.repo));
-      if (!repo) return project;
-
-      return {
-        ...project,
-        repoStars: repo.stargazerCount,
-        repoCreatedAt: repo.createdAt,
-      };
-    });
-  }, [githubStats?.repositories]);
+  const projects = useProjects();
 
   return (
     <main className="text-zinc-100 space-y-6">

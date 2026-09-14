@@ -1,5 +1,5 @@
-﻿import { arrProjects } from "@/data/projects";
-import { projectAsset } from "@/lib/utils";
+﻿import { projectAsset } from "@/lib/utils";
+import { useProjects } from "@/hooks/useProjects";
 import type { Project } from "@/types";
 import { RxArrowTopRight as ExternalLinkIcon } from "react-icons/rx";
 
@@ -8,7 +8,8 @@ interface ProjectsMarqueeProps {
 }
 
 const ProjectsMarquee = ({ onProjectClick }: ProjectsMarqueeProps) => {
-  const duplicated = [...arrProjects, ...arrProjects];
+  const projects = useProjects();
+  const duplicated = [...projects, ...projects];
 
   return (
     <div className="overflow-hidden relative group/marquee">
