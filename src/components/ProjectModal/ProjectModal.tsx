@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import type { ProjectModalProps } from "@/types";
 import {
+  cn,
   formatCompactNumber,
   formatLinkPreview,
   formatMonthYear,
@@ -133,11 +134,12 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                             type="button"
                             onClick={() => setIndex(i)}
                             aria-label={`Ir para imagem ${i + 1}`}
-                            className={`size-1.5 rounded-full transition-colors cursor-pointer ${
+                            className={cn(
+                              "size-1.5 rounded-full transition-colors cursor-pointer",
                               i === index
                                 ? "bg-zinc-100"
-                                : "bg-zinc-100/30 hover:bg-zinc-100/60"
-                            }`}
+                                : "bg-zinc-100/30 hover:bg-zinc-100/60",
+                            )}
                           />
                         ))}
                       </div>

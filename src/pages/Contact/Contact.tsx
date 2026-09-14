@@ -4,12 +4,8 @@ import { RxCheck as CheckIcon } from "react-icons/rx";
 import { RxCross2 as AlertIcon } from "react-icons/rx";
 import { motion } from "motion/react";
 import { useContact, type FieldState } from "@/hooks/useContact";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import { fadeUp } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 const baseInput =
   "w-full rounded-[8px] border px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500/60 transition-colors outline-none";
@@ -110,7 +106,7 @@ const Contact = () => {
             value={form.message}
             onChange={(e) => setField("message", e.target.value)}
             rows={5}
-            className={`${getInputClasses(getFieldState("message"))} resize-none`}
+            className={cn(getInputClasses(getFieldState("message")), "resize-none")}
             required
             minLength={10}
           />
@@ -120,13 +116,14 @@ const Contact = () => {
           <button
             type="submit"
             disabled={!isValid || status === "sending"}
-            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all cursor-pointer ${
+            className={cn(
+              "inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all cursor-pointer",
               status === "success"
                 ? "border-green-500/40 bg-green-900/10 text-green-400"
                 : validationMessage
                   ? "border-amber-500/30 bg-amber-900/10 text-amber-400 opacity-100 cursor-not-allowed"
-                  : "border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed"
-            }`}
+                  : "border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed",
+            )}
           >
             {status === "sending" ? (
               "Enviando..."

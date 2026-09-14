@@ -1,16 +1,11 @@
 import { useState } from "react";
-import ProjectCard from "../../components/ProjectCard/ProjectCard";
-import ProjectModal from "../../components/ProjectModal/ProjectModal";
+import ProjectCard from "@/components/ProjectCard/ProjectCard";
+import ProjectModal from "@/components/ProjectModal/ProjectModal";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import type { Project } from "@/types";
 import { motion } from "motion/react";
 import { useProjects } from "@/hooks/useProjects";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import { fadeUp } from "@/lib/motion";
 
 const Projects = () => {
   const [selected, setSelected] = useState<Project | null>(null);

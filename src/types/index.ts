@@ -44,16 +44,8 @@ export interface Page {
   download?: boolean;
 }
 
-export interface ProjectCardProps {
-  name: string;
-  desc: string;
-  link?: string;
-  linkPreview?: string;
-  repoStars?: number;
-  repoCreatedAt?: string;
-  tech?: string[];
-  favicon?: string;
-  images?: string[];
+export interface ProjectCardProps extends Omit<Project, "repo" | "tech"> {
+  tech?: Project["tech"];
   onClick?: () => void;
 }
 
@@ -96,12 +88,6 @@ export interface SidebarLinkProps {
 export interface HeaderLinkProps {
   to: string;
   title: string;
-}
-export type Theme = "light" | "dark";
-
-export interface CopyHookReturn {
-  isCopied: boolean;
-  handleCopy: () => void;
 }
 export type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
 

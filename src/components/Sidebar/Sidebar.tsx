@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router";
 import type { Page, SidebarLinkProps } from "@/types";
+import { cn } from "@/lib/utils";
 
 import {
   RxPerson as PersonIcon,
@@ -120,18 +121,20 @@ const Sidebar = () => {
         <>
           {/* Overlay */}
           <div
-            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-99 transition-opacity duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
+            className={cn(
+              "fixed inset-0 bg-black/50 backdrop-blur-sm z-99 transition-opacity duration-300",
+              isOpen ? "opacity-100" : "opacity-0 pointer-events-none",
+            )}
             onClick={close}
             aria-hidden="true"
           />
 
           {/* Sidebar panel */}
           <aside
-            className={`fixed right-0 top-0 z-100 flex h-full w-[85vw] sm:w-[350px] lg:w-[320px] flex-col bg-zinc-950 border-l border-zinc-800/80 transition-transform duration-300 ease-out ${
-              isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={cn(
+              "fixed right-0 top-0 z-100 flex h-full w-[85vw] sm:w-[350px] lg:w-[320px] flex-col bg-zinc-950 border-l border-zinc-800/80 transition-transform duration-300 ease-out",
+              isOpen ? "translate-x-0" : "translate-x-full",
+            )}
             role="dialog"
             aria-modal="true"
             data-drawer-content
@@ -283,21 +286,23 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
       to={item.href}
       onClick={onClose}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-2.5 py-2 rounded-lg transition-colors group ${
+        cn(
+          "flex items-center gap-3 px-2.5 py-2 rounded-lg transition-colors group",
           isActive
             ? "bg-zinc-800/80 text-zinc-100"
-            : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60"
-        }`
+            : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60",
+        )
       }
     >
       {({ isActive }) => (
         <>
           <Icon
-            className={`size-[18px] transition-colors ${
+            className={cn(
+              "size-[18px] transition-colors",
               isActive
                 ? "text-zinc-100"
-                : "text-zinc-500 group-hover:text-zinc-300"
-            }`}
+                : "text-zinc-500 group-hover:text-zinc-300",
+            )}
           />
           <span className="text-sm font-medium">{item.name}</span>
         </>

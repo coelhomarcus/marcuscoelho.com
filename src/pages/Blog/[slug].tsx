@@ -13,13 +13,9 @@ import {
 
 import { loadPost } from "./posts/_posts";
 import { blogPostsData } from "@/data/blogPostsData";
-import components from "../../lib/mdx-components";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import components from "@/lib/mdx-components";
+import { fadeUp } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 const Post = () => {
   const { slug } = useParams();
@@ -82,7 +78,7 @@ const Post = () => {
               <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-black/90" />
             </div>
           )}
-          <div className={`relative ${post.banner ? "py-4" : ""}`}>
+          <div className={cn("relative", post.banner ? "py-4" : undefined)}>
             <h1 className="font-[Times_New_Roman] italic text-4xl sm:text-5xl md:text-6xl text-zinc-100 leading-[1.1] mb-5">
               {post.title}
             </h1>

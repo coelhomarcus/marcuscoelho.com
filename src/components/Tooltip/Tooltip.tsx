@@ -1,6 +1,7 @@
 import { useCallback, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 interface TooltipProps {
   content: ReactNode;
@@ -24,7 +25,7 @@ export function Tooltip({ content, children, className }: TooltipProps) {
       onMouseEnter={move}
       onMouseMove={move}
       onMouseLeave={hide}
-      className={`inline-flex ${className ?? ""}`}
+      className={cn("inline-flex", className)}
     >
       {children}
 

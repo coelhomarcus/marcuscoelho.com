@@ -2,12 +2,7 @@ import { arrCertificates } from "@/data/certificates";
 import SimpleCard from "@/components/SimpleCard/SimpleCard";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import { fadeUp } from "@/lib/motion";
 
 const Certificates = () => {
   return (

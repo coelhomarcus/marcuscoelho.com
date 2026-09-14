@@ -3,13 +3,7 @@ import type { BlogCardProps } from "@/types";
 import { blogPostsData } from "@/data/blogPostsData";
 import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
-
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import { fadeUp } from "@/lib/motion";
 
 const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
 

@@ -10,12 +10,7 @@ import GitHubStats from "@/components/GitHubStats/GitHubStats";
 import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
 import ProjectModal from "@/components/ProjectModal/ProjectModal";
 import type { Project } from "@/types";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+import { fadeUp } from "@/lib/motion";
 
 const About = () => {
   const [selected, setSelected] = useState<Project | null>(null);
