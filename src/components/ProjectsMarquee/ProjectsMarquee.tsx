@@ -1,17 +1,14 @@
 ﻿import { arrProjects } from "@/data/projects";
 import { projectAsset } from "@/lib/utils";
+import type { Project } from "@/types";
 import { RxArrowTopRight as ExternalLinkIcon } from "react-icons/rx";
 
-const ProjectsMarquee = () => {
-  const projects = arrProjects.map((p) => ({
-    src: p.images?.[0] ? projectAsset(p.images[0]) : undefined,
-    name: p.name,
-    desc: p.desc,
-    tech: p.tech,
-    href: p.link ?? p.repo,
-  }));
+interface ProjectsMarqueeProps {
+  onProjectClick: (project: Project) => void;
+}
 
-  const duplicated = [...projects, ...projects];
+const ProjectsMarquee = ({ onProjectClick }: ProjectsMarqueeProps) => {
+  const duplicated = [...arrProjects, ...arrProjects];
 
   return (
     <div className="overflow-hidden relative group/marquee">
@@ -19,15 +16,14 @@ const ProjectsMarquee = () => {
       <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none" />
       <div className="flex gap-4 animate-marquee w-max group-hover/marquee:[animation-play-state:paused]">
         {duplicated.map((project, i) => (
-          <a
+          <button
             key={i}
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative group/card flex-shrink-0 rounded overflow-hidden"
+            type="button"
+            onClick={() => onProjectClick(project)}
+            className="relative group/card flex-shrink-0 rounded overflow-hidden cursor-pointer text-left"
           >
             <img
-              src={project.src}
+              src={project.images?.[0] ? projectAsset(project.images[0]) : undefined}
               alt={project.name}
               className="h-48 w-auto object-cover"
               loading="lazy"
@@ -53,7 +49,7 @@ const ProjectsMarquee = () => {
                 ))}
               </div>
             </div>
-          </a>
+          </button>
         ))}
       </div>
     </div>

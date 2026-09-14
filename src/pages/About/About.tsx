@@ -1,4 +1,5 @@
-﻿import PageTitle from "@/components/PageTitle/PageTitle";
+﻿import { useState } from "react";
+import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
 
 import HeroSection from "@/components/HeroSection/HeroSection";
@@ -7,6 +8,8 @@ import Skills from "@/components/Skills/Skills";
 import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
 import GitHubStats from "@/components/GitHubStats/GitHubStats";
 import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
+import ProjectModal from "@/components/ProjectModal/ProjectModal";
+import type { Project } from "@/types";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
@@ -15,6 +18,8 @@ const fadeUp = {
 };
 
 const About = () => {
+  const [selected, setSelected] = useState<Project | null>(null);
+
   return (
     <main className="text-zinc-100 space-y-6">
       <PageTitle title="Marcus Coelho" />
@@ -28,7 +33,7 @@ const About = () => {
       </motion.div>
 
       <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }}>
-        <ProjectsMarquee />
+        <ProjectsMarquee onProjectClick={setSelected} />
       </motion.div>
 
       <motion.div
@@ -46,6 +51,8 @@ const About = () => {
         <GitHubGraph />
         <GitHubStats />
       </motion.div>
+
+      <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </main>
   );
 };
