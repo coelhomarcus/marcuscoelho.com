@@ -100,7 +100,7 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
           )}
         </div>
 
-        <h3 className="text-lg leading-snug font-semibold">
+        <h3 className="text-sm leading-snug font-semibold">
           {experience.companyWebsite ? (
             <a
               className="link"
@@ -174,7 +174,7 @@ export function ExperiencePositionItem({
             "data-disabled:cursor-default data-disabled:before:content-none"
           )}
         >
-          <div className="relative z-1 mb-1 flex items-start gap-3 text-base">
+          <div className="relative z-1 mb-1 flex items-start gap-3 text-sm">
             <div
               className={cn(
                 "flex size-6 shrink-0 items-center justify-center rounded-lg",
@@ -199,7 +199,7 @@ export function ExperiencePositionItem({
           </div>
 
           {/* Separators are aria-hidden: a dl may only expose dt/dd groups, and these dividers are decorative. */}
-          <dl className="relative z-1 flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+          <dl className="relative z-1 flex items-center gap-2 pl-9 text-xs text-muted-foreground">
             {position.employmentType && (
               <>
                 <div>
@@ -270,7 +270,7 @@ function Prose({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "prose max-w-none prose-ncdai prose-invert marker:text-zinc-600",
+        "prose prose-sm max-w-none prose-ncdai prose-invert marker:text-zinc-600",
         className
       )}
       {...props}
@@ -282,7 +282,7 @@ function Skill({ className, ...props }: ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground",
+        "inline-flex items-center rounded-md border bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground",
         className
       )}
       {...props}
