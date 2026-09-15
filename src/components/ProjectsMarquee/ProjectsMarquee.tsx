@@ -8,7 +8,7 @@ interface ProjectsMarqueeProps {
 }
 
 const ProjectsMarquee = ({ onProjectClick }: ProjectsMarqueeProps) => {
-  const projects = useProjects();
+  const projects = useProjects().slice(0, 7);
   const duplicated = [...projects, ...projects];
 
   return (
