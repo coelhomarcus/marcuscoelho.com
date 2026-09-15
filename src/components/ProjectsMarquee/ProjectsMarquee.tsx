@@ -1,5 +1,6 @@
 ﻿import { projectAsset } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
+import { techIcons } from "@/data/techIcons";
 import type { Project } from "@/types";
 import { RxArrowTopRight as ExternalLinkIcon } from "react-icons/rx";
 
@@ -40,14 +41,18 @@ const ProjectsMarquee = ({ onProjectClick }: ProjectsMarqueeProps) => {
                 {project.desc}
               </p>
               <div className="flex flex-wrap gap-1.5">
-                {project.tech.slice(0, 3).map((t) => (
-                  <span
-                    key={t}
-                    className="text-[10px] text-white/90 bg-white/15 px-1.5 py-0.5 rounded"
-                  >
-                    {t}
-                  </span>
-                ))}
+                {project.tech.slice(0, 3).map((t) => {
+                  const Icon = techIcons[t];
+                  return (
+                    <span
+                      key={t}
+                      className="inline-flex items-center gap-1 text-[10px] text-white/90 bg-white/15 px-1.5 py-0.5 rounded"
+                    >
+                      {Icon && <Icon className="size-2.5" />}
+                      {t}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </button>

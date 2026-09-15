@@ -5,6 +5,7 @@ import {
   formatMonthYear,
   projectAsset,
 } from "@/lib/utils";
+import { techIcons } from "@/data/techIcons";
 
 import {
   RxArrowTopRight as ExternalLinkIcon,
@@ -85,14 +86,18 @@ const ProjectCard = ({
       </p>
       {tech && tech.length > 0 && (
         <div className="flex gap-1.5 flex-wrap mt-auto">
-          {tech.map((t, i) => (
-            <span
-              key={i}
-              className="text-[11px] px-2 py-0.5 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
-            >
-              {t}
-            </span>
-          ))}
+          {tech.map((t, i) => {
+            const Icon = techIcons[t];
+            return (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
+              >
+                {Icon && <Icon className="size-3" />}
+                {t}
+              </span>
+            );
+          })}
         </div>
       )}
     </button>

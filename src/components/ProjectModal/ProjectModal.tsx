@@ -21,6 +21,7 @@ import {
   RxGlobe as GlobeIcon,
   RxStar as StarIcon,
 } from "react-icons/rx";
+import { techIcons } from "@/data/techIcons";
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [index, setIndex] = useState(0);
@@ -215,14 +216,18 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
                 {project.tech.length > 0 && (
                   <div className="flex gap-2 flex-wrap mb-6">
-                    {project.tech.map((t, i) => (
-                      <span
-                        key={i}
-                        className="text-xs px-2.5 py-1 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                    {project.tech.map((t, i) => {
+                      const Icon = techIcons[t];
+                      return (
+                        <span
+                          key={i}
+                          className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
+                        >
+                          {Icon && <Icon className="size-3.5" />}
+                          {t}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
 
