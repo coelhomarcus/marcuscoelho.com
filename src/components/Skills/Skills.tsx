@@ -1,4 +1,4 @@
-﻿import { arrSkills } from "@/data/works";
+﻿import { arrSkills } from "@/data/skills";
 import { motion } from "motion/react";
 
 function Skills() {

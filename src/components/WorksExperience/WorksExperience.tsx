@@ -1,47 +1,59 @@
-﻿import { arrWorks } from "@/data/works";
-import { motion } from "motion/react";
+import { arrWorks } from "@/data/works";
+import {
+  WorkExperience,
+  type ExperienceItemType,
+} from "@/components/work-experience";
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+/** "YYYY-MM" or "YYYY" -> "MM.YYYY" or "YYYY", the format work-experience expects */
+function toMonthYear(isoDate: string): string {
+  const [year, month] = isoDate.split("-");
+  return month ? `${month}.${year}` : year;
+}
+
+const experiences: ExperienceItemType[] = arrWorks.map(
+  (work, companyIndex) => {
+    const companyId = slugify(work.company);
+
+    return {
+      id: companyId,
+      companyName: work.company,
+      companyLogo: work.logo,
+      companyWebsite: work.website,
+      isCurrentEmployer: work.positions.some(
+        (position) => !position.period.end
+      ),
+      positions: work.positions.map((position, positionIndex) => ({
+        id: `${companyId}-${positionIndex}`,
+        title: position.title,
+        employmentPeriod: {
+          start: toMonthYear(position.period.start),
+          end: position.period.end
+            ? toMonthYear(position.period.end)
+            : undefined,
+        },
+        employmentType: position.employmentType,
+        description: position.about.map((line) => `- ${line}`).join("\n"),
+        skills: position.skills,
+        isExpanded: companyIndex === 0 && positionIndex === 0,
+      })),
+    };
+  }
+);
 
 function WorksExperience() {
   return (
     <div className="flex flex-col gap-3">
       <h2 className="text-base font-semibold text-zinc-300">Experiência</h2>
-      <div className="space-y-3">
-        {arrWorks.map((work, index) => (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.35,
-              delay: index * 0.08,
-              ease: "easeOut",
-            }}
-            className="group flex gap-3 p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 transition-colors"
-            key={work.company}
-          >
-            <img
-              src={work.logo}
-              alt={work.company}
-              className="size-10 object-cover rounded-md shrink-0 mt-0.5"
-            />
-            <div className="flex flex-col gap-1 min-w-0 flex-1">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5">
-                <h3 className="text-sm font-medium text-zinc-200 leading-snug">
-                  {work.company}
-                </h3>
-                <span className="text-xs text-zinc-500 whitespace-nowrap">
-                  {work.duration}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-400">{work.role}</p>
-              {work.about && (
-                <p className="text-xs text-zinc-500/90 leading-relaxed mt-1">
-                  {work.about}
-                </p>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      <WorkExperience className="px-0" experiences={experiences} />
     </div>
   );
 }
