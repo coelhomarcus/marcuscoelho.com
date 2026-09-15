@@ -6,7 +6,6 @@ import HeroSection from "@/components/HeroSection/HeroSection";
 import WorksExperience from "@/components/WorksExperience/WorksExperience";
 import Skills from "@/components/Skills/Skills";
 import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
-import GitHubStats from "@/components/GitHubStats/GitHubStats";
 import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
 import ProjectModal from "@/components/ProjectModal/ProjectModal";
 import type { Project } from "@/types";
@@ -38,13 +37,8 @@ const About = () => {
         <WorksExperience />
       </motion.div>
 
-      <motion.div
-        {...fadeUp}
-        transition={{ ...fadeUp.transition, delay: 0.25 }}
-        className="flex flex-col gap-3"
-      >
+      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.25 }}>
         <GitHubGraph />
-        <GitHubStats />
       </motion.div>
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />
