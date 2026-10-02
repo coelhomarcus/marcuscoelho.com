@@ -87,12 +87,12 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
     <div className="space-y-4 py-4">
       <div className="not-prose flex items-center gap-3">
-        <div className="flex size-6 shrink-0 items-center justify-center">
+        <div className="flex size-8 shrink-0 items-center justify-center">
           {experience.companyLogo ? (
             <img
               src={experience.companyLogo}
               alt={experience.companyName}
-              className="size-6 rounded-lg"
+              className="size-8 rounded-lg"
               aria-hidden
             />
           ) : (
@@ -100,7 +100,7 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
           )}
         </div>
 
-        <h3 className="text-sm leading-snug font-semibold">
+        <h3 className="text-base leading-snug font-semibold">
           {experience.companyWebsite ? (
             <a
               className="link"
@@ -126,7 +126,7 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
         )}
       </div>
 
-      <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
+      <div className="relative ml-11 space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}
@@ -290,6 +290,10 @@ function Skill({ className, ...props }: ComponentProps<"span">) {
   )
 }
 
+function pluralize(n: number, singular: string, plural: string): string {
+  return `${n} ${n === 1 ? singular : plural}`
+}
+
 function formatDuration(start: string, end?: string): string {
   const startHasMonth = start.includes(".")
   const endHasMonth = end ? end.includes(".") : true
@@ -300,7 +304,7 @@ function formatDuration(start: string, end?: string): string {
     if (years <= 0) {
       return ""
     }
-    return `${years}y`
+    return pluralize(years, "ano", "anos")
   }
 
   const startDate = parsePeriodDate(start, "first")
@@ -313,15 +317,15 @@ function formatDuration(start: string, end?: string): string {
   }
 
   if (totalMonths < 12) {
-    return `${totalMonths}m`
+    return pluralize(totalMonths, "mês", "meses")
   }
 
   const years = Math.floor(totalMonths / 12)
   const months = totalMonths % 12
   if (months === 0) {
-    return `${years}y`
+    return pluralize(years, "ano", "anos")
   }
-  return `${years}y ${months}m`
+  return `${pluralize(years, "ano", "anos")} e ${pluralize(months, "mês", "meses")}`
 }
 
 function parsePeriodDate(str: string, fallbackMonth: "first" | "last"): Date {

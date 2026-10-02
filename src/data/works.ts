@@ -4,13 +4,33 @@ import type { Work } from "@/types";
 
 export const arrWorks: Work[] = [
   {
+    company: "CS-Consoft",
+    logo: "/assets/works/consoft.webp",
+    website: "https://cs-consoft.com.br/",
+    positions: [
+      {
+        title: "Front-end Developer",
+        period: { start: "2026-10" },
+        about: [
+          "Desenvolvimento interfaces web em Vue.js",
+          "Com o decorrer do estágio vou atualizando!"
+        ],
+        skills: [
+          "Vue.js",
+          "TypeScript",
+          "Node.js",
+        ],
+      },
+    ],
+  },
+  {
     company:
       "Logibot AI: Plataforma de Auxilio no Ensino de Lógica de Programação",
     logo: "/assets/works/logibot.svg",
     positions: [
       {
         title: "Full Stack Developer",
-        period: { start: "2025-09" },
+        period: { start: "2025-09", end: "2026-10" },
         about: [
           "Reformulei todo o front-end da plataforma, priorizando responsividade e experiência do usuário",
           "Desenvolvi insights de desempenho do aluno gerados por IA para apoiar o professor",
@@ -45,7 +65,7 @@ export const arrWorks: Work[] = [
     positions: [
       {
         title: "Front-end Developer",
-        period: { start: "2025-09" },
+        period: { start: "2025-09", end: "2026-09" },
         about: [
           "Projeto de inovação em parceria entre a UNIFESSPA e o Ministério da Saúde, focado em transformação digital no SUS",
           "Digitalização e automação de processos em unidades de saúde, melhorando o atendimento e a organização interna",
