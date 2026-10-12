@@ -13,16 +13,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coelhomarcus/api.marcuscoelho.com.git"
+    "url": "git+https://github.com/coelhomarcus/marcuscoelho.com.git",
+    "directory": "api"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/coelhomarcus/api.marcuscoelho.com/issues"
+    "url": "https://github.com/coelhomarcus/marcuscoelho.com/issues"
   },
-  "homepage": "https://github.com/coelhomarcus/api.marcuscoelho.com#readme",
+  "homepage": "https://github.com/coelhomarcus/marcuscoelho.com/tree/main/api#readme",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
