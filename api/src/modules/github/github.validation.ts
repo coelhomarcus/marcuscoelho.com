@@ -1,0 +1,107 @@
+import { z } from "zod";
+
+const contributionDaySchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  contributionCount: z.number().int().nonnegative(),
+  contributionLevel: z.enum([
+    "NONE",
+    "FIRST_QUARTILE",
+    "SECOND_QUARTILE",
+    "THIRD_QUARTILE",
+    "FOURTH_QUARTILE",
+  ]),
+});
+
+const contributionCalendarSchema = z.object({
+  totalContributions: z.number().int().nonnegative(),
+  weeks: z.array(
+    z.object({ contributionDays: z.array(contributionDaySchema) }),
+  ),
+});
+
+const contributionsDataSchema = z.object({
+  user: z.object({
+    contributionsCollection: z.object({
+      contributionCalendar: contributionCalendarSchema,
+    }),
+  }),
+});
+
+const repositorySchema = z.object({
+  name: z.string(),
+  nameWithOwner: z.string(),
+  url: z.string().url(),
+  isPrivate: z.boolean(),
+  stargazerCount: z.number().int().nonnegative(),
+  createdAt: z.string().datetime({ offset: true }),
+  pushedAt: z.string().datetime({ offset: true }).nullable(),
+  languages: z.object({
+    edges: z.array(
+      z.object({
+        size: z.number().int().nonnegative(),
+        node: z.object({
+          name: z.string(),
+          color: z.string().nullable(),
+        }),
+      }),
+    ),
+  }),
+});
+
+const statsDataSchema = z.object({
+  user: z.object({
+    pullRequests: z.object({ totalCount: z.number().int().nonnegative() }),
+    issues: z.object({ totalCount: z.number().int().nonnegative() }),
+    repositories: z.object({ nodes: z.array(repositorySchema) }),
+    contributionsCollection: z.object({
+      contributionCalendar: z.object({
+        weeks: z.array(
+          z.object({
+            contributionDays: z.array(
+              z.object({
+                date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+                contributionCount: z.number().int().nonnegative(),
+              }),
+            ),
+          }),
+        ),
+      }),
+    }),
+  }),
+});
+
+const graphqlEnvelopeSchema = z.object({
+  data: z.unknown().optional(),
+  errors: z
+    .array(z.object({ message: z.string() }))
+    .optional(),
+});
+
+export type ContributionsData = z.infer<typeof contributionsDataSchema>;
+export type StatsData = z.infer<typeof statsDataSchema>;
+
+export function parseGitHubResponse<T>(
+  payload: unknown,
+  dataSchema: z.ZodType<T>,
+  operation: string,
+): T {
+  const envelope = graphqlEnvelopeSchema.safeParse(payload);
+
+  if (!envelope.success) {
+    throw new Error(`[GitHub] Resposta inválida em ${operation}`);
+  }
+
+  if (envelope.data.errors?.length) {
+    const messages = envelope.data.errors.map((error) => error.message);
+    throw new Error(`[GitHub] GraphQL recusou ${operation}: ${messages.join("; ")}`);
+  }
+
+  const data = dataSchema.safeParse(envelope.data.data);
+  if (!data.success) {
+    throw new Error(`[GitHub] Dados inválidos em ${operation}`);
+  }
+
+  return data.data;
+}
+
+export { contributionsDataSchema, statsDataSchema };
