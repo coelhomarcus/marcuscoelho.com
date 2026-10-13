@@ -5,6 +5,7 @@ export class AppError extends Error {
     public readonly statusCode: number,
     public readonly code: string,
     message: string,
+    public readonly details?: Record<string, string[] | undefined>,
   ) {
     super(message);
     this.name = "AppError";
@@ -28,20 +29,24 @@ export const errorHandler: ErrorRequestHandler = (
   const isAppError = error instanceof AppError;
   const statusCode = isAppError ? error.statusCode : 500;
   const code = isAppError ? error.code : "INTERNAL_ERROR";
-  const message = isAppError ? error.message : "Erro interno do servidor";
+  const message = isAppError ? error.message : "Internal server error";
 
-  console.error("[API] Erro na requisição", {
+  // Client mistakes (4xx) are expected; only server failures need the stack
+  const log = statusCode >= 500 ? console.error : console.warn;
+  log("[API] Request failed", {
     method: req.method,
     path: req.originalUrl,
     statusCode,
     code,
-    error: error instanceof Error ? error.stack : error,
+    error:
+      statusCode >= 500 && error instanceof Error ? error.stack : message,
   });
 
   res.status(statusCode).json({
     error: {
       code,
       message,
+      ...(isAppError && error.details ? { details: error.details } : {}),
     },
   });
 };

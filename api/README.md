@@ -84,16 +84,16 @@ Request body:
 
 Responses:
 
-- `201 Created`: row inserted into `contacts`.
+- `201 Created`: the row inserted into `contacts`.
   ```json
-  { "message": "Contato enviado com sucesso", "contact": { "id": 1, "name": "...", "email": "...", "message": "...", "createdAt": "..." } }
+  { "id": 1, "name": "...", "email": "...", "message": "...", "createdAt": "..." }
   ```
-- `400 Bad Request`: Zod field errors (`flatten().fieldErrors`).
+- `400 Bad Request`: `VALIDATION_ERROR` in the [standard error shape](#errors), with Zod field errors (`flatten().fieldErrors`) in `details`.
   ```json
-  { "errors": { "email": ["Email inválido"] } }
+  { "error": { "code": "VALIDATION_ERROR", "message": "Invalid request body", "details": { "email": ["Invalid email"] } } }
   ```
 
-After the insert, an email is sent via Resend with `replyTo` set to the sender. The send is fire-and-forget: it doesn't block the response and a failure is only logged. User input is HTML-escaped before going into the email body.
+After the insert, an email is sent via Resend with `replyTo` set to the sender. The send is fire-and-forget: it doesn't block the response and a failure is only logged (`[Contact] Failed to send email`, with the contact id). Resend returns failures as `{ error }` instead of throwing, so `sendContactEmail` turns them into a thrown error. User input is HTML-escaped before going into the email body.
 
 ### `GET /github/contributions`
 
@@ -127,20 +127,23 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 
 ### Errors
 
-Errors thrown inside handlers go through the global `errorHandler` and share one shape:
+Every error goes through the global `errorHandler` and shares one shape (`details` only appears on validation errors):
 
 ```json
-{ "error": { "code": "GITHUB_TIMEOUT", "message": "O GitHub demorou demais para responder" } }
+{ "error": { "code": "GITHUB_TIMEOUT", "message": "GitHub took too long to respond" } }
 ```
 
 | Status | Code | When |
 | --- | --- | --- |
+| `400` | `VALIDATION_ERROR` | Request body failed Zod validation |
 | `502` | `GITHUB_UNAVAILABLE` | GitHub returned a non-2xx status or the request failed |
 | `502` | `GITHUB_INVALID_RESPONSE` | GraphQL `errors` present, or the payload failed Zod validation |
 | `504` | `GITHUB_TIMEOUT` | GitHub didn't answer within 10s (`AbortController`) |
 | `500` | `INTERNAL_ERROR` | Any unhandled error |
 
-Every error is logged with method, path, status, code and stack.
+Every error is logged with method, path, status and code: `4xx` as a warning with the message, `5xx` as an error with the stack.
+
+Messages, logs and comments are in English. The only Portuguese is the contact email sent to the site owner (subject and labels), since that's user-facing content.
 
 ## GitHub cache
 

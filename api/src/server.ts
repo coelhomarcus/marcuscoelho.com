@@ -13,7 +13,7 @@ function refreshWithLogging(
   refresh: () => Promise<unknown>,
 ) {
   refresh().catch((error: unknown) => {
-    console.error(`[GitHub] Falha ao atualizar ${operation}`, {
+    console.error(`[GitHub] Failed to refresh ${operation}`, {
       error: error instanceof Error ? error.stack : error,
     });
   });
@@ -26,18 +26,18 @@ async function startServer() {
     console.log(`Server running on port ${env.PORT}`);
   });
 
-  // Atualiza cache do GitHub a cada 6 horas
+  // Refresh the GitHub cache every 6 hours
   cron.schedule("0 */6 * * *", () => {
-    refreshWithLogging("contribuições", refreshGitHubContributions);
-    refreshWithLogging("estatísticas", refreshGitHubStats);
+    refreshWithLogging("contributions", refreshGitHubContributions);
+    refreshWithLogging("stats", refreshGitHubStats);
   });
 
-  // Busca inicial ao subir o servidor
-  refreshWithLogging("contribuições", refreshGitHubContributions);
-  refreshWithLogging("estatísticas", refreshGitHubStats);
+  // Initial fetch on startup
+  refreshWithLogging("contributions", refreshGitHubContributions);
+  refreshWithLogging("stats", refreshGitHubStats);
 }
 
 startServer().catch((error) => {
-  console.error("Falha ao iniciar a API:", error);
+  console.error("Failed to start the API:", error);
   process.exit(1);
 });

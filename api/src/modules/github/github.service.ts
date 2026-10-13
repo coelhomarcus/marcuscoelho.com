@@ -136,7 +136,7 @@ async function fetchGitHub(operation: string, query: string): Promise<unknown> {
 
     if (!response.ok) {
       const responseBody = await response.text().catch(() => "");
-      console.error(`[GitHub] ${operation} falhou`, {
+      console.error(`[GitHub] ${operation} request failed`, {
         status: response.status,
         statusText: response.statusText,
         durationMs,
@@ -145,12 +145,12 @@ async function fetchGitHub(operation: string, query: string): Promise<unknown> {
       throw new AppError(
         502,
         "GITHUB_UNAVAILABLE",
-        "Não foi possível consultar o GitHub",
+        "Could not reach GitHub",
       );
     }
 
     const payload: unknown = await response.json();
-    console.info(`[GitHub] ${operation} concluído`, {
+    console.info(`[GitHub] ${operation} request succeeded`, {
       status: response.status,
       durationMs,
     });
@@ -160,25 +160,25 @@ async function fetchGitHub(operation: string, query: string): Promise<unknown> {
 
     const durationMs = Date.now() - startedAt;
     if (controller.signal.aborted) {
-      console.error(`[GitHub] ${operation} excedeu o timeout`, {
+      console.error(`[GitHub] ${operation} request timed out`, {
         timeoutMs: GITHUB_REQUEST_TIMEOUT_MS,
         durationMs,
       });
       throw new AppError(
         504,
         "GITHUB_TIMEOUT",
-        "O GitHub demorou demais para responder",
+        "GitHub took too long to respond",
       );
     }
 
-    console.error(`[GitHub] ${operation} gerou um erro`, {
+    console.error(`[GitHub] ${operation} request threw`, {
       durationMs,
       ...errorDetails(error),
     });
     throw new AppError(
       502,
       "GITHUB_UNAVAILABLE",
-      "Não foi possível consultar o GitHub",
+      "Could not reach GitHub",
     );
   } finally {
     clearTimeout(timeout);
@@ -193,23 +193,23 @@ function parseGitHubData<T>(
   try {
     return parseGitHubResponse(payload, schema, operation);
   } catch (error) {
-    console.error(`[GitHub] ${operation} retornou dados inválidos`, {
+    console.error(`[GitHub] ${operation} returned invalid data`, {
       ...errorDetails(error),
     });
     throw new AppError(
       502,
       "GITHUB_INVALID_RESPONSE",
-      "O GitHub retornou uma resposta inválida",
+      "GitHub returned an invalid response",
     );
   }
 }
 
 export async function refreshGitHubContributions() {
-  const payload = await fetchGitHub("contribuições", CONTRIBUTIONS_QUERY);
+  const payload = await fetchGitHub("contributions", CONTRIBUTIONS_QUERY);
   const data = parseGitHubData<ContributionsData>(
     payload,
     contributionsDataSchema,
-    "contribuições",
+    "contributions",
   );
   const calendar = data.user.contributionsCollection.contributionCalendar;
   const values = {
@@ -234,15 +234,15 @@ export async function refreshGitHubContributions() {
   }
 
   console.log(
-    `[GitHub] Contributions cache atualizado: ${calendar.totalContributions} contribuições`,
+    `[GitHub] Contributions cache updated: ${calendar.totalContributions} contributions`,
   );
 
   return calendar;
 }
 
 export async function refreshGitHubStats() {
-  const payload = await fetchGitHub("estatísticas", STATS_QUERY);
-  const data = parseGitHubData<StatsData>(payload, statsDataSchema, "estatísticas");
+  const payload = await fetchGitHub("stats", STATS_QUERY);
+  const data = parseGitHubData<StatsData>(payload, statsDataSchema, "stats");
   const user = data.user;
 
   // Total stars

@@ -19,7 +19,7 @@ const contributionCalendarSchema = z.object({
   ),
 });
 
-const contributionsDataSchema = z.object({
+export const contributionsDataSchema = z.object({
   user: z.object({
     contributionsCollection: z.object({
       contributionCalendar: contributionCalendarSchema,
@@ -48,7 +48,7 @@ const repositorySchema = z.object({
   }),
 });
 
-const statsDataSchema = z.object({
+export const statsDataSchema = z.object({
   user: z.object({
     pullRequests: z.object({ totalCount: z.number().int().nonnegative() }),
     issues: z.object({ totalCount: z.number().int().nonnegative() }),
@@ -88,20 +88,18 @@ export function parseGitHubResponse<T>(
   const envelope = graphqlEnvelopeSchema.safeParse(payload);
 
   if (!envelope.success) {
-    throw new Error(`[GitHub] Resposta inválida em ${operation}`);
+    throw new Error(`[GitHub] Invalid GraphQL envelope for ${operation}`);
   }
 
   if (envelope.data.errors?.length) {
     const messages = envelope.data.errors.map((error) => error.message);
-    throw new Error(`[GitHub] GraphQL recusou ${operation}: ${messages.join("; ")}`);
+    throw new Error(`[GitHub] GraphQL rejected ${operation}: ${messages.join("; ")}`);
   }
 
   const data = dataSchema.safeParse(envelope.data.data);
   if (!data.success) {
-    throw new Error(`[GitHub] Dados inválidos em ${operation}`);
+    throw new Error(`[GitHub] Invalid data for ${operation}`);
   }
 
   return data.data;
 }
-
-export { contributionsDataSchema, statsDataSchema };

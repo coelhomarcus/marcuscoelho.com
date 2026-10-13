@@ -14,7 +14,8 @@ function escapeHtml(value: string) {
 }
 
 export async function sendContactEmail(data: CreateContactInput) {
-  await resend.emails.send({
+  // Resend reports failures in the result instead of throwing
+  const { error } = await resend.emails.send({
     from: env.CONTACT_FROM_EMAIL,
     to: env.CONTACT_TO_EMAIL,
     replyTo: data.email,
@@ -27,4 +28,6 @@ export async function sendContactEmail(data: CreateContactInput) {
       <p>${escapeHtml(data.message).replace(/\n/g, "<br>")}</p>
     `,
   });
+
+  if (error) throw new Error(`Resend: ${error.message}`);
 }
