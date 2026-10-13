@@ -1,4 +1,5 @@
 ﻿import { Link, NavLink } from "react-router";
+import { motion } from "motion/react";
 import type { HeaderLinkProps } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -50,15 +51,28 @@ function HeaderLink({ to, title, icon: Icon }: HeaderLinkProps) {
       {...hoverProps}
       className={({ isActive }) =>
         cn(
-          "inline-flex h-[calc(100%-1px)] items-center justify-center gap-1.5 rounded-md border border-transparent pr-2.5 pl-2 py-0.5 text-sm font-medium whitespace-nowrap transition-all",
-          isActive
-            ? "bg-zinc-100 text-black"
-            : "text-foreground/60 hover:text-foreground",
+          "relative inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md border border-transparent pr-2.5 pl-2 py-0.5 text-sm font-medium whitespace-nowrap transition-colors",
+          isActive ? "text-black" : "text-foreground/60 hover:text-foreground",
         )
       }
     >
-      <Icon ref={ref} size={14} />
-      {title}
+      {({ isActive }) => (
+        <>
+          {/* One shared pill slides between tabs instead of cross-fading two */}
+          {isActive && (
+            <motion.span
+              layoutId="header-active-tab"
+              className="absolute inset-0 bg-zinc-100"
+              style={{ borderRadius: 8 }}
+              transition={{ type: "spring", stiffness: 500, damping: 40 }}
+            />
+          )}
+          <span className="relative z-10 inline-flex items-center gap-1.5">
+            <Icon ref={ref} size={14} />
+            {title}
+          </span>
+        </>
+      )}
     </NavLink>
   );
 }
