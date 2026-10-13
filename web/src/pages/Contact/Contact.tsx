@@ -7,21 +7,17 @@ import { useContact, type FieldState } from "@/hooks/useContact";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-const baseInput =
-  "w-full rounded-[8px] border px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500/60 transition-colors outline-none";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const inputStateClasses: Record<FieldState, string> = {
-  default:
-    "border-zinc-700/50 bg-zinc-800/30 focus:border-zinc-500 focus:bg-zinc-800/60",
+  default: "",
   valid:
-    "border-green-500/40 bg-green-900/10 focus:border-green-500/60 focus:bg-green-900/20",
+    "border-green-500/40 bg-green-900/10 focus-visible:border-green-500/60 focus-visible:ring-green-500/20 dark:bg-green-900/10",
   invalid:
-    "border-red-500/40 bg-red-900/10 focus:border-red-500/60 focus:bg-red-900/20",
+    "border-red-500/40 bg-red-900/10 focus-visible:border-red-500/60 focus-visible:ring-red-500/20 dark:bg-red-900/10",
 };
-
-const getInputClasses = (state: FieldState) =>
-  `${baseInput} ${inputStateClasses[state]}`;
 
 const Contact = () => {
   const {
@@ -59,55 +55,48 @@ const Contact = () => {
         className="flex flex-col gap-3"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="name" className="text-sm font-medium text-zinc-300">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="name">
               Nome
-            </label>
-            <input
+            </Label>
+            <Input
               id="name"
               type="text"
               placeholder="Seu nome"
               value={form.name}
               onChange={(e) => setField("name", e.target.value)}
-              className={getInputClasses(getFieldState("name"))}
+              className={inputStateClasses[getFieldState("name")]}
               required
               minLength={2}
             />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-zinc-300"
-            >
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email">
               Email
-            </label>
-            <input
+            </Label>
+            <Input
               id="email"
               type="email"
               placeholder="seu@email.com"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
-              className={getInputClasses(getFieldState("email"))}
+              className={inputStateClasses[getFieldState("email")]}
               required
             />
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="message"
-            className="text-sm font-medium text-zinc-300"
-          >
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="message">
             Mensagem
-          </label>
-          <textarea
+          </Label>
+          <Textarea
             id="message"
             placeholder="Sua mensagem (mínimo 10 caracteres)"
             value={form.message}
             onChange={(e) => setField("message", e.target.value)}
-            rows={5}
-            className={cn(getInputClasses(getFieldState("message")), "resize-none")}
+            className={cn(inputStateClasses[getFieldState("message")], "min-h-28 resize-none")}
             required
             minLength={10}
           />
