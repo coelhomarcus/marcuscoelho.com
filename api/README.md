@@ -1,10 +1,10 @@
-<img alt="logo" src="https://marcuscoelho.com/assets/icons/favicon.ico">
+<img alt="logo" src="../web/public/assets/icons/favicon.ico">
 
 ## api
 
-O backend do [marcuscoelho.com](https://marcuscoelho.com), rodando em [api.marcuscoelho.com](https://api.marcuscoelho.com).
+Backend of my personal site.
 
-Pequena e focada: recebe as mensagens do formulário de contato e mantém um cache dos meus dados do GitHub para o site exibir.
+It has two jobs: persist and forward contact form submissions, and keep a Postgres-backed cache of GitHub profile data so the frontend never talks to GitHub (or sees the token) directly.
 
 ## Stack
 
@@ -19,129 +19,195 @@ Pequena e focada: recebe as mensagens do formulário de contato e mantém um cac
 <img alt="Docker" src="https://img.shields.io/badge/-Docker-2496ED?style=plastic&logo=docker&logoColor=white" />
 <p/>
 
-## Endpoints
+- **Runtime:** Node.js 22, Express 5, CommonJS output compiled with `tsc`
+- **Database:** PostgreSQL via `pg` connection pool + Drizzle ORM / drizzle-kit
+- **Validation:** Zod 4 (env, request bodies and GitHub responses)
+- **Email:** Resend
+- **Scheduling:** `node-cron`
+
+## Architecture
+
+```
+src/
+├── server.ts         # bootstrap: run migrations → listen → schedule cron → initial GitHub fetch
+├── app.ts            # Express app: CORS, JSON body parser, routers, error handler
+├── config/
+│   ├── env.ts        # process.env parsed with Zod (fails fast on missing vars)
+│   └── database.ts   # pg Pool + Drizzle instance with all schemas
+├── modules/
+│   ├── contact/      # *.routes → *.controller → *.service, *.schema (Drizzle), *.validation (Zod)
+│   └── github/
+└── shared/
+    ├── errors.ts     # AppError, asyncHandler, global errorHandler
+    └── email.ts      # Resend client + HTML-escaped contact email
+```
+
+Each module follows the same layering:
+
+| Layer | Responsibility |
+| --- | --- |
+| `*.routes.ts` | Declares routes, wraps handlers in `asyncHandler` so rejected promises reach the error handler |
+| `*.controller.ts` | Parses/validates input, shapes the HTTP response |
+| `*.service.ts` | Business logic and database access |
+| `*.schema.ts` | Drizzle table definitions (source of truth for migrations) |
+| `*.validation.ts` | Zod schemas and inferred types |
+
+### Startup sequence
+
+1. `env.ts` validates environment variables. Any failure throws and the process exits.
+2. Pending Drizzle migrations from `./drizzle` are applied.
+3. The HTTP server starts on `PORT`.
+4. A cron job (`0 */6 * * *`) refreshes the GitHub contributions and stats caches.
+5. Both caches are refreshed once immediately. Failures are logged and don't crash the server.
+
+## API reference
+
+CORS only allows the origins in `CORS_ORIGINS` (by default, the production site origins).
 
 ### `POST /contact`
 
-Recebe uma mensagem do formulário de contato.
+Request body:
 
 ```json
 {
-  "name": "Fulano",
-  "email": "fulano@email.com",
-  "message": "Olá! Vi seu portfólio e..."
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "message": "Hi! I saw your portfolio and..."
 }
 ```
 
-- Validação com Zod: `name` ≥ 2 caracteres, `email` válido, `message` ≥ 10 caracteres. Se falhar, responde `400` com os erros por campo.
-- A mensagem é salva no Postgres e em seguida enviada por e-mail via **Resend** (com `reply-to` apontando para quem escreveu). O envio do e-mail não bloqueia a resposta.
-- Responde `201` com o contato criado.
+| Field | Rule |
+| --- | --- |
+| `name` | string, min 2 chars |
+| `email` | valid email |
+| `message` | string, min 10 chars |
+
+Responses:
+
+- `201 Created`: row inserted into `contacts`.
+  ```json
+  { "message": "Contato enviado com sucesso", "contact": { "id": 1, "name": "...", "email": "...", "message": "...", "createdAt": "..." } }
+  ```
+- `400 Bad Request`: Zod field errors (`flatten().fieldErrors`).
+  ```json
+  { "errors": { "email": ["Email inválido"] } }
+  ```
+
+After the insert, an email is sent via Resend with `replyTo` set to the sender. The send is fire-and-forget: it doesn't block the response and a failure is only logged. User input is HTML-escaped before going into the email body.
 
 ### `GET /github/contributions`
 
-Calendário de contribuições do GitHub (o "gráfico de quadradinhos").
+Contribution calendar for the last year, as returned by GitHub's `contributionCalendar`.
 
 ```json
-{ "totalContributions": 1234, "weeks": [...], "cachedAt": "..." }
+{
+  "totalContributions": 1234,
+  "weeks": [
+    { "contributionDays": [{ "date": "2026-10-13", "contributionCount": 4, "contributionLevel": "SECOND_QUARTILE" }] }
+  ],
+  "cachedAt": "2026-10-13T12:00:00.000Z"
+}
 ```
 
 ### `GET /github/stats`
 
-Estatísticas agregadas do perfil:
+Aggregated profile stats, computed from the owner's 100 most recently pushed repositories.
 
-| Campo | O que é |
-| --- | --- |
-| `totalStars` | Soma das stars dos meus repositórios |
-| `mergedPRs` / `closedIssues` | PRs mergeados e issues fechadas |
-| `currentStreak` | Dias seguidos com contribuição |
-| `lastCommitDate` / `lastCommitRepo` | Último push (nome omitido se o repo for privado) |
-| `languages` | Linguagens mais usadas |
-| `repositories` | Repositórios públicos com stars e datas — o site usa para enriquecer a lista de projetos |
+| Field | Type | Description |
+| --- | --- | --- |
+| `totalStars` | `number` | Sum of `stargazerCount` across owned repos |
+| `mergedPRs` | `number` | Total merged pull requests |
+| `closedIssues` | `number` | Total closed issues |
+| `currentStreak` | `number` | Consecutive days with contributions (today is skipped if it has none yet) |
+| `lastCommitDate` | `string` | `pushedAt` of the most recently pushed repo |
+| `lastCommitRepo` | `string` | Name of that repo, or `""` if it's private |
+| `languages` | `{ name, percentage, color }[]` | Top 8 languages by byte size across repos |
+| `repositories` | `{ name, nameWithOwner, url, stargazerCount, createdAt }[]` | Public repos only. The frontend uses them to show stars/creation date on projects |
+| `cachedAt` | `string` | When the cache row was last refreshed |
 
-### Erros
+### Errors
 
-Erros seguem um formato único:
+Errors thrown inside handlers go through the global `errorHandler` and share one shape:
 
 ```json
-{ "error": { "code": "INTERNAL_ERROR", "message": "Erro interno do servidor" } }
+{ "error": { "code": "GITHUB_TIMEOUT", "message": "O GitHub demorou demais para responder" } }
 ```
 
-## Cache do GitHub
+| Status | Code | When |
+| --- | --- | --- |
+| `502` | `GITHUB_UNAVAILABLE` | GitHub returned a non-2xx status or the request failed |
+| `502` | `GITHUB_INVALID_RESPONSE` | GraphQL `errors` present, or the payload failed Zod validation |
+| `504` | `GITHUB_TIMEOUT` | GitHub didn't answer within 10s (`AbortController`) |
+| `500` | `INTERNAL_ERROR` | Any unhandled error |
 
-Consultar a API GraphQL do GitHub a cada visita seria lento e gastaria rate limit, então a API guarda os resultados no Postgres:
+Every error is logged with method, path, status, code and stack.
 
-1. Ao subir, busca contribuições e stats e salva no banco.
-2. Um cron (`node-cron`) atualiza tudo **a cada 6 horas**.
-3. Os endpoints `/github/*` leem direto do cache. Se o cache estiver vazio, buscam no GitHub na hora.
+## GitHub cache
 
-O `GITHUB_TOKEN` fica só no servidor — nunca chega ao navegador.
+Hitting the GitHub GraphQL API on every page view would be slow and burn rate limit, so data is cached in Postgres:
 
-## Banco de dados
+- `refreshGitHubContributions()` and `refreshGitHubStats()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** (update the latest row if one exists, otherwise insert).
+- `GET /github/*` reads the latest row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
+- The cache is refreshed on boot and every 6 hours.
 
-Postgres com **Drizzle ORM**. Tabelas:
+## Database
 
-| Tabela | Conteúdo |
-| --- | --- |
-| `contacts` | Mensagens recebidas pelo formulário |
-| `github_contributions` | Cache do calendário de contribuições |
-| `github_stats` | Cache das estatísticas e repositórios |
+| Table | Columns | Notes |
+| --- | --- | --- |
+| `contacts` | `id`, `name`, `email`, `message`, `created_at` | One row per submission |
+| `github_contributions` | `id`, `total_contributions`, `weeks` (jsonb), `cached_at` | Single cached row |
+| `github_stats` | `id`, `total_stars`, `merged_prs`, `closed_issues`, `current_streak`, `last_commit_date`, `last_commit_repo`, `languages` (jsonb), `repositories` (jsonb), `cached_at` | Single cached row |
 
-Os schemas ficam em `src/modules/*/*.schema.ts` e as migrations em [`drizzle/`](drizzle). **As migrations rodam automaticamente quando o servidor sobe**, então um deploy com schema novo já atualiza o banco.
+Schemas live in `src/modules/*/*.schema.ts`, and drizzle-kit picks them up through [`drizzle.config.ts`](drizzle.config.ts). Migrations are SQL files in [`drizzle/`](drizzle) and run automatically on startup.
 
-## Estrutura
+To change the schema:
 
-```
-api/
-├── drizzle/              # migrations SQL geradas pelo drizzle-kit
-└── src/
-    ├── server.ts         # entrada: roda migrations, sobe o servidor e agenda o cron
-    ├── app.ts            # Express: CORS, rotas e handler de erros
-    ├── config/           # env (validado com Zod) e conexão com o banco
-    ├── modules/
-    │   ├── contact/      # routes → controller → service, + schema e validação
-    │   └── github/
-    └── shared/           # envio de e-mail e tratamento de erros
+```bash
+# 1. edit src/modules/<module>/<module>.schema.ts
+npm run db:generate   # 2. generate a new SQL migration in drizzle/
+npm run dev           # 3. it's applied on next start (or: npm run db:migrate)
 ```
 
-Cada módulo segue o mesmo padrão: `routes` define a rota, `controller` valida a entrada e monta a resposta, `service` tem a regra de negócio e o acesso ao banco.
+## Environment variables
 
-## Variáveis de ambiente
+Copy [`.env.example`](.env.example) to `.env`. All variables are validated at startup.
 
-Copie `.env.example` para `.env`. Todas são validadas com Zod na inicialização — se faltar alguma, a API não sobe.
+| Variable | Required | Description |
+| --- | --- | --- |
+| `PORT` | no | HTTP port (default `3000`) |
+| `DATABASE_URL` | yes | Postgres connection string |
+| `GITHUB_TOKEN` | yes | GitHub token used for the GraphQL API |
+| `RESEND_API_KEY` | yes | Resend API key |
+| `CONTACT_FROM_EMAIL` | yes | Sender address (must be on a domain verified in Resend) |
+| `CONTACT_TO_EMAIL` | yes | Where contact emails are delivered |
+| `CORS_ORIGINS` | no | Comma-separated allowed origins. Empty or unset falls back to the production origins |
 
-| Variável | Descrição |
-| --- | --- |
-| `PORT` | Porta do servidor (padrão `3000`) |
-| `DATABASE_URL` | Connection string do Postgres |
-| `GITHUB_TOKEN` | Token do GitHub para a API GraphQL |
-| `RESEND_API_KEY` | Chave da API do Resend |
-| `CONTACT_FROM_EMAIL` | Remetente dos e-mails de contato (domínio verificado no Resend) |
-| `CONTACT_TO_EMAIL` | Para onde os e-mails de contato são enviados |
+## Development
 
-## Rodando localmente
-
-Precisa de um Postgres acessível pela `DATABASE_URL`.
+Requires Node.js 22+ and a reachable Postgres instance.
 
 ```bash
 cp .env.example .env
 npm install
-npm run dev          # tsx em modo watch
+npm run dev          # tsx watch src/server.ts
 ```
 
-Outros scripts:
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Run with `tsx` in watch mode |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm start` | Run the compiled build |
+| `npm run db:generate` | Generate a migration from schema changes |
+| `npm run db:migrate` | Apply migrations manually |
+| `npm run db:studio` | Open Drizzle Studio |
 
-```bash
-npm run build        # compila para dist/
-npm start            # roda o build
-npm run db:generate  # gera uma migration a partir dos schemas
-npm run db:migrate   # aplica as migrations manualmente
-npm run db:studio    # abre o Drizzle Studio
-```
+> To call the API from the local frontend, set `CORS_ORIGINS=http://localhost:5173` here and `VITE_API_URL=http://localhost:3000` in `web/.env`.
 
-> O CORS só libera `marcuscoelho.com` e `www.marcuscoelho.com`. Para testar com o frontend local, ajuste a origem em [`src/app.ts`](src/app.ts).
+## Docker
 
-## Deploy
+The [`Dockerfile`](Dockerfile) is a two-stage build on `node:22-alpine`:
 
-O [`Dockerfile`](Dockerfile) compila o TypeScript em um estágio de build e gera uma imagem enxuta só com as dependências de produção, o `dist/` e as migrations. Expõe a porta `3000`.
+1. **builder**: `npm ci` + `tsc`
+2. **runner**: production dependencies only (`npm ci --omit=dev`), `dist/` and `drizzle/`, `NODE_ENV=production`
 
-No Dokploy, o app usa **Build Path** `/api`, com as variáveis de ambiente configuradas no painel.
+The container exposes port `3000` and runs `node dist/server.js`.

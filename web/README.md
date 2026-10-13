@@ -1,8 +1,8 @@
-<img alt="logo" src="https://marcuscoelho.com/assets/icons/favicon.ico">
+<img alt="logo" src="public/assets/icons/favicon.ico">
 
 ## web
 
-O frontend do [marcuscoelho.com](https://marcuscoelho.com): um site estático, minimalista, feito para apresentar quem sou, o que construo e o que penso.
+Frontend of my personal site: a statically built React SPA with an MDX blog, served by nginx.
 
 ## Stack
 
@@ -17,102 +17,148 @@ O frontend do [marcuscoelho.com](https://marcuscoelho.com): um site estático, m
 <img alt="nginx" src="https://img.shields.io/badge/-nginx-009639?style=plastic&logo=nginx&logoColor=white" />
 <p/>
 
-## Páginas
+- **UI:** React 19, Tailwind CSS 4 (`@tailwindcss/vite` + typography plugin), shadcn/ui (Radix), Motion
+- **Routing:** React Router 7 (`BrowserRouter`)
+- **Content:** MDX 3 via `@mdx-js/rollup` + `remark-frontmatter`
+- **Build:** Vite, TypeScript 5.7 (`tsc -b` type check before bundling)
+- **Serving:** nginx (Alpine) in Docker
 
-| Rota | Página |
-| --- | --- |
-| `/` | **Sobre** — quem sou, skills, experiência e gráfico de contribuições do GitHub |
-| `/projects` | **Projetos** — trabalhos e ideias que saíram do papel |
-| `/blog` | **Blog** — textos sobre programação, tecnologia e afins |
-| `/blog/:slug` | Post individual |
-| `/certificates` | **Certificados** — cursos e certificações |
-| `/contact` | **Contato** — formulário que envia a mensagem para a [API](../api) |
+## Routes
 
-## Estrutura
+| Path | Component | Loading |
+| --- | --- | --- |
+| `/` | `pages/About` | eager |
+| `/projects` | `pages/Projects` | eager |
+| `/blog` | `pages/Blog` | eager |
+| `/blog/:slug` | `pages/Blog/[slug]` | eager shell, post body lazy-loaded |
+| `/certificates` | `pages/Certificates` | `React.lazy` |
+| `/contact` | `pages/Contact` | eager |
+| `*` | `pages/NotFound` | `React.lazy` |
+
+Page changes are animated with `AnimatePresence` keyed on `location.pathname`.
+
+## Project structure
 
 ```
 web/
-├── public/assets/      # imagens: ícones, projetos, posts, empresas
+├── public/assets/           # static images: icons, projects/<name>/, posts/<date>/, works/
 ├── scripts/
-│   └── generate-posts.mjs   # gera src/data/blogPostsData.ts a partir dos .mdx
+│   └── generate-posts.mjs   # builds src/data/blogPostsData.ts from MDX frontmatter
+├── nginx.conf
 └── src/
-    ├── pages/          # uma pasta por página (Blog/posts guarda os .mdx)
-    ├── components/     # componentes reutilizáveis
-    ├── data/           # conteúdo do site: projetos, skills, experiências, certificados
-    ├── hooks/          # chamadas à API (contato, GitHub) e composição de dados
-    ├── lib/            # utilitários, animações, componentes do MDX, cache de requests
+    ├── main.tsx             # BrowserRouter + ToastProvider
+    ├── App.tsx              # layout and route table
+    ├── pages/               # one folder per page; Blog/posts/*.mdx holds the posts
+    ├── components/          # feature components + ui/ (shadcn)
+    ├── data/                # site content: projects, skills, works, certificates, config
+    ├── hooks/               # API access and data composition
+    ├── lib/                 # utils, motion presets, MDX components, request cache
     └── types/
 ```
 
-Quase todo o conteúdo do site mora em `src/data/` — para mudar algo, geralmente é só editar um array.
+The `@/` alias resolves to `src/`.
 
-## Conteúdo
+## Content model
 
-### Projetos
+Almost all site content is static data in `src/data/`. Changing the site usually means editing a typed array:
 
-Ficam em [`src/data/projects.ts`](src/data/projects.ts). Cada projeto tem nome, descrição, techs e, opcionalmente, link, repositório, favicon e imagens (em `public/assets/projects/<projeto>/`).
+| File | Content |
+| --- | --- |
+| `projects.ts` | `Project[]`: name, description, tech, optional `link`, `repo`, `favicon`, `images` |
+| `works.ts` | `Work[]`: companies, positions, periods, highlights, skills |
+| `skills.ts` | Skill icons and links |
+| `certificates.ts` | Certificates |
+| `config.ts` | Runtime config derived from `VITE_*` env vars |
+| `blogPostsData.ts` | **Generated**, don't edit by hand |
 
-Se o projeto tiver `repo`, o site cruza com os dados do GitHub vindos da API e mostra automaticamente as **stars** e a **data de criação** do repositório.
+Project assets are resolved relative to `public/assets/projects/`, so `favicon: "dbunny/favicon.svg"` maps to `public/assets/projects/dbunny/favicon.svg`.
 
-### Posts
+### Blog pipeline
 
-Os posts são arquivos `.mdx` em [`src/pages/Blog/posts/`](src/pages/Blog/posts), com frontmatter:
+Posts are `.mdx` files in [`src/pages/Blog/posts/`](src/pages/Blog/posts):
 
 ```mdx
 ---
-title: Título do post
-desc: Uma linha de descrição
+title: Post title
+desc: One-line description
 date: 19.09.2026
 tags: react, typescript
 banner: "/assets/posts/19-09-2026/banner.webp"
 ---
 
-Conteúdo em Markdown/MDX...
+Markdown / MDX content...
 ```
 
-- O `slug` é o nome do arquivo (ou o campo `slug`, se existir).
-- A data segue o formato `DD.MM.YYYY` e define a ordem no blog.
-- Antes do `dev` e do `build`, o script [`scripts/generate-posts.mjs`](scripts/generate-posts.mjs) lê os frontmatters e gera a listagem — basta criar o arquivo e ele aparece.
-- Cada post vira um chunk separado no build, carregado só quando é aberto.
+1. **Index generation:** `scripts/generate-posts.mjs` runs before `dev` and `build`. It parses each file's frontmatter, sorts by `date` (`DD.MM.YYYY`, newest first), splits `tags` on commas and writes `src/data/blogPostsData.ts`. The blog listing only imports this file, never the MDX itself.
+2. **Compilation:** `@mdx-js/rollup` (with `enforce: "pre"`) compiles MDX to React components. `remark-frontmatter` strips the YAML block from the output. Elements are mapped to styled components through `MDXProvider` and [`src/lib/mdx-components.tsx`](src/lib/mdx-components.tsx).
+3. **Loading:** [`posts/_posts.ts`](src/pages/Blog/posts/_posts.ts) uses `import.meta.glob("./*.mdx")` and `loadPost(slug)` resolves the module whose **file name** matches the slug.
+4. **Chunking:** `manualChunks` in [`vite.config.ts`](vite.config.ts) puts every post in its own chunk at `assets/posts/<name>-[hash].js`, so a post is only downloaded when it's opened.
 
-## Integração com a API
+The slug is always the file name without `.mdx` (e.g. `19-09-2026.mdx` → `/blog/19-09-2026`).
 
-O site consome a [API](../api) em três pontos:
+### Bundle splitting
 
-| Endpoint | Usado em |
-| --- | --- |
-| `GET /github/contributions` | Gráfico de contribuições na página Sobre |
-| `GET /github/stats` | Stats do GitHub e stars/datas dos projetos |
-| `POST /contact` | Formulário de contato |
+Besides per-post chunks, `node_modules` is split into `react-icons`, `syntax-highlighter` (`react-syntax-highlighter`) and a shared `vendor` chunk.
 
-## Variáveis de ambiente
+## API integration
 
-Copie `.env.example` para `.env`:
+Data from the [API](../api) is fetched by hooks in `src/hooks/`:
 
-| Variável | Descrição | Padrão |
+| Hook | Endpoint | Used by |
 | --- | --- | --- |
-| `VITE_API_URL` | URL base da API | `https://api.marcuscoelho.com` |
-| `VITE_ENV` | `dev` ou `prod`. Em `dev`, o gráfico de contribuições usa dados mockados | `prod` |
+| `useGitHubCalendar` | `GET /github/contributions` | Contribution graph on `/` |
+| `useGitHubStats` | `GET /github/stats` | `useProjects` |
+| `useProjects` | via `useGitHubStats` | Merges `repositories` into `projects.ts` by normalized repo URL, adding `repoStars` and `repoCreatedAt` |
+| `useContact` | `POST /contact` | Contact form state, client-side validation (same rules as the API) and submit status |
 
-> Variáveis `VITE_*` são embutidas no bundle no momento do build — não coloque segredos aqui.
+GET requests go through `createRequestCache` ([`src/lib/requestCache.ts`](src/lib/requestCache.ts)), a module-level memoizer that:
 
-## Rodando localmente
+- returns the resolved value if it was already fetched,
+- shares the in-flight promise between concurrent callers (no duplicate requests when several components mount at once),
+- clears the pending promise on failure so a later mount can retry.
+
+The cache lives for the lifetime of the page, so navigating between routes doesn't refetch.
+
+## Environment variables
+
+Copy [`.env.example`](.env.example) to `.env`.
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `VITE_API_URL` | API base URL | production API |
+| `VITE_ENV` | `dev` or `prod`. In `dev`, the contribution graph uses mock data from `src/data/mockGitHubCalendar.ts` instead of calling the API | `prod` |
+
+> `VITE_*` variables are inlined into the bundle at build time. Never put secrets here.
+
+The production API only accepts the production origins (CORS), so from `localhost` the endpoints that aren't mocked (stats, contact) fail. To work against real data, run the [API](../api) locally with `CORS_ORIGINS=http://localhost:5173` and set `VITE_API_URL=http://localhost:3000`.
+
+## Development
 
 ```bash
 npm install
-npm run dev       # gera os posts e sobe o Vite
+npm run dev        # generate post index, start Vite dev server
 ```
 
-Outros scripts:
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Generate post index + Vite dev server |
+| `npm run build` | Generate post index, type check (`tsc -b`), bundle to `dist/` |
+| `npm run preview` | Serve `dist/` locally |
+| `npm run lint` | ESLint (typescript-eslint, react-hooks, react-refresh) |
 
-```bash
-npm run build     # gera os posts, checa os tipos e builda para dist/
-npm run preview   # serve o build localmente
-npm run lint
-```
+## Docker
 
-## Deploy
+The [`Dockerfile`](Dockerfile) is a two-stage build:
 
-O [`Dockerfile`](Dockerfile) builda o site com Node e serve o `dist/` com **nginx** na porta `5189`. O [`nginx.conf`](nginx.conf) redireciona qualquer rota para o `index.html` (SPA) e aplica cache longo nos assets.
+1. **build** (`node:20-alpine`): `npm ci` + `npm run build`
+2. **serve** (`nginx:alpine`): copies `dist/` to `/usr/share/nginx/html` along with [`nginx.conf`](nginx.conf)
 
-No Dokploy, o app usa **Build Path** `/web`.
+nginx listens on port `5189` and falls back to `index.html` for any unknown path (`try_files $uri $uri/ /index.html`), so client-side routes work on refresh.
+
+Caching is split by how each file is named:
+
+| Files | `Cache-Control` | Why |
+| --- | --- | --- |
+| `index.html` | `no-cache` | Always revalidated, so a new deploy never serves HTML pointing to chunks that no longer exist |
+| `*.js`, `*.css` | `public, max-age=31536000, immutable` | Emitted by Vite with a content hash in the file name |
+| Images, icons, fonts | `public, max-age=3600, must-revalidate` | Files from `public/` keep their names, so replacing one is picked up within an hour (revalidated via `ETag`) |
