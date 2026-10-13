@@ -1,4 +1,5 @@
-const mdxModules = import.meta.glob("./*.mdx");
+// Posts live in the repo-level posts/ folder, outside the web app
+const mdxModules = import.meta.glob("@posts/*.mdx");
 
 export function loadPost(slug: string) {
   const key = Object.keys(mdxModules).find((k) => k.endsWith(`/${slug}.mdx`));

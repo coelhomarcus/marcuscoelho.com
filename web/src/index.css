@@ -2,6 +2,9 @@
 
 @plugin "@tailwindcss/typography";
 
+/* Posts live outside the web app, so Tailwind has to be told to scan them */
+@source "../../posts";
+
 @custom-variant dark (&:is(.dark *));
 
 /* Width of the sidebar; the page is pushed by exactly this amount. */

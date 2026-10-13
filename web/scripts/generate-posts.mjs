@@ -35,7 +35,7 @@ function sortByDateDesc(a, b) {
 }
 
 function generateBlogData() {
-  const postsDir = path.join(srcDir, "Blog/posts");
+  const postsDir = path.resolve(__dirname, "../../posts");
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".mdx"));
 
   const posts = files

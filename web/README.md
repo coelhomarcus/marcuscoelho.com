@@ -48,7 +48,7 @@ web/
 └── src/
     ├── main.tsx             # BrowserRouter + ToastProvider
     ├── App.tsx              # layout and route table
-    ├── pages/               # one folder per page; Blog/posts/*.mdx holds the posts
+    ├── pages/               # one folder per page (posts live in ../posts, see below)
     ├── components/          # feature components + ui/ (shadcn)
     ├── data/                # site content: projects, skills, works, certificates, config
     ├── hooks/               # API access and data composition
@@ -56,7 +56,7 @@ web/
     └── types/
 ```
 
-The `@/` alias resolves to `src/`.
+The `@/` alias resolves to `src/`, and `@posts/` to the repo-level [`posts/`](../posts) folder.
 
 ## Content model
 
@@ -75,7 +75,7 @@ Project assets are resolved relative to `public/assets/projects/`, so `favicon: 
 
 ### Blog pipeline
 
-Posts are `.mdx` files in [`src/pages/Blog/posts/`](src/pages/Blog/posts):
+Posts are `.mdx` files in the repo-level [`posts/`](../posts) folder, outside the web app:
 
 ```mdx
 ---
@@ -91,7 +91,7 @@ Markdown / MDX content...
 
 1. **Index generation:** `scripts/generate-posts.mjs` runs before `dev` and `build`. It parses each file's frontmatter, sorts by `date` (`DD.MM.YYYY`, newest first), splits `tags` on commas and writes `src/data/blogPostsData.ts`. The blog listing only imports this file, never the MDX itself.
 2. **Compilation:** `@mdx-js/rollup` (with `enforce: "pre"`) compiles MDX to React components. `remark-frontmatter` strips the YAML block from the output. Elements are mapped to styled components through `MDXProvider` and [`src/lib/mdx-components.tsx`](src/lib/mdx-components.tsx).
-3. **Loading:** [`posts/_posts.ts`](src/pages/Blog/posts/_posts.ts) uses `import.meta.glob("./*.mdx")` and `loadPost(slug)` resolves the module whose **file name** matches the slug.
+3. **Loading:** [`Blog/loadPost.ts`](src/pages/Blog/loadPost.ts) uses `import.meta.glob("@posts/*.mdx")` and `loadPost(slug)` resolves the module whose **file name** matches the slug. Because the folder sits outside `web/`, [`vite.config.ts`](vite.config.ts) also allows it in `server.fs.allow`, dedupes `react` / `@mdx-js/react` so compiled MDX resolves them from `web/node_modules`, and [`index.css`](src/index.css) adds it as a Tailwind `@source`.
 4. **Chunking:** `manualChunks` in [`vite.config.ts`](vite.config.ts) puts every post in its own chunk at `assets/posts/<name>-[hash].js`, so a post is only downloaded when it's opened.
 
 The slug is always the file name without `.mdx` (e.g. `19-09-2026.mdx` → `/blog/19-09-2026`).
@@ -148,7 +148,13 @@ npm run dev        # generate post index, start Vite dev server
 
 ## Docker
 
-The [`Dockerfile`](Dockerfile) is a two-stage build:
+The [`Dockerfile`](Dockerfile) builds from the **repo root**, so `posts/` is in the context (ignore rules live in [`Dockerfile.dockerignore`](Dockerfile.dockerignore)):
+
+```bash
+docker build -f web/Dockerfile .
+```
+
+It's a two-stage build:
 
 1. **build** (`node:20-alpine`): `npm ci` + `npm run build`
 2. **serve** (`nginx:alpine`): copies `dist/` to `/usr/share/nginx/html` along with [`nginx.conf`](nginx.conf)

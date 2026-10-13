@@ -6,7 +6,7 @@ Oi, eu sou o **Marcus Coelho**, desenvolvedor full stack 👋
 
 ## Sobre este repositório
 
-O site em [`web/`](web) (React, Vite e MDX) e a API em [`api/`](api) (Express e PostgreSQL), que cuida do formulário de contato e dos dados do GitHub. Cada pasta tem seu próprio README com os detalhes técnicos.
+O site em [`web/`](web) (React, Vite e MDX), os posts do blog em [`posts/`](posts) e a API em [`api/`](api) (Express e PostgreSQL), que cuida do formulário de contato e dos dados do GitHub. Cada pasta tem seu próprio README com os detalhes técnicos.
 
 ## Contato
 

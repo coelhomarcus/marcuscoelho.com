@@ -11,7 +11,7 @@ import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { LinkIcon } from "@/components/icons/link";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
-import { loadPost } from "./posts/_posts";
+import { loadPost } from "./loadPost";
 import { blogPostsData } from "@/data/blogPostsData";
 import components from "@/lib/mdx-components";
 import { fadeUp } from "@/lib/motion";
