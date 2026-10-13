@@ -7,10 +7,3 @@ export interface BlogFrontmatter {
   banner?: string;
 }
 
-export interface DiaryFrontmatter {
-  slug: string;
-  date: string;
-  preview?: string;
-  dayWas: string;
-  background?: string;
-}
