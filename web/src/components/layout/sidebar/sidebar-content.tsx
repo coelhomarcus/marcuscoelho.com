@@ -46,10 +46,10 @@ export function SidebarContent({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-3 pt-3 pb-2">
+      <div className="flex items-center justify-between px-3 pt-3 pb-5">
         <div className="flex items-center gap-2.5">
           <img
-            src="/assets/profile.webp"
+            src="https://avatars.githubusercontent.com/u/106438089?v=4"
             className="size-8 rounded-full"
             alt="Marcus Coelho"
           />
@@ -69,8 +69,6 @@ export function SidebarContent({
           <XIcon ref={closeIcon.ref} size={16} />
         </Button>
       </div>
-
-      <div className="mx-3 my-3 border-t border-zinc-800/80" />
 
       <nav
         className="scrollbar flex-1 overflow-y-auto overflow-x-hidden px-1"

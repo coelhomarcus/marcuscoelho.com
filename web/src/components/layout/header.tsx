@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Sidebar from "@/components/layout/sidebar/sidebar";
 
 import { SocialLink } from "@/components/social-link";
+import FluidOrb from "@/components/ui/fluid-orb";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { navigation, socials } from "@/data/navigation";
 
@@ -16,8 +17,9 @@ const Header = () => {
         to="/"
         className="text-zinc-100 font-medium text-sm hover:opacity-80 transition-opacity flex items-center rounded-sm"
       >
-        <img src="/assets/profile.webp" className="size-5 mr-2 inline" /> Marcus
-        Coelho
+        {/* Decorative: the link already reads "Marcus Coelho" */}
+        <FluidOrb size={20} aria-hidden className="mr-2 shrink-0" />
+        Marcus Coelho
       </Link>
 
       <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
