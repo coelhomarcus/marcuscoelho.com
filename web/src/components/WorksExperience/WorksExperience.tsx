@@ -29,6 +29,8 @@ function WorksExperience() {
         work={selected === null ? null : arrWorks[selected]}
         index={selected ?? 0}
         total={total}
+        prevName={arrWorks[((selected ?? 0) - 1 + total) % total].company}
+        nextName={arrWorks[((selected ?? 0) + 1) % total].company}
         onClose={() => setSelected(null)}
         onPrev={() => step(-1)}
         onNext={() => step(1)}
@@ -48,9 +50,11 @@ function WorkRow({ work, onSelect }: { work: Work; onSelect: () => void }) {
       aria-haspopup="dialog"
       className="group card-surface flex w-full cursor-pointer items-center gap-3 p-3 text-left hover:bg-zinc-900 hover:ring-foreground/20"
     >
-      <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-muted ring-1 ring-foreground/10">
-        <img src={work.logo} alt="" className="size-full object-cover" />
-      </div>
+      <img
+        src={work.logo}
+        alt=""
+        className="size-10 shrink-0 rounded-sm object-cover"
+      />
 
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-zinc-100 text-balance">
