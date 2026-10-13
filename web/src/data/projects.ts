@@ -9,14 +9,6 @@ export const arrProjects: Project[] = [
     images: ["linkord/01.webp"],
   },
   {
-    name: "Gikan",
-    desc: "Plataforma de Todo/Kanban multi-projeto.",
-    repo: "coelhomarcus/Gikan",
-    tech: ["React", "Typescript", "Tailwind", "Express", "PostgreSQL", "dnd-kit", "TanStack Query", "Mono Repo"],
-    favicon: "gikan/favicon.svg",
-    images: ["gikan/01.webp"],
-  },
-  {
     name: "DBunny",
     desc: "Cliente Banco de Dados PostgreSQL feito com React e Rust",
     repo: "coelhomarcus/dbunny",
