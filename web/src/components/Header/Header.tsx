@@ -1,5 +1,6 @@
 ﻿import { Link, NavLink } from "react-router";
 import type { HeaderLinkProps } from "@/types";
+import { cn } from "@/lib/utils";
 
 import Sidebar from "@/components/Sidebar/Sidebar";
 
@@ -20,7 +21,7 @@ const Header = () => {
         Coelho
       </Link>
 
-      <nav className="hidden md:flex items-center bg-zinc-800/60 rounded-full px-1.5 py-1 border border-zinc-700/50">
+      <nav className="hidden md:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
         <HeaderLink title="Sobre" to="/" />
         <HeaderLink title="Projetos" to="/projects" />
         <HeaderLink title="Blog" to="/blog" />
@@ -53,11 +54,12 @@ function HeaderLink({ to, title }: HeaderLinkProps) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `px-3 py-1 rounded-full text-sm transition-all ${
+        cn(
+          "inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md border border-transparent px-2.5 py-0.5 text-sm font-medium whitespace-nowrap transition-all",
           isActive
-            ? "bg-zinc-100 text-black font-medium"
-            : "text-zinc-500 hover:text-zinc-100"
-        }`
+            ? "bg-zinc-100 text-black"
+            : "text-foreground/60 hover:text-foreground",
+        )
       }
     >
       {title}
