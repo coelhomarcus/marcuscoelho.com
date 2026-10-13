@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { NavLink } from "react-router";
 import type { Page, SidebarLinkProps } from "@/types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 import {
   RxPerson as PersonIcon,
@@ -90,18 +91,20 @@ const Sidebar = () => {
 
   return (
     <>
-      <button
-        className="hover:*:text-zinc-100 rounded-md transition-all cursor-pointer"
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        className="text-muted-foreground hover:bg-transparent hover:text-foreground dark:hover:bg-transparent"
         aria-label="Abrir menu"
         onClick={() => setIsOpen(true)}
       >
         {isOpen ? (
-          <SideBarIcon className="w-5 h-5 hidden md:block text-zinc-500" />
+          <SideBarIcon className="size-4 hidden md:block" />
         ) : (
-          <SideBarOffIcon className="w-5 h-5 hidden md:block text-zinc-500" />
+          <SideBarOffIcon className="size-4 hidden md:block" />
         )}
         <svg
-          className="w-5 h-5 block md:hidden text-zinc-500"
+          className="size-4 block md:hidden"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -115,7 +118,7 @@ const Sidebar = () => {
             d="M1 1h15M1 7h15M1 13h15"
           />
         </svg>
-      </button>
+      </Button>
 
       {createPortal(
         <>
@@ -141,7 +144,7 @@ const Sidebar = () => {
           >
             <div className="flex flex-col h-full">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-2">
+              <div className="flex items-center justify-between px-4 pt-4 pb-2">
                 <div className="flex items-center gap-2.5">
                   <img
                     src="/assets/profile.webp"
@@ -155,25 +158,28 @@ const Sidebar = () => {
                     <p className="text-xs text-zinc-500">@coelhomarcus</p>
                   </div>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={close}
-                  className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors cursor-pointer"
+                  aria-label="Fechar menu"
+                  className="text-muted-foreground"
                 >
-                  <CloseIcon className="size-4" />
-                </button>
+                  <CloseIcon />
+                </Button>
               </div>
 
               {/* Divider */}
-              <div className="mx-5 my-3 border-t border-zinc-800/80" />
+              <div className="mx-4 my-3 border-t border-zinc-800/80" />
 
               {/* Navigation */}
               <nav
-                className="flex-1 overflow-y-auto overflow-x-hidden px-3 scrollbar"
+                className="flex-1 overflow-y-auto overflow-x-hidden px-2 scrollbar"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
                 {/* Main nav */}
-                <div className="mb-6">
-                  <p className="px-2 mb-1.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <div className="mb-4">
+                  <p className="px-2 mb-1 text-xs font-medium text-zinc-500">
                     Navegação
                   </p>
                   <div className="space-y-0.5">
@@ -188,8 +194,8 @@ const Sidebar = () => {
                 </div>
 
                 {/* Socials */}
-                <div className="mb-6">
-                  <p className="px-2 mb-1.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <div className="mb-4">
+                  <p className="px-2 mb-1 text-xs font-medium text-zinc-500">
                     Contato
                   </p>
                   <div className="space-y-0.5">
@@ -205,7 +211,7 @@ const Sidebar = () => {
 
                 {/* Others */}
                 <div className="mb-4">
-                  <p className="px-2 mb-1.5 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                  <p className="px-2 mb-1 text-xs font-medium text-zinc-500">
                     Outros
                   </p>
                   <div className="space-y-0.5">
@@ -221,7 +227,7 @@ const Sidebar = () => {
               </nav>
 
               {/* Footer */}
-              <div className="px-5 py-4 border-t border-zinc-800/80">
+              <div className="px-4 py-3 border-t border-zinc-800/80">
                 <p className="text-xs text-zinc-600 text-center">
                   marcuscoelho.com
                 </p>
@@ -252,15 +258,15 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
     return (
       <button
         onClick={item.download ? handleDownload : undefined}
-        className="flex items-center justify-between w-full px-2.5 py-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60 transition-colors group cursor-pointer"
+        className="flex h-8 items-center justify-between w-full px-2.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60 transition-colors group cursor-pointer"
       >
         {item.download ? (
           <>
-            <div className="flex items-center gap-3">
-              <Icon className="size-[18px] text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+            <div className="flex items-center gap-2">
+              <Icon className="size-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
               <span className="text-sm font-medium">{item.name}</span>
             </div>
-            <DownloadIcon className="size-4 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+            <DownloadIcon className="size-3.5 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
           </>
         ) : (
           <a
@@ -270,11 +276,11 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
             className="flex items-center justify-between w-full"
             onClick={onClose}
           >
-            <div className="flex items-center gap-3">
-              <Icon className="size-[18px] text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+            <div className="flex items-center gap-2">
+              <Icon className="size-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
               <span className="text-sm font-medium">{item.name}</span>
             </div>
-            <ExternalLinkIcon className="size-4 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+            <ExternalLinkIcon className="size-3.5 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
           </a>
         )}
       </button>
@@ -287,7 +293,7 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
       onClick={onClose}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-3 px-2.5 py-2 rounded-lg transition-colors group",
+          "flex h-8 items-center gap-2 px-2.5 rounded-lg transition-colors group",
           isActive
             ? "bg-zinc-800/80 text-zinc-100"
             : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60",
@@ -298,7 +304,7 @@ function SidebarLink({ item, onClose }: SidebarLinkProps) {
         <>
           <Icon
             className={cn(
-              "size-[18px] transition-colors",
+              "size-4 transition-colors",
               isActive
                 ? "text-zinc-100"
                 : "text-zinc-500 group-hover:text-zinc-300",
