@@ -91,13 +91,13 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.97 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="pointer-events-auto flex flex-col w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-[8px] border border-zinc-800/80 bg-zinc-950 shadow-2xl"
+              className="pointer-events-auto flex flex-col w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-xl bg-popover text-popover-foreground ring-1 ring-foreground/10 shadow-2xl"
               role="dialog"
               aria-modal="true"
               aria-label={project.name}
             >
               {images.length > 0 && (
-                <div className="relative aspect-[8/5] shrink-0 bg-zinc-900 overflow-hidden">
+                <div className="relative aspect-[8/5] shrink-0 bg-muted overflow-hidden">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={images[index]}
@@ -166,7 +166,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 </div>
               )}
 
-              <div className="flex flex-col p-6 overflow-y-auto scrollbar">
+              <div className="flex flex-col p-4 overflow-y-auto scrollbar">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2.5">
                     {project.favicon ? (
@@ -178,7 +178,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     ) : (
                       <GlobeIcon className="size-5 text-zinc-500" />
                     )}
-                    <h2 className="text-lg font-semibold text-zinc-100">
+                    <h2 className="text-base font-medium text-zinc-100">
                       {project.name}
                     </h2>
                   </div>
