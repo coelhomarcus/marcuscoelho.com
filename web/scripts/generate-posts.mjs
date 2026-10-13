@@ -57,7 +57,7 @@ function generateBlogData() {
   const lines = [
     'import type { BlogFrontmatter } from "@/types/posts";',
     "",
-    "export const blogPostsData: BlogFrontmatter[] = [",
+    "export const blogPosts: BlogFrontmatter[] = [",
   ];
 
   for (const p of posts) {
@@ -76,7 +76,7 @@ function generateBlogData() {
 
   lines.push("];", "");
   fs.writeFileSync(
-    path.resolve(srcDir, "../data/blogPostsData.ts"),
+    path.resolve(srcDir, "../data/blog-posts.ts"),
     lines.join("\n"),
   );
   console.log(`Blog: generated ${posts.length} post(s).`);

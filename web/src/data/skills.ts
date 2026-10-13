@@ -23,13 +23,13 @@ import {
 import { BiLogoFigma as FigmaIcon } from "react-icons/bi";
 import { Rocket as DokployIcon } from "lucide-react";
 
-type SkillType = {
+type Skill = {
   icon: ComponentType<{ className?: string }>;
   name: string;
   url: string;
 };
 
-export const arrSkills: SkillType[] = [
+export const skills: Skill[] = [
   // Frontend
   { icon: ReactIcon, name: "React", url: "https://react.dev" },
   { icon: NextJSIcon, name: "Next.js", url: "https://nextjs.org" },

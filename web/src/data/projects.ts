@@ -1,6 +1,6 @@
 import type { Project } from "@/types";
 
-export const arrProjects: Project[] = [
+export const projects: Project[] = [
   {
     name: "Linkord",
     desc: "Chat em tempo real, canais e chamadas de voz/tela.",

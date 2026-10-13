@@ -58,7 +58,7 @@ html {
   overflow-y: scroll;
 }
 
-/* On desktop the page card scrolls (see Shell in App.tsx), not the window,
+/* On desktop the page card scrolls (see Shell in app.tsx), not the window,
    so the scrollbar sits inside the card instead of next to the sidebar. */
 @media (min-width: 768px) {
   html,

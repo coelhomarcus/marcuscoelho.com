@@ -1,6 +1,6 @@
 import type { Certificate } from "@/types";
 
-export const arrCertificates: Certificate[] = [
+export const certificates: Certificate[] = [
    {
       href: "https://app.rocketseat.com.br/certificates/0859ff5b-a2f3-4881-9cc1-f32f430b6941",
       course: "Conceitos Avançados de Go",
