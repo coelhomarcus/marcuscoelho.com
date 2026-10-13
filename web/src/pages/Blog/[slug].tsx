@@ -1,9 +1,10 @@
-﻿import { useEffect, useState } from "react";
+﻿import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { useParams, Link, useLocation } from "react-router";
 import PageTitle from "@/components/PageTitle/PageTitle";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useToast } from "@/components/Toast/ToastContext";
+import { RailToc, type RailTocItem } from "@/components/ui/rail-toc";
 
 import { RxCommit as CommitIcon } from "react-icons/rx";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
@@ -16,6 +17,12 @@ import components from "@/lib/mdx-components";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
+// The TOC floats in the empty space left of the article, plus some breathing
+// room from the edge of the page
+const TOC_WIDTH = 160;
+const TOC_GAP = 40;
+const TOC_SPACE = TOC_WIDTH + TOC_GAP + 16;
+
 const Post = () => {
   const { slug } = useParams();
   const post = blogPostsData.find((p) => p.slug === slug);
@@ -25,6 +32,11 @@ const Post = () => {
   const { toast } = useToast();
   const back = useAnimatedIcon();
   const copyLink = useAnimatedIcon();
+  const articleRef = useRef<HTMLElement>(null);
+  const scrollRef = useRef<HTMLElement | null>(null);
+  const [tocItems, setTocItems] = useState<RailTocItem[]>([]);
+  const gutter = useLeftGutter(articleRef, MDXComponent);
+  const showToc = gutter >= TOC_SPACE && tocItems.length > 1;
 
   useEffect(() => {
     if (!slug) return;
@@ -41,6 +53,29 @@ const Post = () => {
       ));
     }
   }, [slug]);
+
+  // Headings only exist once the MDX renders; read them before paint so the
+  // two-column layout never flashes in
+  useLayoutEffect(() => {
+    const article = articleRef.current;
+    if (!article) return;
+
+    // The TOC only shows on desktop, where the page card scrolls, not the window
+    scrollRef.current = document.getElementById("app-scroll");
+
+    const headings = Array.from(
+      article.querySelectorAll<HTMLHeadingElement>("h1[id], h2[id], h3[id]"),
+    );
+    const levels = headings.map((h) => Number(h.tagName[1]));
+    const top = Math.min(...levels);
+    setTocItems(
+      headings.map((h, i) => ({
+        id: h.id,
+        label: h.textContent ?? "",
+        depth: levels[i] - top,
+      })),
+    );
+  }, [MDXComponent]);
 
   if (!MDXComponent)
     return (
@@ -110,12 +145,36 @@ const Post = () => {
         {...fadeUp}
         transition={{ ...fadeUp.transition, delay: 0.12 }}
       >
-        <MDXProvider components={components}>
-          <article className="prose max-w-full">
-            <ScrollToHashOnLoad />
-            <MDXComponent />
-          </article>
-        </MDXProvider>
+        <div className="relative">
+          <MDXProvider components={components}>
+            <article ref={articleRef} className="prose max-w-full">
+              <ScrollToHashOnLoad />
+              <MDXComponent />
+            </article>
+          </MDXProvider>
+
+          <AnimatePresence>
+            {showToc && (
+              <motion.aside
+                key="toc"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="absolute top-0 right-full bottom-0"
+                style={{ width: TOC_WIDTH, marginRight: TOC_GAP }}
+              >
+                <RailToc
+                  items={tocItems}
+                  containerRef={scrollRef}
+                  offset={80}
+                  title="Nesta página"
+                  className="sticky top-8 w-full"
+                />
+              </motion.aside>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
     </main>
   );
@@ -153,6 +212,32 @@ function PostNotFound() {
       </motion.div>
     </main>
   );
+}
+
+// Free space between the scroll container's left edge and the article. It
+// shrinks with the window and when the sidebar pushes the page
+function useLeftGutter(
+  ref: React.RefObject<HTMLElement | null>,
+  ready: unknown,
+) {
+  const [gutter, setGutter] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const scroller = document.getElementById("app-scroll");
+    if (!el || !scroller) return;
+
+    const measure = () =>
+      setGutter(
+        el.getBoundingClientRect().left - scroller.getBoundingClientRect().left,
+      );
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(scroller);
+    return () => ro.disconnect();
+  }, [ref, ready]);
+
+  return gutter;
 }
 
 function ScrollToHashOnLoad() {
