@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
-import type { ProjectModalProps } from "@/types";
+import type { Project } from "@/types";
 import {
   cn,
   formatCompactNumber,
@@ -25,6 +25,11 @@ import { techIcons } from "@/data/techIcons";
 import { IconButton } from "@/components/ui/icon-button";
 import { LinkButton } from "@/components/ui/link-button";
 import { Badge } from "@/components/ui/badge";
+
+interface ProjectModalProps {
+  project: Project | null;
+  onClose: () => void;
+}
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [index, setIndex] = useState(0);

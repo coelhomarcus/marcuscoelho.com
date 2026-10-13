@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import config from "@/data/config";
-import { getMockGitHubCalendar } from "@/data/mockGitHubCalendar";
+import { getMockGitHubCalendar } from "./mockGitHubCalendar";
 import { createRequestCache } from "@/lib/requestCache";
 
 export type ContributionLevel =

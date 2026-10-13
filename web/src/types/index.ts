@@ -1,5 +1,3 @@
-import { AnchorHTMLAttributes } from "react";
-import type { IconType } from "react-icons";
 import type { AnimatedIcon } from "@/components/icons/use-animated-icon";
 
 export interface Project {
@@ -42,66 +40,11 @@ export interface Certificate {
   teacher: string;
 }
 
-export interface BlogPost {
-  slug: string;
-  title: string;
-  desc: string;
-  date: string;
-  tags?: string[];
-}
-
-export interface Page {
+/** A link in the header, sidebar or footer */
+export interface NavItem {
   name: string;
   href: string;
   icon: AnimatedIcon;
   external?: boolean;
   download?: boolean;
-}
-
-export interface ProjectCardProps extends Omit<Project, "repo" | "tech"> {
-  tech?: Project["tech"];
-  onClick?: () => void;
-}
-
-export interface ProjectModalProps {
-  project: Project | null;
-  onClose: () => void;
-}
-
-export interface PageTitleProps {
-  title: string;
-  suffix?: boolean;
-}
-
-export interface ContactLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  Icon: IconType;
-  title: string;
-  href: string;
-}
-
-export interface SimpleCardProps {
-  href: string;
-  name: string;
-  desc: string;
-}
-
-export interface BlogCardProps {
-  slug: string;
-  title: string;
-  date: string;
-  desc: string;
-  tags?: string[];
-  banner?: string;
-}
-
-export interface HeaderLinkProps {
-  to: string;
-  title: string;
-  icon: AnimatedIcon;
-}
-export type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
-
-export interface PreComponentProps {
-  children: React.ReactElement<{ className?: string; children: string }>;
-  [key: string]: unknown;
 }

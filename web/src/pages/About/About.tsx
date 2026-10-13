@@ -1,13 +1,13 @@
 ﻿import { useState } from "react";
-import PageTitle from "@/components/PageTitle/PageTitle";
+import PageTitle from "@/components/PageTitle";
 import { motion } from "motion/react";
 
-import HeroSection from "@/components/HeroSection/HeroSection";
-import WorksExperience from "@/components/WorksExperience/WorksExperience";
-import Skills from "@/components/Skills/Skills";
-import GitHubGraph from "@/components/GitHubGraph/GitHubGraph";
-import ProjectsMarquee from "@/components/ProjectsMarquee/ProjectsMarquee";
-import ProjectModal from "@/components/ProjectModal/ProjectModal";
+import HeroSection from "./components/HeroSection";
+import WorksExperience from "./components/WorksExperience/WorksExperience";
+import Skills from "./components/Skills";
+import GitHubGraph from "./components/GitHubGraph";
+import ProjectsMarquee from "./components/ProjectsMarquee";
+import ProjectModal from "@/components/ProjectModal";
 import type { Project } from "@/types";
 import { fadeUp } from "@/lib/motion";
 

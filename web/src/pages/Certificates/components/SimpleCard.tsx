@@ -1,6 +1,11 @@
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
-import type { SimpleCardProps } from "@/types";
+
+interface SimpleCardProps {
+  href: string;
+  name: string;
+  desc: string;
+}
 
 const SimpleCard = ({ href, name, desc }: SimpleCardProps) => {
   const arrow = useAnimatedIcon();

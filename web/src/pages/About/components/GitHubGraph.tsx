@@ -2,10 +2,10 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import {
   useGitHubCalendar,
   type ContributionLevel,
-} from "@/hooks/useGitHubCalendar";
+} from "../hooks/useGitHubCalendar";
 import { GithubIcon } from "@/components/icons/github";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
-import { Tooltip } from "@/components/Tooltip/Tooltip";
+import { Tooltip } from "@/components/ui/tooltip";
 
 const GAP = 3;
 const MIN_CELL = 10;

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ProjectCard from "@/components/ProjectCard/ProjectCard";
-import ProjectModal from "@/components/ProjectModal/ProjectModal";
-import PageTitle from "@/components/PageTitle/PageTitle";
+import ProjectCard from "./components/ProjectCard";
+import ProjectModal from "@/components/ProjectModal";
+import PageTitle from "@/components/PageTitle";
 import type { Project } from "@/types";
 import { motion } from "motion/react";
 import { useProjects } from "@/hooks/useProjects";

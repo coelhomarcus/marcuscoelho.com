@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import type { Page } from "@/types";
+import type { NavItem } from "@/types";
 import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { DownloadIcon } from "@/components/icons/download";
@@ -17,7 +17,7 @@ const sizes = {
 } as const;
 
 interface SidebarLinkProps {
-  item: Page;
+  item: NavItem;
   size?: SidebarSize;
   /** Called after a link is followed; the mobile sheet uses it to close. */
   onNavigate?: () => void;

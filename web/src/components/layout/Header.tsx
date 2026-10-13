@@ -1,16 +1,13 @@
 ﻿import { Link, NavLink } from "react-router";
 import { motion } from "motion/react";
-import type { HeaderLinkProps } from "@/types";
+import type { NavItem } from "@/types";
 import { cn } from "@/lib/utils";
 
-import Sidebar from "@/components/Sidebar/Sidebar";
+import Sidebar from "@/components/layout/Sidebar/Sidebar";
 
-import { SocialLink, socialLinks } from "@/components/SocialLink/SocialLink";
-import { BookmarkIcon } from "@/components/icons/bookmark";
-import { FolderCodeIcon } from "@/components/icons/folder-code";
-import { MessageCircleIcon } from "@/components/icons/message-circle";
+import { SocialLink } from "@/components/SocialLink";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
-import { UserIcon } from "@/components/icons/user";
+import { navigation, socials } from "@/data/navigation";
 
 const Header = () => {
   return (
@@ -24,16 +21,15 @@ const Header = () => {
       </Link>
 
       <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
-        <HeaderLink title="Sobre" to="/" icon={UserIcon} />
-        <HeaderLink title="Projetos" to="/projects" icon={FolderCodeIcon} />
-        <HeaderLink title="Blog" to="/blog" icon={BookmarkIcon} />
-        <HeaderLink title="Contato" to="/contact" icon={MessageCircleIcon} />
+        {navigation.map((item) => (
+          <HeaderLink key={item.href} {...item} />
+        ))}
       </nav>
 
       <div className="flex items-center gap-1">
         <div className="hidden @2xl:flex items-center gap-1 text-zinc-500">
-          {socialLinks.map((link) => (
-            <SocialLink key={link.label} {...link} />
+          {socials.map((link) => (
+            <SocialLink key={link.name} {...link} />
           ))}
         </div>
         <Sidebar />
@@ -42,12 +38,12 @@ const Header = () => {
   );
 };
 
-function HeaderLink({ to, title, icon: Icon }: HeaderLinkProps) {
+function HeaderLink({ href, name, icon: Icon }: NavItem) {
   const { ref, hoverProps } = useAnimatedIcon();
 
   return (
     <NavLink
-      to={to}
+      to={href}
       {...hoverProps}
       className={({ isActive }) =>
         cn(
@@ -69,7 +65,7 @@ function HeaderLink({ to, title, icon: Icon }: HeaderLinkProps) {
           )}
           <span className="relative z-10 inline-flex items-center gap-1.5">
             <Icon ref={ref} size={14} />
-            {title}
+            {name}
           </span>
         </>
       )}

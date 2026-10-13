@@ -1,13 +1,13 @@
 ﻿import { Link } from "react-router";
-import type { BlogCardProps } from "@/types";
+import type { BlogFrontmatter } from "@/types/posts";
 import { blogPostsData } from "@/data/blogPostsData";
-import PageTitle from "@/components/PageTitle/PageTitle";
+import PageTitle from "@/components/PageTitle";
 import { motion } from "motion/react";
 import { fadeUp } from "@/lib/motion";
 
 const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
 
-const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
+const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
   return (
     <Link
       to={`/blog/${slug}`}

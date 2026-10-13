@@ -1,6 +1,6 @@
 import { arrCertificates } from "@/data/certificates";
-import SimpleCard from "@/components/SimpleCard/SimpleCard";
-import PageTitle from "@/components/PageTitle/PageTitle";
+import SimpleCard from "./components/SimpleCard";
+import PageTitle from "@/components/PageTitle";
 import { motion } from "motion/react";
 import { fadeUp } from "@/lib/motion";
 

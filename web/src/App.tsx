@@ -1,12 +1,12 @@
-import Header from "./components/Header/Header";
-import PageTransition from "./components/PageTransition/PageTransition";
-import Footer from "./components/Footer/Footer";
-import { SidebarProvider } from "./components/Sidebar/SidebarProvider";
-import { useSidebar } from "./components/Sidebar/SidebarContext";
-import { cn } from "./lib/utils";
+import Header from "@/components/layout/Header";
+import PageTransition from "@/components/layout/PageTransition";
+import Footer from "@/components/layout/Footer";
+import ScrollToTop from "@/components/layout/ScrollToTop";
+import { SidebarProvider } from "@/components/layout/Sidebar/SidebarProvider";
+import { useSidebar } from "@/components/layout/Sidebar/SidebarContext";
+import { cn } from "@/lib/utils";
 
 import { Routes, Route, useLocation } from "react-router";
-import { useEffect } from "react";
 import { AnimatePresence } from "motion/react";
 
 import { lazy, Suspense } from "react";
@@ -16,22 +16,8 @@ const Certificates = lazy(() => import("@/pages/Certificates/Certificates"));
 import About from "@/pages/About/About";
 import Projects from "@/pages/Projects/Projects";
 import Blog from "@/pages/Blog/Blog";
-import PostPage from "@/pages/Blog/[slug]";
+import PostPage from "@/pages/Blog/Post";
 import Contact from "@/pages/Contact/Contact";
-
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    // Mobile scrolls the window, desktop scrolls the page card
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    document
-      .getElementById("app-scroll")
-      ?.scrollTo({ top: 0, behavior: "smooth" });
-  }, [pathname]);
-
-  return null;
-}
 
 const Shell = () => {
   const location = useLocation();

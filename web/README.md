@@ -30,7 +30,7 @@ Frontend of my personal site: a statically built React SPA with an MDX blog, ser
 | `/` | `pages/About` | eager |
 | `/projects` | `pages/Projects` | eager |
 | `/blog` | `pages/Blog` | eager |
-| `/blog/:slug` | `pages/Blog/[slug]` | eager shell, post body lazy-loaded |
+| `/blog/:slug` | `pages/Blog/Post` | eager shell, post body lazy-loaded |
 | `/certificates` | `pages/Certificates` | `React.lazy` |
 | `/contact` | `pages/Contact` | eager |
 | `*` | `pages/NotFound` | `React.lazy` |
@@ -49,12 +49,24 @@ web/
     ├── main.tsx             # BrowserRouter + ToastProvider
     ├── App.tsx              # layout and route table
     ├── pages/               # one folder per page (posts live in ../posts, see below)
-    ├── components/          # feature components + ui/ (shadcn)
-    ├── data/                # site content: projects, skills, works, certificates, config
-    ├── hooks/               # API access and data composition
-    ├── lib/                 # utils, motion presets, MDX components, request cache
-    └── types/
+    │   └── <Page>/
+    │       ├── <Page>.tsx
+    │       ├── components/  # components only this page uses
+    │       └── hooks/       # hooks only this page uses
+    ├── components/          # shared across pages
+    │   ├── layout/          # app shell: Header, Footer, Sidebar/, PageTransition, ScrollToTop
+    │   ├── ui/              # primitives (shadcn, rail-toc, tooltip)
+    │   ├── icons/           # animated lucide icons + useAnimatedIcon
+    │   └── Toast/, PageTitle, SocialLink, ProjectModal
+    ├── hooks/               # shared hooks (useProjects, useGitHubStats)
+    ├── data/                # site content: projects, works, skills, certificates, navigation, config
+    ├── lib/                 # utils, motion presets, request cache
+    └── types/               # domain types (props types live next to their component)
 ```
+
+Where things go: code used by **one page** lives in that page's folder; code used by **two or more pages** (or the app shell) lives in `src/components/` or `src/hooks/`. Content you edit by hand always lives in `src/data/`. Single-file components are plain files (`PageTitle.tsx`); a folder is only used when a component has several files (`Sidebar/`, `WorksExperience/`).
+
+Header, sidebar and footer links all come from [`src/data/navigation.ts`](src/data/navigation.ts).
 
 The `@/` alias resolves to `src/`, and `@posts/` to the repo-level [`posts/`](../posts) folder.
 
@@ -90,7 +102,7 @@ Markdown / MDX content...
 ```
 
 1. **Index generation:** `scripts/generate-posts.mjs` runs before `dev` and `build`. It parses each file's frontmatter, sorts by `date` (`DD.MM.YYYY`, newest first), splits `tags` on commas and writes `src/data/blogPostsData.ts`. The blog listing only imports this file, never the MDX itself.
-2. **Compilation:** `@mdx-js/rollup` (with `enforce: "pre"`) compiles MDX to React components. `remark-frontmatter` strips the YAML block from the output. Elements are mapped to styled components through `MDXProvider` and [`src/lib/mdx-components.tsx`](src/lib/mdx-components.tsx).
+2. **Compilation:** `@mdx-js/rollup` (with `enforce: "pre"`) compiles MDX to React components. `remark-frontmatter` strips the YAML block from the output. Elements are mapped to styled components through `MDXProvider` and [`pages/Blog/components/mdx-components.tsx`](src/pages/Blog/components/mdx-components.tsx).
 3. **Loading:** [`Blog/loadPost.ts`](src/pages/Blog/loadPost.ts) uses `import.meta.glob("@posts/*.mdx")` and `loadPost(slug)` resolves the module whose **file name** matches the slug. Because the folder sits outside `web/`, [`vite.config.ts`](vite.config.ts) also allows it in `server.fs.allow`, dedupes `react` / `@mdx-js/react` so compiled MDX resolves them from `web/node_modules`, and [`index.css`](src/index.css) adds it as a Tailwind `@source`.
 4. **Chunking:** `manualChunks` in [`vite.config.ts`](vite.config.ts) puts every post in its own chunk at `assets/posts/<name>-[hash].js`, so a post is only downloaded when it's opened.
 
@@ -102,14 +114,14 @@ Besides per-post chunks, `node_modules` is split into `react-icons`, `syntax-hig
 
 ## API integration
 
-Data from the [API](../api) is fetched by hooks in `src/hooks/`:
+Data from the [API](../api) is fetched by hooks (shared ones in `src/hooks/`, page-specific ones in `src/pages/<Page>/hooks/`):
 
 | Hook | Endpoint | Used by |
 | --- | --- | --- |
-| `useGitHubCalendar` | `GET /github/contributions` | Contribution graph on `/` |
+| `useGitHubCalendar` (`pages/About/hooks`) | `GET /github/contributions` | Contribution graph on `/` |
 | `useGitHubStats` | `GET /github/stats` | `useProjects` |
 | `useProjects` | via `useGitHubStats` | Merges `repositories` into `projects.ts` by normalized repo URL, adding `repoStars` and `repoCreatedAt` |
-| `useContact` | `POST /contact` | Contact form state, client-side validation (same rules as the API) and submit status |
+| `useContact` (`pages/Contact/hooks`) | `POST /contact` | Contact form state, client-side validation (same rules as the API) and submit status |
 
 GET requests go through `createRequestCache` ([`src/lib/requestCache.ts`](src/lib/requestCache.ts)), a module-level memoizer that:
 
@@ -126,7 +138,7 @@ Copy [`.env.example`](.env.example) to `.env`.
 | Variable | Description | Default |
 | --- | --- | --- |
 | `VITE_API_URL` | API base URL | production API |
-| `VITE_ENV` | `dev` or `prod`. In `dev`, the contribution graph uses mock data from `src/data/mockGitHubCalendar.ts` instead of calling the API | `prod` |
+| `VITE_ENV` | `dev` or `prod`. In `dev`, the contribution graph uses mock data from `src/pages/About/hooks/mockGitHubCalendar.ts` instead of calling the API | `prod` |
 
 > `VITE_*` variables are inlined into the bundle at build time. Never put secrets here.
 

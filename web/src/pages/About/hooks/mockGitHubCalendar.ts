@@ -1,7 +1,7 @@
 import type {
   ContributionLevel,
   GitHubCalendarData,
-} from "@/hooks/useGitHubCalendar";
+} from "./useGitHubCalendar";
 
 const WEEKS = 53;
 

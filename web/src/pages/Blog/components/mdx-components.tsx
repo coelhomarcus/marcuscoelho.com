@@ -4,13 +4,19 @@ import { CopyIcon } from "@/components/icons/copy";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { useToast } from "@/components/Toast/ToastContext";
 
-import type { HeadingProps, PreComponentProps } from "@/types";
 
 import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
 import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
 
 SyntaxHighlighter.registerLanguage("bash", bash);
 SyntaxHighlighter.registerLanguage("json", json);
+
+type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
+
+interface PreComponentProps {
+  children: React.ReactElement<{ className?: string; children: string }>;
+  [key: string]: unknown;
+}
 
 export function slugify(text: string): string {
   return text

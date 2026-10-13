@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { XIcon } from "@/components/icons/x";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { Button } from "@/components/ui/button";
-import { navigation, others, socials } from "./sidebar-data";
+import { navigation, others, socials } from "@/data/navigation";
 import { SidebarLink, type SidebarSize } from "./SidebarLink";
 
 interface SidebarContentProps {

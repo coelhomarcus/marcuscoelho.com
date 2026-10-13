@@ -1,4 +1,4 @@
-import type { Page } from "@/types";
+import type { NavItem } from "@/types";
 import { AtSignIcon } from "@/components/icons/at-sign";
 import { BookmarkIcon } from "@/components/icons/bookmark";
 import { FileTextIcon } from "@/components/icons/file-text";
@@ -9,14 +9,14 @@ import { MessageCircleIcon } from "@/components/icons/message-circle";
 import { RocketIcon } from "@/components/icons/rocket";
 import { UserIcon } from "@/components/icons/user";
 
-export const navigation: Page[] = [
+export const navigation: NavItem[] = [
   { name: "Sobre", href: "/", icon: UserIcon },
   { name: "Projetos", href: "/projects", icon: FolderCodeIcon },
   { name: "Blog", href: "/blog", icon: BookmarkIcon },
   { name: "Contato", href: "/contact", icon: MessageCircleIcon },
 ];
 
-export const socials: Page[] = [
+export const socials: NavItem[] = [
   {
     name: "Email",
     href: "mailto:marcusrangelcoelho@gmail.com",
@@ -30,14 +30,14 @@ export const socials: Page[] = [
     external: true,
   },
   {
-    name: "Linkedin",
+    name: "LinkedIn",
     href: "https://www.linkedin.com/in/coelhomarcus/",
     icon: LinkedinIcon,
     external: true,
   },
 ];
 
-export const others: Page[] = [
+export const others: NavItem[] = [
   {
     name: "Curriculo",
     href: "https://docs.google.com/document/d/1wgOhwh-1YT-LRog9j1tvxzBVKfraoSzps1AiBGuSx9A/export?format=pdf",

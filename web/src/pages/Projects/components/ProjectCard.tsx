@@ -1,4 +1,4 @@
-import type { ProjectCardProps } from "@/types";
+import type { Project } from "@/types";
 import {
   formatCompactNumber,
   formatLinkPreview,
@@ -15,6 +15,11 @@ import {
   RxGlobe as GlobeIcon,
   RxStar as StarIcon,
 } from "react-icons/rx";
+
+interface ProjectCardProps extends Omit<Project, "repo" | "tech"> {
+  tech?: Project["tech"];
+  onClick?: () => void;
+}
 
 const ProjectCard = ({
   name,

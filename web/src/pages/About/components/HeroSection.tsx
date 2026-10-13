@@ -1,4 +1,4 @@
-﻿import DiaTextReveal from "@/components/DiaTextReveal/DiaTextReveal";
+﻿import DiaTextReveal from "./DiaTextReveal";
 
 const HeroSection = () => {
   return (

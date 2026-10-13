@@ -1,10 +1,10 @@
-import PageTitle from "@/components/PageTitle/PageTitle";
+import PageTitle from "@/components/PageTitle";
 import { CheckIcon } from "@/components/icons/check";
 import { SendIcon } from "@/components/icons/send";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { XIcon as AlertIcon } from "@/components/icons/x";
 import { motion } from "motion/react";
-import { useContact, type FieldState } from "@/hooks/useContact";
+import { useContact, type FieldState } from "./hooks/useContact";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
