@@ -43,7 +43,7 @@ export function Tooltip({ content, children, className }: TooltipProps) {
                 top: coords.y + 10,
                 transform: "translate(-50%, calc(-100% - 15px))",
               }}
-              className="pointer-events-none z-50 whitespace-nowrap rounded-lg border border-zinc-800 bg-zinc-900 p-1.5 text-xs text-zinc-200 shadow-lg"
+              className="pointer-events-none z-50 whitespace-nowrap rounded-md bg-foreground px-3 py-1.5 text-xs text-background"
             >
               {content}
             </motion.div>

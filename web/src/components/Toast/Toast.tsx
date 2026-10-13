@@ -26,7 +26,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 shadow-lg"
+              className="flex items-center gap-2 rounded-lg bg-popover px-3 py-2 text-sm text-popover-foreground ring-1 ring-foreground/10 shadow-lg"
             >
               <CheckIcon className="size-3.5 text-lime-300 shrink-0" />
               {t.message}
