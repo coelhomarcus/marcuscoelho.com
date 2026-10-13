@@ -7,9 +7,10 @@ import {
 } from "@/lib/utils";
 import { techIcons } from "@/data/techIcons";
 import { Badge } from "@/components/ui/badge";
+import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
 import {
-  RxArrowTopRight as ExternalLinkIcon,
   RxCalendar as CalendarIcon,
   RxGlobe as GlobeIcon,
   RxStar as StarIcon,
@@ -27,6 +28,7 @@ const ProjectCard = ({
   repoCreatedAt,
   onClick,
 }: ProjectCardProps) => {
+  const arrow = useAnimatedIcon();
   const preview = linkPreview ?? (link ? formatLinkPreview(link) : undefined);
   const cover = images?.[0];
   const hasStars = typeof repoStars === "number" && repoStars > 0;
@@ -35,6 +37,7 @@ const ProjectCard = ({
     <button
       type="button"
       onClick={onClick}
+      {...arrow.hoverProps}
       className="group card-surface flex flex-col h-full w-full text-left p-3 hover:bg-zinc-900 hover:ring-foreground/20 cursor-pointer"
     >
       {cover && (
@@ -60,7 +63,11 @@ const ProjectCard = ({
           {name}
         </div>
         <span className="opacity-50 group-hover:opacity-90 transition-opacity">
-          <ExternalLinkIcon width={14} height={14} className="text-zinc-500" />
+          <ArrowUpRightIcon
+            ref={arrow.ref}
+            size={14}
+            className="text-zinc-500"
+          />
         </span>
       </div>
       {preview && (

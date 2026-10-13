@@ -3,7 +3,8 @@ import {
   useGitHubCalendar,
   type ContributionLevel,
 } from "@/hooks/useGitHubCalendar";
-import { RxGithubLogo as GithubIcon } from "react-icons/rx";
+import { GithubIcon } from "@/components/icons/github";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { Tooltip } from "@/components/Tooltip/Tooltip";
 
 const GAP = 3;
@@ -68,6 +69,7 @@ function CalendarSkeleton({
 }
 
 function GitHubGraph() {
+  const github = useAnimatedIcon();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(12);
@@ -110,15 +112,13 @@ function GitHubGraph() {
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center w-fit gap-2 text-base font-semibold text-zinc-300 hover:text-zinc-100 hover:underline transition-colors"
+        {...github.hoverProps}
       >
-        <GithubIcon className="size-4" />
+        <GithubIcon ref={github.ref} size={16} />
         github.com/coelhomarcus
       </a>
 
-      <div
-        ref={containerRef}
-        className="card-surface p-3"
-      >
+      <div ref={containerRef} className="card-surface p-3">
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}
 
         {error && !isLoading && (

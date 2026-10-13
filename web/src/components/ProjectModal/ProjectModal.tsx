@@ -12,17 +12,18 @@ import {
 } from "@/lib/utils";
 
 import {
-  RxCross1 as CloseIcon,
-  RxChevronLeft as ChevronLeftIcon,
-  RxChevronRight as ChevronRightIcon,
-  RxArrowTopRight as ExternalLinkIcon,
   RxCalendar as CalendarIcon,
-  RxGithubLogo as GithubIcon,
   RxGlobe as GlobeIcon,
   RxStar as StarIcon,
 } from "react-icons/rx";
+import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
+import { ChevronLeftIcon } from "@/components/icons/chevron-left";
+import { ChevronRightIcon } from "@/components/icons/chevron-right";
+import { GithubIcon } from "@/components/icons/github";
+import { XIcon } from "@/components/icons/x";
 import { techIcons } from "@/data/techIcons";
-import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Badge } from "@/components/ui/badge";
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
@@ -113,26 +114,22 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
                   {hasMultiple && (
                     <>
-                      <Button
+                      <IconButton
                         type="button"
                         variant="outline"
-                        size="icon-sm"
+                        icon={ChevronLeftIcon}
                         onClick={prev}
                         aria-label="Imagem anterior"
                         className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
-                      >
-                        <ChevronLeftIcon />
-                      </Button>
-                      <Button
+                      />
+                      <IconButton
                         type="button"
                         variant="outline"
-                        size="icon-sm"
+                        icon={ChevronRightIcon}
                         onClick={next}
                         aria-label="Próxima imagem"
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
-                      >
-                        <ChevronRightIcon />
-                      </Button>
+                      />
 
                       <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5">
                         {images.map((_, i) => (
@@ -153,16 +150,14 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     </>
                   )}
 
-                  <Button
+                  <IconButton
                     type="button"
                     variant="outline"
-                    size="icon-sm"
+                    icon={XIcon}
                     onClick={onClose}
                     aria-label="Fechar"
                     className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm"
-                  >
-                    <CloseIcon />
-                  </Button>
+                  />
                 </div>
               )}
 
@@ -184,16 +179,14 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   </div>
 
                   {images.length === 0 && (
-                    <Button
+                    <IconButton
                       type="button"
                       variant="ghost"
-                      size="icon-sm"
+                      icon={XIcon}
                       onClick={onClose}
                       aria-label="Fechar"
                       className="shrink-0 text-muted-foreground"
-                    >
-                      <CloseIcon />
-                    </Button>
+                    />
                   )}
                 </div>
 
@@ -241,28 +234,17 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 {(project.link || project.repo) && (
                   <div className="flex flex-wrap gap-2">
                     {project.link && (
-                      <Button asChild variant="outline">
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                        >
-                          Ver projeto
-                          <ExternalLinkIcon className="size-3.5" />
-                        </a>
-                      </Button>
+                      <LinkButton href={project.link} icon={ArrowUpRightIcon}>
+                        Ver projeto
+                      </LinkButton>
                     )}
                     {project.repo && (
-                      <Button asChild variant="outline">
-                        <a
-                          href={githubRepoUrl(project.repo)}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                        >
-                          Repositório
-                          <GithubIcon className="size-3.5" />
-                        </a>
-                      </Button>
+                      <LinkButton
+                        href={githubRepoUrl(project.repo)}
+                        icon={GithubIcon}
+                      >
+                        Repositório
+                      </LinkButton>
                     )}
                   </div>
                 )}

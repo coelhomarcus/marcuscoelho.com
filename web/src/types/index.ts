@@ -1,5 +1,6 @@
 import { AnchorHTMLAttributes } from "react";
 import type { IconType } from "react-icons";
+import type { AnimatedIcon } from "@/components/icons/use-animated-icon";
 
 export interface Project {
   name: string;
@@ -52,7 +53,7 @@ export interface BlogPost {
 export interface Page {
   name: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: AnimatedIcon;
   external?: boolean;
   download?: boolean;
 }

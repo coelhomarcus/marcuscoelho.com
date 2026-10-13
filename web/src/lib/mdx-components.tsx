@@ -1,6 +1,7 @@
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { RxClipboardCopy as CopyIcon } from "react-icons/rx";
+import { CopyIcon } from "@/components/icons/copy";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { useToast } from "@/components/Toast/ToastContext";
 
 import type { HeadingProps, PreComponentProps } from "@/types";
@@ -124,10 +125,7 @@ const components = {
     );
   },
   p: (props: React.HTMLProps<HTMLParagraphElement>) => (
-    <p
-      className="text-zinc-400 mb-5 leading-[1.8] text-[15px]"
-      {...props}
-    />
+    <p className="text-zinc-400 mb-5 leading-[1.8] text-[15px]" {...props} />
   ),
   a: (props: React.HTMLProps<HTMLAnchorElement>) => (
     <a
@@ -156,6 +154,7 @@ const components = {
 
   pre: function PreComponent({ children, ...rest }: PreComponentProps) {
     const { toast } = useToast();
+    const copy = useAnimatedIcon();
     const child = children.props;
     const language = child.className?.replace("language-", "") || "text";
     const code = child.children.trim?.() || "";
@@ -173,8 +172,9 @@ const components = {
             onClick={handleCopyCode}
             className="p-1 text-zinc-500 hover:text-zinc-200 active:scale-90 transition-colors cursor-pointer rounded-md"
             aria-label="Copiar código"
+            {...copy.hoverProps}
           >
-            <CopyIcon className="w-3.5 h-3.5" />
+            <CopyIcon ref={copy.ref} size={14} />
           </button>
         </div>
         <SyntaxHighlighter

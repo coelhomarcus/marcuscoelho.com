@@ -1,7 +1,8 @@
 import PageTitle from "@/components/PageTitle/PageTitle";
-import { LuMail as MailIcon } from "react-icons/lu";
-import { RxCheck as CheckIcon } from "react-icons/rx";
-import { RxCross2 as AlertIcon } from "react-icons/rx";
+import { CheckIcon } from "@/components/icons/check";
+import { SendIcon } from "@/components/icons/send";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
+import { XIcon as AlertIcon } from "@/components/icons/x";
 import { motion } from "motion/react";
 import { useContact, type FieldState } from "@/hooks/useContact";
 import { fadeUp } from "@/lib/motion";
@@ -20,6 +21,7 @@ const inputStateClasses: Record<FieldState, string> = {
 };
 
 const Contact = () => {
+  const submitIcon = useAnimatedIcon();
   const {
     form,
     status,
@@ -56,9 +58,7 @@ const Contact = () => {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="name">
-              Nome
-            </Label>
+            <Label htmlFor="name">Nome</Label>
             <Input
               id="name"
               type="text"
@@ -72,9 +72,7 @@ const Contact = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email">
-              Email
-            </Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
@@ -88,15 +86,16 @@ const Contact = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="message">
-            Mensagem
-          </Label>
+          <Label htmlFor="message">Mensagem</Label>
           <Textarea
             id="message"
             placeholder="Sua mensagem (mínimo 10 caracteres)"
             value={form.message}
             onChange={(e) => setField("message", e.target.value)}
-            className={cn(inputStateClasses[getFieldState("message")], "min-h-28 resize-none")}
+            className={cn(
+              inputStateClasses[getFieldState("message")],
+              "min-h-28 resize-none",
+            )}
             required
             minLength={10}
           />
@@ -107,6 +106,7 @@ const Contact = () => {
             type="submit"
             variant="outline"
             disabled={!isValid || status === "sending"}
+            {...submitIcon.hoverProps}
             className={cn(
               "disabled:pointer-events-auto disabled:cursor-not-allowed",
               status === "success" &&
@@ -120,17 +120,17 @@ const Contact = () => {
               "Enviando..."
             ) : status === "success" ? (
               <>
-                <CheckIcon />
+                <CheckIcon ref={submitIcon.ref} size={16} />
                 Enviado!
               </>
             ) : validationMessage ? (
               <>
-                <AlertIcon />
+                <AlertIcon ref={submitIcon.ref} size={16} />
                 {validationMessage}
               </>
             ) : (
               <>
-                <MailIcon />
+                <SendIcon ref={submitIcon.ref} size={16} />
                 Enviar mensagem
               </>
             )}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { RxChevronRight as ChevronRightIcon } from "react-icons/rx";
+import { ChevronRightIcon } from "@/components/icons/chevron-right";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { arrWorks } from "@/data/works";
 import type { Work } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +40,7 @@ function WorksExperience() {
 }
 
 function WorkRow({ work, onSelect }: { work: Work; onSelect: () => void }) {
+  const chevron = useAnimatedIcon();
   const { start, end, isCurrent } = getWorkRange(work);
   const latest = work.positions[work.positions.length - 1];
 
@@ -47,6 +49,7 @@ function WorkRow({ work, onSelect }: { work: Work; onSelect: () => void }) {
       type="button"
       onClick={onSelect}
       aria-haspopup="dialog"
+      {...chevron.hoverProps}
       className="group card-surface flex w-full cursor-pointer items-center gap-3 p-3 text-left hover:bg-zinc-900 hover:ring-foreground/20"
     >
       <img
@@ -82,8 +85,9 @@ function WorkRow({ work, onSelect }: { work: Work; onSelect: () => void }) {
       </div>
 
       <ChevronRightIcon
-        className="size-4 shrink-0 text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-zinc-400"
-        aria-hidden
+        ref={chevron.ref}
+        size={16}
+        className="shrink-0 text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-zinc-400"
       />
     </button>
   );

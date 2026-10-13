@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  RxArrowTopRight as ExternalLinkIcon,
-  RxChevronLeft as ChevronLeftIcon,
-  RxChevronRight as ChevronRightIcon,
-  RxCross1 as CloseIcon,
-} from "react-icons/rx";
+import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
+import { ChevronLeftIcon } from "@/components/icons/chevron-left";
+import { ChevronRightIcon } from "@/components/icons/chevron-right";
+import { XIcon } from "@/components/icons/x";
 import type { Work } from "@/types";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Period } from "./Period";
 import { formatDuration, getWorkRange } from "./format";
 
@@ -161,16 +160,14 @@ const WorkModal = ({
                       </div>
                     </div>
 
-                    <Button
+                    <IconButton
                       type="button"
                       variant="ghost"
-                      size="icon-sm"
+                      icon={XIcon}
                       onClick={onClose}
                       aria-label="Fechar"
                       className="shrink-0 text-muted-foreground"
-                    >
-                      <CloseIcon />
-                    </Button>
+                    />
                   </div>
 
                   {positions.map((position) => (
@@ -240,43 +237,32 @@ const WorkModal = ({
               <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/50 p-3">
                 {hasMultiple ? (
                   <div className="flex items-center gap-1">
-                    <Button
+                    <IconButton
                       type="button"
                       variant="outline"
-                      size="icon-sm"
+                      icon={ChevronLeftIcon}
                       onClick={onPrev}
                       aria-label="Experiência anterior"
-                    >
-                      <ChevronLeftIcon />
-                    </Button>
+                    />
                     <span className="min-w-12 text-center text-xs text-zinc-400 tabular-nums">
                       {index + 1} de {total}
                     </span>
-                    <Button
+                    <IconButton
                       type="button"
                       variant="outline"
-                      size="icon-sm"
+                      icon={ChevronRightIcon}
                       onClick={onNext}
                       aria-label="Próxima experiência"
-                    >
-                      <ChevronRightIcon />
-                    </Button>
+                    />
                   </div>
                 ) : (
                   <span />
                 )}
 
                 {work.website && (
-                  <Button asChild variant="outline">
-                    <a
-                      href={work.website}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      Visitar site
-                      <ExternalLinkIcon className="size-3.5" />
-                    </a>
-                  </Button>
+                  <LinkButton href={work.website} icon={ArrowUpRightIcon}>
+                    Visitar site
+                  </LinkButton>
                 )}
               </div>
             </motion.div>

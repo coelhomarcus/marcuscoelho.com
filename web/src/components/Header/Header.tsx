@@ -4,11 +4,7 @@ import { cn } from "@/lib/utils";
 
 import Sidebar from "@/components/Sidebar/Sidebar";
 
-import {
-  RxGithubLogo as GithubIcon,
-  RxLinkedinLogo as LinkedinIcon,
-} from "react-icons/rx";
-import { LuMail as MailIcon } from "react-icons/lu";
+import { SocialLink, socialLinks } from "@/components/SocialLink/SocialLink";
 
 const Header = () => {
   return (
@@ -30,18 +26,9 @@ const Header = () => {
 
       <div className="flex items-center gap-1">
         <div className="hidden md:flex items-center gap-1 text-zinc-500">
-          <SocialLink href="mailto:marcusrangelcoelho@gmail.com" label="Email">
-            <MailIcon className="size-4" />
-          </SocialLink>
-          <SocialLink href="https://github.com/coelhomarcus" label="GitHub">
-            <GithubIcon className="size-4" />
-          </SocialLink>
-          <SocialLink
-            href="https://www.linkedin.com/in/coelhomarcus/"
-            label="LinkedIn"
-          >
-            <LinkedinIcon className="size-4" />
-          </SocialLink>
+          {socialLinks.map((link) => (
+            <SocialLink key={link.label} {...link} />
+          ))}
         </div>
         <Sidebar />
       </div>
@@ -64,28 +51,6 @@ function HeaderLink({ to, title }: HeaderLinkProps) {
     >
       {title}
     </NavLink>
-  );
-}
-
-function SocialLink({
-  href,
-  label,
-  children,
-}: {
-  href: string;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
-      className="p-1.5 rounded-md hover:text-zinc-100 transition-colors"
-    >
-      {children}
-    </a>
   );
 }
 

@@ -5,11 +5,10 @@ import PageTitle from "@/components/PageTitle/PageTitle";
 import { motion } from "motion/react";
 import { useToast } from "@/components/Toast/ToastContext";
 
-import {
-  RxChevronLeft as BackIcon,
-  RxCommit as CommitIcon,
-  RxLink2 as LinkIcon,
-} from "react-icons/rx";
+import { RxCommit as CommitIcon } from "react-icons/rx";
+import { ChevronLeftIcon } from "@/components/icons/chevron-left";
+import { LinkIcon } from "@/components/icons/link";
+import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
 import { loadPost } from "./posts/_posts";
 import { blogPostsData } from "@/data/blogPostsData";
@@ -24,6 +23,8 @@ const Post = () => {
     null,
   );
   const { toast } = useToast();
+  const back = useAnimatedIcon();
+  const copyLink = useAnimatedIcon();
 
   useEffect(() => {
     if (!slug) return;
@@ -58,8 +59,9 @@ const Post = () => {
         <Link
           to="/blog"
           className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors duration-200 mb-8"
+          {...back.hoverProps}
         >
-          <BackIcon className="size-4" /> Voltar aos articles
+          <ChevronLeftIcon ref={back.ref} size={16} /> Voltar aos articles
         </Link>
       </motion.div>
 
@@ -95,8 +97,9 @@ const Post = () => {
                   navigator.clipboard.writeText(window.location.href);
                   toast("Link copiado!");
                 }}
+                {...copyLink.hoverProps}
               >
-                <LinkIcon className="size-3.5" /> Copiar link
+                <LinkIcon ref={copyLink.ref} size={14} /> Copiar link
               </button>
             </div>
           </div>
