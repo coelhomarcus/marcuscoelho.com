@@ -23,6 +23,7 @@ import {
 } from "react-icons/rx";
 import { techIcons } from "@/data/techIcons";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [index, setIndex] = useState(0);
@@ -224,17 +225,14 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 </p>
 
                 {project.tech.length > 0 && (
-                  <div className="flex gap-2 flex-wrap mb-6">
+                  <div className="flex gap-1.5 flex-wrap mb-6">
                     {project.tech.map((t, i) => {
                       const Icon = techIcons[t];
                       return (
-                        <span
-                          key={i}
-                          className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
-                        >
-                          {Icon && <Icon className="size-3.5" />}
+                        <Badge key={i} variant="muted">
+                          {Icon && <Icon />}
                           {t}
-                        </span>
+                        </Badge>
                       );
                     })}
                   </div>

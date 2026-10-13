@@ -6,6 +6,7 @@ import {
   projectAsset,
 } from "@/lib/utils";
 import { techIcons } from "@/data/techIcons";
+import { Badge } from "@/components/ui/badge";
 
 import {
   RxArrowTopRight as ExternalLinkIcon,
@@ -89,13 +90,10 @@ const ProjectCard = ({
           {tech.map((t, i) => {
             const Icon = techIcons[t];
             return (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded-full"
-              >
-                {Icon && <Icon className="size-3" />}
+              <Badge key={i} variant="muted">
+                {Icon && <Icon />}
                 {t}
-              </span>
+              </Badge>
             );
           })}
         </div>
