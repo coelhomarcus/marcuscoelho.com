@@ -60,17 +60,3 @@ export function getWorkRange(work: Work) {
     isCurrent,
   };
 }
-
-/** "set 2025 → out 2026", or "desde out 2026" while ongoing. */
-export function formatPeriod(start: string, end?: string) {
-  return end
-    ? `${formatMonth(start)} → ${formatMonth(end)}`
-    : `desde ${formatMonth(start)}`;
-}
-
-/** "2025 → 2026", or just "2025" when both ends fall in the same year. */
-export function formatYears(start: string, end: string) {
-  const from = start.slice(0, 4);
-  const to = end.slice(0, 4);
-  return from === to ? from : `${from} → ${to}`;
-}

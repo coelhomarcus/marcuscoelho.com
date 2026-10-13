@@ -10,14 +10,13 @@ import {
 import type { Work } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatDuration, formatPeriod, getWorkRange } from "./format";
+import { Period } from "./Period";
+import { formatDuration, getWorkRange } from "./format";
 
 interface WorkModalProps {
   work: Work | null;
   index: number;
   total: number;
-  prevName: string;
-  nextName: string;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
@@ -27,8 +26,6 @@ const WorkModal = ({
   work,
   index,
   total,
-  prevName,
-  nextName,
   onClose,
   onPrev,
   onNext,
@@ -156,7 +153,7 @@ const WorkModal = ({
                           variant="outline"
                           className="tabular-nums text-zinc-300"
                         >
-                          {formatPeriod(range.start, range.end)}
+                          <Period start={range.start} end={range.end} />
                         </Badge>
                         <Badge variant="muted">
                           {formatDuration(range.start, range.end)}
@@ -186,10 +183,10 @@ const WorkModal = ({
                           {position.title}
                           <span className="font-normal text-muted-foreground tabular-nums">
                             {" · "}
-                            {formatPeriod(
-                              position.period.start,
-                              position.period.end,
-                            )}
+                            <Period
+                              start={position.period.start}
+                              end={position.period.end}
+                            />
                           </span>
                         </h3>
                       )}
@@ -249,7 +246,6 @@ const WorkModal = ({
                       size="icon-sm"
                       onClick={onPrev}
                       aria-label="Experiência anterior"
-                      title={`Anterior: ${prevName}`}
                     >
                       <ChevronLeftIcon />
                     </Button>
@@ -262,7 +258,6 @@ const WorkModal = ({
                       size="icon-sm"
                       onClick={onNext}
                       aria-label="Próxima experiência"
-                      title={`Próxima: ${nextName}`}
                     >
                       <ChevronRightIcon />
                     </Button>

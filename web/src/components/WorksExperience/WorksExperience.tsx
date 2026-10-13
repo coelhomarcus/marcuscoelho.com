@@ -4,7 +4,8 @@ import { arrWorks } from "@/data/works";
 import type { Work } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import WorkModal from "./WorkModal";
-import { formatDuration, formatYears, getWorkRange } from "./format";
+import { Years } from "./Period";
+import { formatDuration, getWorkRange } from "./format";
 
 function WorksExperience() {
   const [selected, setSelected] = useState<number | null>(null);
@@ -29,8 +30,6 @@ function WorksExperience() {
         work={selected === null ? null : arrWorks[selected]}
         index={selected ?? 0}
         total={total}
-        prevName={arrWorks[((selected ?? 0) - 1 + total) % total].company}
-        nextName={arrWorks[((selected ?? 0) + 1) % total].company}
         onClose={() => setSelected(null)}
         onPrev={() => step(-1)}
         onNext={() => step(1)}
@@ -74,7 +73,7 @@ function WorkRow({ work, onSelect }: { work: Work; onSelect: () => void }) {
           </Badge>
         ) : (
           <Badge variant="outline" className="tabular-nums">
-            {formatYears(start, end!)}
+            <Years start={start} end={end!} />
           </Badge>
         )}
         <span className="text-xs text-muted-foreground tabular-nums">
