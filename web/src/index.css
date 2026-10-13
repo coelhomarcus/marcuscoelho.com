@@ -46,7 +46,11 @@ html {
 
 @layer base {
   * {
-    @apply border-zinc-700 outline-0;
+    @apply border-zinc-700;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
   }
 
   body {
