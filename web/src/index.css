@@ -2,6 +2,8 @@
 
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --color-background: #000000;
   --color-foreground: var(--color-zinc-100);
@@ -9,6 +11,32 @@
   --color-muted-foreground: var(--color-zinc-500);
   --color-border: var(--color-zinc-700);
   --color-line: var(--color-zinc-700);
+
+  --color-card: var(--color-zinc-950);
+  --color-card-foreground: var(--color-zinc-100);
+  --color-popover: var(--color-zinc-900);
+  --color-popover-foreground: var(--color-zinc-100);
+  --color-primary: var(--color-zinc-100);
+  --color-primary-foreground: var(--color-zinc-950);
+  --color-secondary: var(--color-zinc-800);
+  --color-secondary-foreground: var(--color-zinc-100);
+  --color-accent: var(--color-zinc-800);
+  --color-accent-foreground: var(--color-zinc-100);
+  --color-destructive: var(--color-red-400);
+  --color-input: var(--color-zinc-700);
+  --color-ring: var(--color-zinc-500);
+}
+
+/* shadcn radius scale (Nova), emitted even when only referenced via var() */
+@theme static {
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 html {
