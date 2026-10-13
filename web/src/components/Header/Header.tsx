@@ -23,7 +23,7 @@ const Header = () => {
         Coelho
       </Link>
 
-      <nav className="hidden md:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
+      <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
         <HeaderLink title="Sobre" to="/" icon={UserIcon} />
         <HeaderLink title="Projetos" to="/projects" icon={FolderCodeIcon} />
         <HeaderLink title="Blog" to="/blog" icon={BookmarkIcon} />
@@ -31,7 +31,7 @@ const Header = () => {
       </nav>
 
       <div className="flex items-center gap-1">
-        <div className="hidden md:flex items-center gap-1 text-zinc-500">
+        <div className="hidden @2xl:flex items-center gap-1 text-zinc-500">
           {socialLinks.map((link) => (
             <SocialLink key={link.label} {...link} />
           ))}

@@ -94,11 +94,6 @@ export interface BlogCardProps {
   banner?: string;
 }
 
-export interface SidebarLinkProps {
-  item: Page;
-  onClose: () => void;
-}
-
 export interface HeaderLinkProps {
   to: string;
   title: string;

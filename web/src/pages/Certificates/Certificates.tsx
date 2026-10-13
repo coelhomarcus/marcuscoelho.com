@@ -23,7 +23,7 @@ const Certificates = () => {
       <motion.div
         {...fadeUp}
         transition={{ ...fadeUp.transition, delay: 0.1 }}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+        className="grid grid-cols-1 @xl:grid-cols-2 gap-2"
       >
         {arrCertificates.map((certificate, index) => (
           <motion.div

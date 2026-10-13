@@ -4,6 +4,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Width of the sidebar; the page is pushed by exactly this amount. */
+:root {
+  --sidebar-w: 85vw;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --sidebar-w: 320px;
+  }
+}
+
 @theme {
   --color-background: #000000;
   --color-foreground: var(--color-zinc-100);
@@ -42,6 +53,17 @@
 html {
   scrollbar-gutter: stable both-edges;
   overflow-y: scroll;
+}
+
+/* On desktop the page card scrolls (see Shell in App.tsx), not the window,
+   so the scrollbar sits inside the card instead of next to the sidebar. */
+@media (min-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    scrollbar-gutter: auto;
+  }
 }
 
 @layer base {
@@ -238,5 +260,5 @@ html {
 
 /* Nova card surface: rounded-xl, ring-1 instead of a border */
 @utility card-surface {
-    @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-colors;
+  @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-colors;
 }
