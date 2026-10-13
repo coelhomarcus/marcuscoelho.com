@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { useContact, type FieldState } from "@/hooks/useContact";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const baseInput =
   "w-full rounded-[8px] border px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500/60 transition-colors outline-none";
@@ -113,37 +114,38 @@ const Contact = () => {
         </div>
 
         <div className="flex items-center gap-3 mt-1">
-          <button
+          <Button
             type="submit"
+            variant="outline"
             disabled={!isValid || status === "sending"}
             className={cn(
-              "inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all cursor-pointer",
-              status === "success"
-                ? "border-green-500/40 bg-green-900/10 text-green-400"
-                : validationMessage
-                  ? "border-amber-500/30 bg-amber-900/10 text-amber-400 opacity-100 cursor-not-allowed"
-                  : "border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed",
+              "disabled:pointer-events-auto disabled:cursor-not-allowed",
+              status === "success" &&
+                "border-green-500/40 bg-green-900/10 text-green-400 hover:bg-green-900/10 hover:text-green-400 disabled:opacity-100",
+              status !== "success" &&
+                validationMessage &&
+                "border-amber-500/30 bg-amber-900/10 text-amber-400 hover:bg-amber-900/10 hover:text-amber-400 disabled:opacity-100",
             )}
           >
             {status === "sending" ? (
               "Enviando..."
             ) : status === "success" ? (
               <>
-                <CheckIcon className="size-4" />
+                <CheckIcon />
                 Enviado!
               </>
             ) : validationMessage ? (
               <>
-                <AlertIcon className="size-4 shrink-0" />
+                <AlertIcon />
                 {validationMessage}
               </>
             ) : (
               <>
-                <MailIcon className="size-4" />
+                <MailIcon />
                 Enviar mensagem
               </>
             )}
-          </button>
+          </Button>
 
           {status === "error" && (
             <p className="text-sm text-red-400">

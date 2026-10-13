@@ -22,6 +22,7 @@ import {
   RxStar as StarIcon,
 } from "react-icons/rx";
 import { techIcons } from "@/data/techIcons";
+import { Button } from "@/components/ui/button";
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [index, setIndex] = useState(0);
@@ -111,22 +112,26 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
                   {hasMultiple && (
                     <>
-                      <button
+                      <Button
                         type="button"
+                        variant="outline"
+                        size="icon-sm"
                         onClick={prev}
                         aria-label="Imagem anterior"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-zinc-950/70 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/80 border border-zinc-800/80 transition-colors cursor-pointer"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
                       >
-                        <ChevronLeftIcon className="size-4" />
-                      </button>
-                      <button
+                        <ChevronLeftIcon />
+                      </Button>
+                      <Button
                         type="button"
+                        variant="outline"
+                        size="icon-sm"
                         onClick={next}
                         aria-label="Próxima imagem"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-zinc-950/70 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/80 border border-zinc-800/80 transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
                       >
-                        <ChevronRightIcon className="size-4" />
-                      </button>
+                        <ChevronRightIcon />
+                      </Button>
 
                       <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5">
                         {images.map((_, i) => (
@@ -147,14 +152,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     </>
                   )}
 
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="icon-sm"
                     onClick={onClose}
                     aria-label="Fechar"
-                    className="absolute top-2 right-2 p-1.5 rounded-lg bg-zinc-950/70 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/80 border border-zinc-800/80 transition-colors cursor-pointer"
+                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm"
                   >
-                    <CloseIcon className="size-4" />
-                  </button>
+                    <CloseIcon />
+                  </Button>
                 </div>
               )}
 
@@ -176,14 +183,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   </div>
 
                   {images.length === 0 && (
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={onClose}
                       aria-label="Fechar"
-                      className="p-1.5 -m-1.5 rounded-lg text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors cursor-pointer shrink-0"
+                      className="shrink-0 text-muted-foreground"
                     >
-                      <CloseIcon className="size-4" />
-                    </button>
+                      <CloseIcon />
+                    </Button>
                   )}
                 </div>
 
@@ -232,28 +241,30 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 )}
 
                 {(project.link || project.repo) && (
-                  <div className="flex flex-wrap gap-2.5">
+                  <div className="flex flex-wrap gap-2">
                     {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 text-zinc-200 px-4 py-2 text-sm font-medium transition-colors cursor-pointer"
-                      >
-                        Ver projeto
-                        <ExternalLinkIcon className="size-3.5" />
-                      </a>
+                      <Button asChild variant="outline">
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
+                          Ver projeto
+                          <ExternalLinkIcon className="size-3.5" />
+                        </a>
+                      </Button>
                     )}
                     {project.repo && (
-                      <a
-                        href={githubRepoUrl(project.repo)}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 text-zinc-200 px-4 py-2 text-sm font-medium transition-colors cursor-pointer"
-                      >
-                        Repositório
-                        <GithubIcon className="size-3.5" />
-                      </a>
+                      <Button asChild variant="outline">
+                        <a
+                          href={githubRepoUrl(project.repo)}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
+                          Repositório
+                          <GithubIcon className="size-3.5" />
+                        </a>
+                      </Button>
                     )}
                   </div>
                 )}
