@@ -117,7 +117,7 @@ function GitHubGraph() {
 
       <div
         ref={containerRef}
-        className="border border-zinc-700/50 bg-zinc-800/30 rounded-lg p-3"
+        className="card-surface p-3"
       >
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}
 

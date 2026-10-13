@@ -35,10 +35,10 @@ const ProjectCard = ({
     <button
       type="button"
       onClick={onClick}
-      className="group flex flex-col h-full w-full text-left p-3 rounded-[8px] border border-zinc-700/50 bg-zinc-800/30 hover:bg-zinc-800/60 transition-colors cursor-pointer"
+      className="group card-surface flex flex-col h-full w-full text-left p-3 hover:bg-zinc-900 hover:ring-foreground/20 cursor-pointer"
     >
       {cover && (
-        <div className="aspect-[8/5] mb-3 overflow-clip rounded transition-all">
+        <div className="aspect-[8/5] mb-3 overflow-clip rounded-lg transition-all">
           <img
             src={projectAsset(cover)}
             alt={name}

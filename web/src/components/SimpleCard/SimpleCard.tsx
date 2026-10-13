@@ -5,7 +5,7 @@ const SimpleCard = ({ href, name, desc }: SimpleCardProps) => {
   return (
     <a
       href={href}
-      className="group flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 p-4"
+      className="group card-surface flex items-center justify-between gap-3 p-4 hover:bg-zinc-900 hover:ring-foreground/20"
       rel="noreferrer noopener"
       target="_blank"
     >

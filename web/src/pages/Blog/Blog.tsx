@@ -11,7 +11,7 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${slug}`}
-      className="group block rounded-xl border border-zinc-800 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 overflow-hidden relative group"
+      className="group card-surface block overflow-hidden relative hover:bg-zinc-900 hover:ring-foreground/20"
     >
       {banner && (
         <div className="absolute right-0 top-0 w-[40%] h-full">
@@ -28,7 +28,7 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogCardProps) => {
           <div className="absolute inset-0 bg-linear-to-r from-zinc-950 via-zinc-950/70 to-transparent transition-colors duration-200 group-hover:from-zinc-900 group-hover:via-zinc-900/70" />
         </div>
       )}
-      <div className="relative flex flex-col gap-3 p-5 sm:p-6">
+      <div className="relative flex flex-col gap-3 p-4 sm:p-5">
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-500 font-mono tracking-wide">
             {date}
