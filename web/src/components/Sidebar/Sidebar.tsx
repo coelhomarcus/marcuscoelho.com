@@ -11,12 +11,12 @@ import { BookmarkIcon } from "@/components/icons/bookmark";
 import { DownloadIcon } from "@/components/icons/download";
 import { FileTextIcon } from "@/components/icons/file-text";
 import { GithubIcon } from "@/components/icons/github";
-import { LayersIcon } from "@/components/icons/layers";
+import { FolderCodeIcon } from "@/components/icons/folder-code";
 import { LinkedinIcon } from "@/components/icons/linkedin";
 import { MenuIcon } from "@/components/icons/menu";
 import { PanelRightOpenIcon } from "@/components/icons/panel-right-open";
 import { RocketIcon } from "@/components/icons/rocket";
-import { SendIcon } from "@/components/icons/send";
+import { MessageCircleIcon } from "@/components/icons/message-circle";
 import {
   combineHoverProps,
   useAnimatedIcon,
@@ -26,9 +26,9 @@ import { XIcon } from "@/components/icons/x";
 
 const navigation: Page[] = [
   { name: "Sobre", href: "/", icon: UserIcon },
-  { name: "Projetos", href: "/projects", icon: LayersIcon },
+  { name: "Projetos", href: "/projects", icon: FolderCodeIcon },
   { name: "Blog", href: "/blog", icon: BookmarkIcon },
-  { name: "Contato", href: "/contact", icon: SendIcon },
+  { name: "Contato", href: "/contact", icon: MessageCircleIcon },
 ];
 
 const socials: Page[] = [

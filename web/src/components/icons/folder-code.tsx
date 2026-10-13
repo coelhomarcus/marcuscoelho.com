@@ -1,52 +1,53 @@
 "use client";
 
-import type { Transition } from "motion/react";
+import type { Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface LayersIconHandle {
+export interface FolderCodeIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface LayersIconProps extends HTMLAttributes<HTMLDivElement> {
+interface FolderCodeIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const DEFAULT_TRANSITION: Transition = {
-  type: "spring",
-  stiffness: 100,
-  damping: 14,
-  mass: 1,
+const CODE_VARIANTS: Variants = {
+  normal: { x: 0, rotate: 0, opacity: 1 },
+  animate: (direction: number) => ({
+    x: [0, direction * 2, 0],
+    rotate: [0, direction * -8, 0],
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
+  }),
 };
 
-const LayersIcon = forwardRef<LayersIconHandle, LayersIconProps>(
+const FolderCodeIcon = forwardRef<FolderCodeIconHandle, FolderCodeIconProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
 
     useImperativeHandle(ref, () => {
       isControlledRef.current = true;
-
       return {
-        startAnimation: async () => {
-          await controls.start("firstState");
-          await controls.start("secondState");
-        },
+        startAnimation: () => controls.start("animate"),
         stopAnimation: () => controls.start("normal"),
       };
     });
 
     const handleMouseEnter = useCallback(
-      async (e: React.MouseEvent<HTMLDivElement>) => {
+      (e: React.MouseEvent<HTMLDivElement>) => {
         if (isControlledRef.current) {
           onMouseEnter?.(e);
         } else {
-          await controls.start("firstState");
-          await controls.start("secondState");
+          controls.start("animate");
         }
       },
       [controls, onMouseEnter]
@@ -81,26 +82,20 @@ const LayersIcon = forwardRef<LayersIconHandle, LayersIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+          <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" />
           <motion.path
             animate={controls}
-            d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"
-            transition={DEFAULT_TRANSITION}
-            variants={{
-              normal: { y: 0 },
-              firstState: { y: -9 },
-              secondState: { y: 0 },
-            }}
+            custom={-1}
+            d="M10 10.5 8 13l2 2.5"
+            initial="normal"
+            variants={CODE_VARIANTS}
           />
           <motion.path
             animate={controls}
-            d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"
-            transition={DEFAULT_TRANSITION}
-            variants={{
-              normal: { y: 0 },
-              firstState: { y: -5 },
-              secondState: { y: 0 },
-            }}
+            custom={1}
+            d="m14 10.5 2 2.5-2 2.5"
+            initial="normal"
+            variants={CODE_VARIANTS}
           />
         </svg>
       </div>
@@ -108,6 +103,6 @@ const LayersIcon = forwardRef<LayersIconHandle, LayersIconProps>(
   }
 );
 
-LayersIcon.displayName = "LayersIcon";
+FolderCodeIcon.displayName = "FolderCodeIcon";
 
-export { LayersIcon };
+export { FolderCodeIcon };

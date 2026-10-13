@@ -102,6 +102,7 @@ export interface SidebarLinkProps {
 export interface HeaderLinkProps {
   to: string;
   title: string;
+  icon: AnimatedIcon;
 }
 export type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
 
