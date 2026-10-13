@@ -1,7 +1,5 @@
 import type { Work } from "@/types";
 
-// https://chanhdai.com/components/work-experience-component
-
 export const arrWorks: Work[] = [
   {
     company: "CS-Consoft",
