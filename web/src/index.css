@@ -263,5 +263,7 @@ html {
 
 /* Nova card surface: rounded-xl, ring-1 instead of a border */
 @utility card-surface {
-  @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-colors;
+  /* box-shadow is listed because the ring is a box-shadow: with plain
+     transition-colors the ring snapped on hover while the background faded. */
+  @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-[color,background-color,border-color,box-shadow];
 }
