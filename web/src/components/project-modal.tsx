@@ -23,6 +23,7 @@ import {
 } from "@/components/icons/use-animated-icon";
 import { techIcons } from "@/data/tech-icons";
 import { IconButton } from "@/components/ui/icon-button";
+import { LinkButton } from "@/components/ui/link-button";
 
 /** Text link with a trailing animated icon, the same idiom as "Ver projeto" on the card. */
 function ActionLink({
@@ -273,19 +274,22 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 )}
 
                 {(project.link || project.repo) && (
-                  <div className="mt-5 flex flex-wrap items-center gap-5 border-t border-white/10 pt-4">
+                  <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
                     {project.link && (
                       <ActionLink href={project.link} icon={ArrowUpRightIcon}>
                         Ver projeto
                       </ActionLink>
                     )}
                     {project.repo && (
-                      <ActionLink
+                      <LinkButton
                         href={githubRepoUrl(project.repo)}
                         icon={GithubIcon}
+                        variant="default"
+                        size="sm"
+                        className="ml-auto"
                       >
                         Repositório
-                      </ActionLink>
+                      </LinkButton>
                     )}
                   </div>
                 )}
