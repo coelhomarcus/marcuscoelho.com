@@ -2,26 +2,6 @@ import type { Work } from "@/types";
 
 export const experience: Work[] = [
   {
-    company: "CS-Consoft",
-    logo: "/assets/works/consoft.webp",
-    website: "https://cs-consoft.com.br/",
-    positions: [
-      {
-        title: "Front-end Developer",
-        period: { start: "2026-10" },
-        about: [
-          "Desenvolvimento interfaces web em Vue.js",
-          "Com o decorrer do estágio vou atualizando!"
-        ],
-        skills: [
-          "Vue.js",
-          "TypeScript",
-          "Node.js",
-        ],
-      },
-    ],
-  },
-  {
     company:
       "Logibot AI: Plataforma de Auxilio no Ensino de Lógica de Programação",
     logo: "/assets/works/logibot.svg",

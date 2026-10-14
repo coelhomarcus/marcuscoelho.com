@@ -19,10 +19,3 @@ export function Period({ start, end }: { start: string; end?: string }) {
     <>desde {formatMonth(start)}</>
   );
 }
-
-/** "2025 → 2026", or just "2025" when both ends fall in the same year. */
-export function Years({ start, end }: { start: string; end: string }) {
-  const from = start.slice(0, 4);
-  const to = end.slice(0, 4);
-  return from === to ? <>{from}</> : <Range from={from} to={to} />;
-}
