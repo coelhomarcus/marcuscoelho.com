@@ -1,4 +1,5 @@
 import PageTitle from "@/components/page-title";
+import { SectionRule } from "@/components/layout/stitch";
 import { CheckIcon } from "@/components/icons/check";
 import { SendIcon } from "@/components/icons/send";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
@@ -49,6 +50,8 @@ const ContactPage = () => {
           </p>
         </div>
       </motion.div>
+
+      <SectionRule />
 
       <motion.form
         {...fadeUp}

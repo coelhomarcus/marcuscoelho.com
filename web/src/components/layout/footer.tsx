@@ -3,7 +3,7 @@ import { socials } from "@/data/navigation";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-between items-center border-t border-zinc-700/50 pt-4 mt-4">
+    <footer className="flex justify-between items-center">
       <div className="flex items-center gap-1 text-zinc-500">
         {socials.map((link) => (
           <SocialLink key={link.name} {...link} />

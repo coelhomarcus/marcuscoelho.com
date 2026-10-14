@@ -1,4 +1,5 @@
 import { certificates } from "@/data/certificates";
+import { SectionRule } from "@/components/layout/stitch";
 import CertificateCard from "./components/certificate-card";
 import PageTitle from "@/components/page-title";
 import { motion } from "motion/react";
@@ -19,6 +20,8 @@ const CertificatesPage = () => {
           </p>
         </div>
       </motion.div>
+
+      <SectionRule />
 
       <motion.div
         {...fadeUp}

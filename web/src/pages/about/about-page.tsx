@@ -7,6 +7,7 @@ import WorkExperience from "./components/work-experience/work-experience";
 import Skills from "./components/skills";
 import GitHubGraph from "./components/github-graph";
 import ProjectsMarquee from "./components/projects-marquee";
+import { SectionRule } from "@/components/layout/stitch";
 import ProjectModal from "@/components/project-modal";
 import type { Project } from "@/types";
 import { fadeUp } from "@/lib/motion";
@@ -15,20 +16,26 @@ const AboutPage = () => {
   const [selected, setSelected] = useState<Project | null>(null);
 
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100 space-y-8">
       <PageTitle title="Marcus Coelho" />
 
       <motion.div {...fadeUp}>
         <HeroSection />
       </motion.div>
 
+      <SectionRule />
+
       <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
         <Skills />
       </motion.div>
 
+      <SectionRule />
+
       <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }}>
         <ProjectsMarquee onProjectClick={setSelected} />
       </motion.div>
+
+      <SectionRule />
 
       <motion.div
         {...fadeUp}
@@ -37,7 +44,12 @@ const AboutPage = () => {
         <WorkExperience />
       </motion.div>
 
-      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.25 }}>
+      <SectionRule />
+
+      <motion.div
+        {...fadeUp}
+        transition={{ ...fadeUp.transition, delay: 0.25 }}
+      >
         <GitHubGraph />
       </motion.div>
 

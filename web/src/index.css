@@ -267,3 +267,16 @@ html {
      transition-colors the ring snapped on hover while the background faded. */
   @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-[color,background-color,border-color,box-shadow];
 }
+
+/* "Stitched" lines: a 1px line masked to a dot every 6px */
+@utility dotted-x {
+  height: 1px;
+  background-color: rgb(255 255 255 / 0.15);
+  mask-image: repeating-linear-gradient(to right, #000 0 1px, transparent 1px 6px);
+}
+
+@utility dotted-y {
+  width: 1px;
+  background-color: rgb(255 255 255 / 0.15);
+  mask-image: repeating-linear-gradient(to bottom, #000 0 1px, transparent 1px 6px);
+}

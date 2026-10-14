@@ -1,6 +1,7 @@
 import Header from "@/components/layout/header";
 import PageTransition from "@/components/layout/page-transition";
 import Footer from "@/components/layout/footer";
+import { Rails, SectionRule } from "@/components/layout/stitch";
 import ScrollToTop from "@/components/layout/scroll-to-top";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-provider";
 import { useSidebar } from "@/components/layout/sidebar/sidebar-context";
@@ -11,7 +12,9 @@ import { AnimatePresence } from "motion/react";
 
 import { lazy, Suspense } from "react";
 const NotFoundPage = lazy(() => import("@/pages/not-found/not-found-page"));
-const CertificatesPage = lazy(() => import("@/pages/certificates/certificates-page"));
+const CertificatesPage = lazy(
+  () => import("@/pages/certificates/certificates-page"),
+);
 
 import AboutPage from "@/pages/about/about-page";
 import ProjectsPage from "@/pages/projects/projects-page";
@@ -40,25 +43,35 @@ const Shell = () => {
             "md:m-2 md:mr-0 md:rounded-xl md:ring-1 md:ring-foreground/10",
         )}
       >
-        <div className="@container mx-auto min-h-screen max-w-5xl md:min-h-full space-y-3 px-4 py-4 sm:px-6 sm:py-8">
-          <ScrollToTop />
-          <Header />
-          <AnimatePresence mode="wait" initial={false}>
-            <PageTransition key={location.pathname}>
-              <Suspense fallback={null}>
-                <Routes location={location}>
-                  <Route path="/" element={<AboutPage />} />
-                  <Route path="/projects" element={<ProjectsPage />} />
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/blog/:slug" element={<PostPage />} />
-                  <Route path="/certificates" element={<CertificatesPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            </PageTransition>
-          </AnimatePresence>
-          <Footer />
+        {/* clip (not hidden) cuts the full-bleed rules without creating anything
+            that can be scrolled sideways */}
+        <div className="overflow-x-clip md:flex md:min-h-full md:flex-col">
+          <div className="@container relative mx-auto min-h-screen max-w-3xl space-y-6 px-(--gutter) py-4 [--gutter:--spacing(4)] sm:py-8 sm:[--gutter:--spacing(6)] md:min-h-0 md:w-full md:flex-1">
+            <Rails />
+            <ScrollToTop />
+            <Header />
+            <SectionRule />
+            <AnimatePresence mode="wait" initial={false}>
+              <PageTransition key={location.pathname}>
+                <Suspense fallback={null}>
+                  <Routes location={location}>
+                    <Route path="/" element={<AboutPage />} />
+                    <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/:slug" element={<PostPage />} />
+                    <Route
+                      path="/certificates"
+                      element={<CertificatesPage />}
+                    />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </Suspense>
+              </PageTransition>
+            </AnimatePresence>
+            <SectionRule />
+            <Footer />
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SectionRule } from "@/components/layout/stitch";
 import ProjectCard from "./components/project-card";
 import ProjectModal from "@/components/project-modal";
 import PageTitle from "@/components/page-title";
@@ -25,6 +26,8 @@ const ProjectsPage = () => {
           </p>
         </div>
       </motion.div>
+
+      <SectionRule />
 
       <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
         <div className="grid grid-cols-1 gap-3 @xl:grid-cols-2 @4xl:grid-cols-3">
