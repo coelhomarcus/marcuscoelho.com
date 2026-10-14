@@ -22,7 +22,7 @@ const Header = () => {
         Marcus Coelho
       </Link>
 
-      <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground">
+      <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-black p-[3px] text-muted-foreground ring-1 ring-white/10">
         {navigation.map((item) => (
           <HeaderLink key={item.href} {...item} />
         ))}
