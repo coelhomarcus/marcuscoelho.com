@@ -11,20 +11,44 @@ import {
   projectAsset,
 } from "@/lib/utils";
 
-import {
-  RxCalendar as CalendarIcon,
-  RxGlobe as GlobeIcon,
-  RxStar as StarIcon,
-} from "react-icons/rx";
+import { RxCalendar as CalendarIcon, RxStar as StarIcon } from "react-icons/rx";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { GithubIcon } from "@/components/icons/github";
 import { XIcon } from "@/components/icons/x";
+import {
+  useAnimatedIcon,
+  type AnimatedIcon,
+} from "@/components/icons/use-animated-icon";
 import { techIcons } from "@/data/tech-icons";
 import { IconButton } from "@/components/ui/icon-button";
-import { LinkButton } from "@/components/ui/link-button";
-import { Badge } from "@/components/ui/badge";
+
+/** Text link with a trailing animated icon, the same idiom as "Ver projeto" on the card. */
+function ActionLink({
+  href,
+  icon: Icon,
+  children,
+}: {
+  href: string;
+  icon: AnimatedIcon;
+  children: React.ReactNode;
+}) {
+  const { ref, hoverProps } = useAnimatedIcon();
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+      className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-300 transition-colors hover:text-zinc-50"
+      {...hoverProps}
+    >
+      {children}
+      <Icon ref={ref} size={14} />
+    </a>
+  );
+}
 
 interface ProjectModalProps {
   project: Project | null;
@@ -97,14 +121,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.97 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="pointer-events-auto flex flex-col w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-xl bg-popover text-popover-foreground ring-1 ring-foreground/10 shadow-2xl"
+              className="pointer-events-auto scrollbar w-full max-w-2xl max-h-[92vh] rounded-xl bg-[#09090b] p-3 text-popover-foreground shadow-2xl ring-1 ring-foreground/10"
               role="dialog"
               aria-modal="true"
               aria-label={project.name}
             >
+              {/* Same anatomy as the project card: inset image, then the text */}
               {images.length > 0 && (
-                <div className="relative aspect-[8/5] shrink-0 bg-muted overflow-hidden">
-                  <AnimatePresence mode="wait">
+                <div className="relative isolate aspect-[8/5] overflow-hidden rounded-lg bg-zinc-900">
+                  {/* No mode="wait": images cross-fade instead of leaving a gap */}
+                  <AnimatePresence initial={false}>
                     <motion.img
                       key={images[index]}
                       src={projectAsset(images[index])}
@@ -112,8 +138,8 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="absolute inset-0 size-full object-cover"
                     />
                   </AnimatePresence>
 
@@ -125,7 +151,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         icon={ChevronLeftIcon}
                         onClick={prev}
                         aria-label="Imagem anterior"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
+                        className="absolute top-1/2 left-2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
                       />
                       <IconButton
                         type="button"
@@ -133,10 +159,10 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         icon={ChevronRightIcon}
                         onClick={next}
                         aria-label="Próxima imagem"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
+                        className="absolute top-1/2 right-2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
                       />
 
-                      <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5">
+                      <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 gap-1.5">
                         {images.map((_, i) => (
                           <button
                             key={i}
@@ -144,7 +170,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                             onClick={() => setIndex(i)}
                             aria-label={`Ir para imagem ${i + 1}`}
                             className={cn(
-                              "size-1.5 rounded-full transition-colors cursor-pointer",
+                              "size-1.5 cursor-pointer rounded-full transition-colors",
                               i === index
                                 ? "bg-zinc-100"
                                 : "bg-zinc-100/30 hover:bg-zinc-100/60",
@@ -161,28 +187,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     icon={XIcon}
                     onClick={onClose}
                     aria-label="Fechar"
-                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm"
+                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm md:hidden"
                   />
                 </div>
               )}
 
-              <div className="flex flex-col p-4 overflow-y-auto scrollbar">
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2.5">
-                    {project.favicon ? (
-                      <img
-                        className="size-6 rounded-sm"
-                        src={projectAsset(project.favicon)}
-                        alt=""
-                      />
-                    ) : (
-                      <GlobeIcon className="size-5 text-zinc-500" />
-                    )}
-                    <h2 className="text-base font-medium text-zinc-100">
-                      {project.name}
-                    </h2>
-                  </div>
-
+              <div className="flex flex-col px-1 pt-4 pb-1">
+                <div className="flex items-start justify-between gap-3">
+                  <h2 className="text-lg leading-tight font-bold text-zinc-100">
+                    {project.name}
+                  </h2>
                   {images.length === 0 && (
                     <IconButton
                       type="button"
@@ -190,66 +204,88 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                       icon={XIcon}
                       onClick={onClose}
                       aria-label="Fechar"
-                      className="shrink-0 text-muted-foreground"
+                      className="-mt-1 -mr-1 shrink-0 text-zinc-500 hover:text-zinc-100 md:hidden"
                     />
                   )}
                 </div>
 
-                {preview && (
-                  <p className="text-xs text-zinc-500/70 italic mb-2">
-                    {preview}
-                  </p>
-                )}
-
-                {(hasStars || project.repoCreatedAt) && (
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-xs text-zinc-500">
-                    {hasStars && (
-                      <span className="inline-flex items-center gap-1.5">
-                        <StarIcon className="size-3.5 text-zinc-400" />
-                        {formatCompactNumber(project.repoStars!)} stars
-                      </span>
-                    )}
-                    {project.repoCreatedAt && (
-                      <span className="inline-flex items-center gap-1.5">
-                        <CalendarIcon className="size-3.5 text-zinc-400" />
-                        Criado em {formatMonthYear(project.repoCreatedAt)}
-                      </span>
-                    )}
+                {(preview || hasStars || project.repoCreatedAt) && (
+                  <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-zinc-500">
+                    {[
+                      preview && <span key="preview">{preview}</span>,
+                      hasStars && (
+                        <span
+                          key="stars"
+                          className="inline-flex items-center gap-1 tabular-nums"
+                        >
+                          <StarIcon className="size-3.5" />
+                          {formatCompactNumber(project.repoStars!)}
+                        </span>
+                      ),
+                      project.repoCreatedAt && (
+                        <span
+                          key="created"
+                          className="inline-flex items-center gap-1"
+                        >
+                          <CalendarIcon className="size-3.5" />
+                          {formatMonthYear(project.repoCreatedAt)}
+                        </span>
+                      ),
+                    ]
+                      .filter(Boolean)
+                      .flatMap((item, i) =>
+                        i === 0
+                          ? [item]
+                          : [
+                              <span key={`dot-${i}`} aria-hidden>
+                                ·
+                              </span>,
+                              item,
+                            ],
+                      )}
                   </div>
                 )}
 
-                <p className="text-sm text-zinc-400 leading-relaxed mb-5">
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">
                   {project.desc}
                 </p>
 
                 {project.tech.length > 0 && (
-                  <div className="flex gap-1.5 flex-wrap mb-6">
-                    {project.tech.map((t, i) => {
-                      const Icon = techIcons[t];
-                      return (
-                        <Badge key={i} variant="muted">
-                          {Icon && <Icon />}
-                          {t}
-                        </Badge>
-                      );
-                    })}
+                  <div className="mt-5">
+                    <p className="mb-2 text-xs font-medium text-zinc-500">
+                      Tecnologias
+                    </p>
+                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-[13px] text-zinc-400">
+                      {project.tech.map((t) => {
+                        const Icon = techIcons[t];
+                        return (
+                          <li
+                            key={t}
+                            className="inline-flex items-center gap-1.5"
+                          >
+                            {Icon && <Icon className="size-4 text-zinc-300" />}
+                            {t}
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
                 )}
 
                 {(project.link || project.repo) && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="mt-5 flex flex-wrap items-center gap-5 border-t border-white/10 pt-4">
                     {project.link && (
-                      <LinkButton href={project.link} icon={ArrowUpRightIcon}>
+                      <ActionLink href={project.link} icon={ArrowUpRightIcon}>
                         Ver projeto
-                      </LinkButton>
+                      </ActionLink>
                     )}
                     {project.repo && (
-                      <LinkButton
+                      <ActionLink
                         href={githubRepoUrl(project.repo)}
                         icon={GithubIcon}
                       >
                         Repositório
-                      </LinkButton>
+                      </ActionLink>
                     )}
                   </div>
                 )}

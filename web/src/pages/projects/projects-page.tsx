@@ -26,11 +26,8 @@ const ProjectsPage = () => {
         </div>
       </motion.div>
 
-      <motion.div
-        {...fadeUp}
-        transition={{ ...fadeUp.transition, delay: 0.1 }}
-      >
-        <div className="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-3">
+      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+        <div className="grid grid-cols-1 gap-3 @xl:grid-cols-2 @4xl:grid-cols-3">
           {projects.map((project, index) => (
             <motion.div
               key={project.name}
@@ -44,15 +41,7 @@ const ProjectsPage = () => {
               }}
             >
               <ProjectCard
-                favicon={project.favicon}
-                link={project.link}
-                linkPreview={project.linkPreview}
-                name={project.name}
-                desc={project.desc}
-                repoStars={project.repoStars}
-                repoCreatedAt={project.repoCreatedAt}
-                tech={project.tech}
-                images={project.images}
+                project={project}
                 onClick={() => setSelected(project)}
               />
             </motion.div>

@@ -1,116 +1,104 @@
+import { motion, type Variants } from "motion/react";
 import type { Project } from "@/types";
-import {
-  formatCompactNumber,
-  formatLinkPreview,
-  formatMonthYear,
-  projectAsset,
-} from "@/lib/utils";
+import { projectAsset } from "@/lib/utils";
 import { techIcons } from "@/data/tech-icons";
-import { Badge } from "@/components/ui/badge";
+import { Tooltip } from "@/components/ui/tooltip";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
-import {
-  RxCalendar as CalendarIcon,
-  RxGlobe as GlobeIcon,
-  RxStar as StarIcon,
-} from "react-icons/rx";
+// Background and ring animate together in one transition. With Tailwind the
+// ring (a box-shadow) jumped while the background faded, which read as a flicker.
+const cardVariants: Variants = {
+  rest: {
+    backgroundColor: "#09090b",
+    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.1)",
+  },
+  hover: {
+    backgroundColor: "#18181b",
+    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.2)",
+  },
+};
 
-interface ProjectCardProps extends Omit<Project, "repo" | "tech"> {
-  tech?: Project["tech"];
+const imageVariants: Variants = {
+  rest: { scale: 1 },
+  hover: { scale: 1.03 },
+};
+
+interface ProjectCardProps {
+  project: Project;
   onClick?: () => void;
 }
 
-const ProjectCard = ({
-  name,
-  desc,
-  tech = [],
-  images,
-  favicon,
-  link,
-  linkPreview,
-  repoStars,
-  repoCreatedAt,
-  onClick,
-}: ProjectCardProps) => {
+const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+  const { name, desc, tech, images } = project;
   const arrow = useAnimatedIcon();
-  const preview = linkPreview ?? (link ? formatLinkPreview(link) : undefined);
   const cover = images?.[0];
-  const hasStars = typeof repoStars === "number" && repoStars > 0;
+
+  // Only techs with an icon are drawn; the rest collapse into a "+N" hint
+  const withIcon = tech.filter((t) => techIcons[t]);
+  const withoutIcon = tech.filter((t) => !techIcons[t]);
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
       {...arrow.hoverProps}
-      className="group card-surface flex flex-col h-full w-full text-left p-3 hover:bg-zinc-900 hover:ring-foreground/20 cursor-pointer"
+      variants={cardVariants}
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="group flex h-full w-full cursor-pointer flex-col rounded-xl p-3 text-left"
     >
       {cover && (
-        <div className="aspect-[8/5] mb-3 overflow-clip rounded-lg transition-all">
-          <img
+        // isolate keeps the rounded clip stable while the image scales
+        <div className="isolate aspect-[8/5] w-full overflow-hidden rounded-lg">
+          <motion.img
             src={projectAsset(cover)}
             alt={name}
-            className="group-hover:scale-[1.03] duration-200 w-full h-full object-cover"
+            loading="lazy"
+            variants={imageVariants}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="size-full object-cover"
           />
         </div>
       )}
-      <div className="flex justify-between items-start mb-1.5">
-        <div className="text-sm font-medium text-zinc-200 flex gap-2 items-center">
-          {favicon ? (
-            <img
-              className="size-4 rounded-sm"
-              src={projectAsset(favicon)}
-              alt=""
-            />
-          ) : (
-            <GlobeIcon className="size-4 text-zinc-500" />
-          )}
+
+      <div className="mt-3 flex flex-1 flex-col px-1 pb-1">
+        <h3 className="text-[15px] leading-tight font-bold text-zinc-100">
           {name}
+        </h3>
+
+        <p className="mt-1.5 pr-2 text-[13px] leading-relaxed text-zinc-400">
+          {desc}
+        </p>
+
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+          <div className="flex flex-wrap items-center gap-2 text-zinc-400">
+            {withIcon.map((t) => {
+              const Icon = techIcons[t];
+              return (
+                <Tooltip key={t} content={t}>
+                  <Icon className="size-4" aria-label={t} />
+                </Tooltip>
+              );
+            })}
+            {withoutIcon.length > 0 && (
+              <Tooltip content={withoutIcon.join(", ")}>
+                <span className="text-[11px] font-medium text-zinc-500 tabular-nums">
+                  +{withoutIcon.length}
+                </span>
+              </Tooltip>
+            )}
+          </div>
+
+          <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-zinc-500 transition-colors group-hover:text-zinc-200">
+            Ver projeto
+            <ArrowUpRightIcon ref={arrow.ref} size={12} />
+          </span>
         </div>
-        <span className="opacity-50 group-hover:opacity-90 transition-opacity">
-          <ArrowUpRightIcon
-            ref={arrow.ref}
-            size={14}
-            className="text-zinc-500"
-          />
-        </span>
       </div>
-      {preview && (
-        <p className="text-xs text-zinc-500/70 italic mb-1">{preview}</p>
-      )}
-      {(hasStars || repoCreatedAt) && (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-[11px] text-zinc-500">
-          {hasStars && (
-            <span className="inline-flex items-center gap-1">
-              <StarIcon className="size-3.5 text-zinc-400" />
-              {formatCompactNumber(repoStars)}
-            </span>
-          )}
-          {repoCreatedAt && (
-            <span className="inline-flex items-center gap-1">
-              <CalendarIcon className="size-3.5 text-zinc-400" />
-              {formatMonthYear(repoCreatedAt)}
-            </span>
-          )}
-        </div>
-      )}
-      <p className="text-xs text-zinc-500 mb-3 flex-grow leading-relaxed">
-        {desc}
-      </p>
-      {tech && tech.length > 0 && (
-        <div className="flex gap-1.5 flex-wrap mt-auto">
-          {tech.map((t, i) => {
-            const Icon = techIcons[t];
-            return (
-              <Badge key={i} variant="muted">
-                {Icon && <Icon />}
-                {t}
-              </Badge>
-            );
-          })}
-        </div>
-      )}
-    </button>
+    </motion.button>
   );
 };
 
