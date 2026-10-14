@@ -188,7 +188,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     icon={XIcon}
                     onClick={onClose}
                     aria-label="Fechar"
-                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm md:hidden"
+                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm"
                   />
                 </div>
               )}
@@ -205,7 +205,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                       icon={XIcon}
                       onClick={onClose}
                       aria-label="Fechar"
-                      className="-mt-1 -mr-1 shrink-0 text-zinc-500 hover:text-zinc-100 md:hidden"
+                      className="-mt-1 -mr-1 shrink-0 text-zinc-500 hover:text-zinc-100"
                     />
                   )}
                 </div>
