@@ -1,10 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { SectionAction, SectionHeading } from "@/components/section-heading";
 import {
   useGitHubCalendar,
   type ContributionLevel,
 } from "../hooks/use-github-calendar";
-import { GithubIcon } from "@/components/icons/github";
-import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { Tooltip } from "@/components/ui/tooltip";
 
 const GAP = 3;
@@ -69,7 +68,6 @@ function CalendarSkeleton({
 }
 
 function GitHubGraph() {
-  const github = useAnimatedIcon();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(12);
@@ -106,17 +104,15 @@ function GitHubGraph() {
   const gridWidth = data ? data.weeks.length * (cellSize + GAP) - GAP : 0;
 
   return (
-    <div className="flex flex-col gap-3">
-      <a
-        href="https://github.com/coelhomarcus"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center w-fit gap-2 text-base font-semibold text-zinc-300 hover:text-zinc-100 hover:underline transition-colors"
-        {...github.hoverProps}
-      >
-        <GithubIcon ref={github.ref} size={16} />
-        github.com/coelhomarcus
-      </a>
+    <div className="flex flex-col gap-4">
+      <SectionHeading
+        title="GitHub"
+        action={
+          <SectionAction href="https://github.com/coelhomarcus">
+            @coelhomarcus
+          </SectionAction>
+        }
+      />
 
       <div ref={containerRef} className="card-surface p-3">
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}

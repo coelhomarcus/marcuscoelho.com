@@ -1,5 +1,6 @@
 ﻿import { projectAsset } from "@/lib/utils";
 import { useProjects } from "@/hooks/use-projects";
+import { SectionAction, SectionHeading } from "@/components/section-heading";
 import { techIcons } from "@/data/tech-icons";
 import type { Project } from "@/types";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
@@ -67,19 +68,25 @@ const ProjectsMarquee = ({ onProjectClick }: ProjectsMarqueeProps) => {
   const duplicated = [...projects, ...projects];
 
   return (
-    <div className="overflow-hidden relative group/marquee">
-      <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none" />
-      <div className="flex gap-4 animate-marquee w-max group-hover/marquee:[animation-play-state:paused]">
-        {duplicated.map((project, i) => (
-          <MarqueeCard
-            key={i}
-            project={project}
-            onClick={() => onProjectClick(project)}
-          />
-        ))}
+    <section className="flex flex-col gap-4">
+      <SectionHeading
+        title="Projetos"
+        action={<SectionAction to="/projects">Ver todos</SectionAction>}
+      />
+      <div className="overflow-hidden relative group/marquee">
+        <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none" />
+        <div className="flex gap-4 animate-marquee w-max group-hover/marquee:[animation-play-state:paused]">
+          {duplicated.map((project, i) => (
+            <MarqueeCard
+              key={i}
+              project={project}
+              onClick={() => onProjectClick(project)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

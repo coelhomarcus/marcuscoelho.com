@@ -1,11 +1,12 @@
 ﻿import { skills } from "@/data/skills";
 import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
+import { SectionHeading } from "@/components/section-heading";
 
 function Skills() {
   return (
-    <div className="flex flex-col gap-3 cursor-default">
-      <h2 className="text-base font-semibold text-zinc-300">Skills</h2>
+    <div className="flex flex-col gap-4 cursor-default">
+      <SectionHeading title="Skills" />
       <div className="flex flex-wrap gap-1.5">
         {skills.map((skill, index) => (
           <Badge key={index} asChild variant="muted">
