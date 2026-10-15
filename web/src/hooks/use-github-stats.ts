@@ -13,6 +13,7 @@ export interface GitHubRepository {
   nameWithOwner: string;
   url: string;
   stargazerCount: number;
+  downloads?: number;
   createdAt: string;
 }
 

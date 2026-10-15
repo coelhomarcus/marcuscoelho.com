@@ -7,6 +7,7 @@ export interface Project {
   linkPreview?: string;
   repo?: string;
   repoStars?: number;
+  repoDownloads?: number;
   repoCreatedAt?: string;
   tech: string[];
   favicon?: string;

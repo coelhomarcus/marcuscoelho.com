@@ -3,14 +3,14 @@ import type { Project } from "@/types";
 export const projects: Project[] = [
   {
     name: "Linkord",
-    desc: "Chat em tempo real, canais e chamadas de voz/tela.",
+    desc: "Chat self-hosted no estilo Discord, organizado por amigos e grupos, com mensagens, chamadas de voz e vídeo e compartilhamento de tela.",
     repo: "coelhomarcus/linkord",
     tech: ["React", "Typescript", "Tailwind", "shadcn/ui", "Fastify", "Socket.io", "Livekit", "PostgreSQL"],
     images: ["linkord/01.webp"],
   },
   {
     name: "DBunny",
-    desc: "Cliente Banco de Dados PostgreSQL feito com React e Rust",
+    desc: "Cliente desktop leve para PostgreSQL, feito com Tauri e React, para gerenciar conexões, navegar schemas, editar dados e rodar queries.",
     repo: "coelhomarcus/dbunny",
     tech: ["React", "Typescript", "Tailwind", "Tauri", "Rust", "PostgreSQL", "Monaco Editor", "TanStack Table"],
     favicon: "dbunny/favicon.svg",
@@ -18,14 +18,14 @@ export const projects: Project[] = [
   },
   {
     name: "Usagi-PKGJ",
-    desc: "PKG download & instalação de jogos diretamente no PSVita, projeto com mais de 7000 downloads!",
+    desc: "Fork do PKGj que baixa e instala jogos direto no PS Vita, sem precisar de PC, com uma grade de capas para navegar pelos jogos de Vita, PSP e PS1.",
     repo: "coelhomarcus/usagi-pkgj",
     tech: ["C++", "C", "VitaSDK", "CMake", "Dear ImGui", "SQLite", "Conan", "Docker"],
     images: ["usagipkgj/01.webp"],
   },
   {
     name: "Cropin",
-    desc: "Site para fazer Recortes em Imagens e Gifs",
+    desc: "Ferramenta web para recortar imagens e GIFs animados, com preview em tempo real e sem perder a animação.",
     link: "https://crop.marcuscoelho.com",
     repo: "coelhomarcus/Cropin",
     tech: ["React", "Typescript", "Tailwind", "Express", "react-image-crop", "Multer", "Mono Repo"],
@@ -34,7 +34,7 @@ export const projects: Project[] = [
   },
   {
     name: "Portfolio",
-    desc: "Meu Portfólio Pessoal",
+    desc: "Meu site pessoal, com projetos, experiência e blog, e uma API que guarda em cache os dados do GitHub.",
     link: "https://marcuscoelho.com/",
     repo: "coelhomarcus/marcuscoelho.com",
     linkPreview: "marcuscoelho.com 📌",
@@ -44,14 +44,14 @@ export const projects: Project[] = [
   },
   {
     name: "Studio 2N",
-    desc: "Projeto Real de Agendamentos para uma Barbearia Local",
+    desc: "Sistema de agendamentos feito sob medida para uma barbearia local.",
     link: "https://studio-2n.blipe.cloud/",
     tech: ["React", "Typescript", "Tailwind", "Express"],
     images: ["studio-2n/01.webp"],
   },
   {
     name: "SOS Queimadas",
-    desc: "Aplicativo IOS para conscientização e prevenção de queimadas",
+    desc: "Aplicativo iOS de conscientização e prevenção de queimadas em Marabá, com mapa de focos e denúncias.",
     link: "https://www.youtube.com/shorts/0fSoHjAadas",
     linkPreview: "Video Preview",
     tech: ["Swift", "MapKit", "IoT", "API"],
@@ -59,7 +59,7 @@ export const projects: Project[] = [
   },
   {
     name: "Mailman",
-    desc: "Protótipo de jogo retrô de terror",
+    desc: "Protótipo de jogo de terror com visual retrô, feito na Unity.",
     link: "https://coelhomarcus.itch.io/mailman",
     tech: ["C#", "Unity", "Blender"],
     favicon: "mailman/favicon.png",
@@ -67,7 +67,7 @@ export const projects: Project[] = [
   },
   {
     name: "BakaNeo",
-    desc: "Tema Dark para VS Code",
+    desc: "Tema escuro, limpo e moderno para o VS Code.",
     link: "https://marketplace.visualstudio.com/items?itemName=coelhomarcus.bakaneo",
     linkPreview: "coelhomarcus.bakaneo",
     repo: "coelhomarcus/bakaneo-theme",
@@ -77,7 +77,7 @@ export const projects: Project[] = [
   },
   {
     name: "Bunny Bash",
-    desc: "Site que simula um Terminal",
+    desc: "Site que simula um terminal, com comandos próprios, temas e integrações com APIs públicas.",
     link: "https://coelhomarcus.github.io/bunnybash/",
     repo: "coelhomarcus/bunnybash",
     tech: ["HTML", "CSS", "JavaScript"],

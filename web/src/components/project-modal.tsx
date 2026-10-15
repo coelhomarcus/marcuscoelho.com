@@ -11,7 +11,11 @@ import {
   projectAsset,
 } from "@/lib/utils";
 
-import { RxCalendar as CalendarIcon, RxStar as StarIcon } from "react-icons/rx";
+import {
+  RxCalendar as CalendarIcon,
+  RxDownload as DownloadIcon,
+  RxStar as StarIcon,
+} from "react-icons/rx";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
@@ -69,6 +73,8 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
     : undefined;
   const hasStars =
     typeof project?.repoStars === "number" && project.repoStars > 0;
+  const hasDownloads =
+    typeof project?.repoDownloads === "number" && project.repoDownloads > 0;
 
   const prev = useCallback(() => {
     setIndex((i) => (i - 1 + images.length) % images.length);
@@ -208,7 +214,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   )}
                 </div>
 
-                {(preview || hasStars || project.repoCreatedAt) && (
+                {(preview || hasStars || hasDownloads || project.repoCreatedAt) && (
                   <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-zinc-500">
                     {[
                       preview && <span key="preview">{preview}</span>,
@@ -219,6 +225,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         >
                           <StarIcon className="size-3.5" />
                           {formatCompactNumber(project.repoStars!)}
+                        </span>
+                      ),
+                      hasDownloads && (
+                        <span
+                          key="downloads"
+                          title={`${project.repoDownloads!.toLocaleString("pt-BR")} downloads`}
+                          className="inline-flex items-center gap-1 tabular-nums"
+                        >
+                          <DownloadIcon className="size-3.5" />
+                          {formatCompactNumber(project.repoDownloads!)}
                         </span>
                       ),
                       project.repoCreatedAt && (

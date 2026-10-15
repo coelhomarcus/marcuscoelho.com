@@ -24,6 +24,7 @@ export function useProjects(): Project[] {
       return {
         ...project,
         repoStars: repo.stargazerCount,
+        repoDownloads: repo.downloads,
         repoCreatedAt: repo.createdAt,
       };
     });
