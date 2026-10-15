@@ -1,9 +1,9 @@
 export interface BlogFrontmatter {
-  slug: string;
+  /** Name of the .mdx file in posts/, without extension. Generated. */
+  file: string;
   title: string;
   date: string;
-  desc: string;
-  tags?: string[];
+  tag: string;
   banner?: string;
 }
 

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { slugify } from "../src/lib/slug.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = path.resolve(__dirname, "../src/pages");
@@ -28,8 +29,8 @@ function extractFrontmatter(filePath) {
 }
 
 function sortByDateDesc(a, b) {
-  const [da, ma, ya] = a.date.split(".").map(Number);
-  const [db, mb, yb] = b.date.split(".").map(Number);
+  const [da, ma, ya] = a.date.split("/").map(Number);
+  const [db, mb, yb] = b.date.split("/").map(Number);
   return new Date(yb, mb - 1, db) - new Date(ya, ma - 1, da);
 }
 
@@ -42,16 +43,29 @@ function generateBlogData() {
       const fm = extractFrontmatter(path.join(postsDir, file));
       if (!fm) return null;
       return {
-        slug: path.basename(file, ".mdx"),
+        file: path.basename(file, ".mdx"),
         title: fm.title || "",
         date: fm.date || "",
-        desc: fm.desc || "",
-        tags: fm.tags || undefined,
+        tag: fm.tag || "",
         banner: fm.banner || undefined,
       };
     })
     .filter(Boolean)
     .sort(sortByDateDesc);
+
+  const seen = new Map();
+  for (const p of posts) {
+    const slug = slugify(p.title);
+    if (!slug) {
+      throw new Error(`${p.file}.mdx: title "${p.title}" produces an empty slug`);
+    }
+    if (seen.has(slug)) {
+      throw new Error(
+        `${p.file}.mdx and ${seen.get(slug)}.mdx have the same slug "${slug}"`,
+      );
+    }
+    seen.set(slug, p.file);
+  }
 
   const lines = [
     'import type { BlogFrontmatter } from "@/types/posts";',
@@ -61,14 +75,10 @@ function generateBlogData() {
 
   for (const p of posts) {
     lines.push("  {");
-    lines.push(`    slug: ${JSON.stringify(p.slug)},`);
+    lines.push(`    file: ${JSON.stringify(p.file)},`);
     lines.push(`    title: ${JSON.stringify(p.title)},`);
     lines.push(`    date: ${JSON.stringify(p.date)},`);
-    lines.push(`    desc: ${JSON.stringify(p.desc)},`);
-    if (p.tags)
-      lines.push(
-        `    tags: ${JSON.stringify(p.tags.split(",").map((t) => t.trim()))},`,
-      );
+    lines.push(`    tag: ${JSON.stringify(p.tag)},`);
     if (p.banner) lines.push(`    banner: ${JSON.stringify(p.banner)},`);
     lines.push("  },");
   }

@@ -9,6 +9,12 @@ export function formatLinkPreview(url: string) {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+export { slugify } from "./slug.mjs";
+
+export function formatPostDate(date: string) {
+  return date.replace(/\//g, ".");
+}
+
 export function formatCompactNumber(value: number) {
   return new Intl.NumberFormat("pt-BR", {
     notation: "compact",

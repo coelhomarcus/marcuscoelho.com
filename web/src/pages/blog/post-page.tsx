@@ -16,11 +16,12 @@ import components from "./components/mdx-components";
 import PostNotFound from "./components/post-not-found";
 import PostToc from "./components/post-toc";
 import { fadeUp } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn, formatPostDate, slugify } from "@/lib/utils";
 
 const PostPage = () => {
   const { slug } = useParams();
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = blogPosts.find((p) => slugify(p.title) === slug);
+  const file = post?.file;
   const [MDXComponent, setMDXComponent] = useState<React.ComponentType | null>(
     null,
   );
@@ -30,9 +31,7 @@ const PostPage = () => {
   const articleRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!slug) return;
-
-    const importer = loadPost(slug);
+    const importer = file ? loadPost(file) : null;
     if (importer) {
       importer().then((mod) => {
         const Component = (mod as { default: React.ComponentType }).default;
@@ -43,7 +42,7 @@ const PostPage = () => {
         <p className="text-red-500">Post não encontrado</p>
       ));
     }
-  }, [slug]);
+  }, [file]);
 
   if (!MDXComponent)
     return (
@@ -89,10 +88,10 @@ const PostPage = () => {
             </h1>
             <div className="flex items-center gap-3">
               <span className="text-sm text-zinc-500 font-mono">
-                {post.date}
+                {formatPostDate(post.date)}
               </span>
               <span className="text-zinc-700">·</span>
-              <span className="text-sm text-zinc-500">{post.desc}</span>
+              <span className="text-sm text-zinc-500">{post.tag}</span>
               <span className="text-zinc-700">·</span>
               <button
                 className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors duration-200 cursor-pointer"

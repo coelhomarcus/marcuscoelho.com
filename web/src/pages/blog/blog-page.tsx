@@ -5,6 +5,7 @@ import { blogPosts } from "@/data/blog-posts";
 import PageTitle from "@/components/page-title";
 import { motion, type Variants } from "motion/react";
 import { fadeUp } from "@/lib/motion";
+import { formatPostDate, slugify } from "@/lib/utils";
 
 const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
 
@@ -21,7 +22,13 @@ const cardVariants: Variants = {
   },
 };
 
-const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
+const BlogCard = ({
+  title,
+  date,
+  tag,
+  banner,
+}: Omit<BlogFrontmatter, "file">) => {
+  const slug = slugify(title);
   return (
     <MotionLink
       to={`/blog/${slug}`}
@@ -60,10 +67,10 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
       <div className="relative flex flex-col gap-3 p-4 sm:p-5">
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-500 font-mono tracking-wide">
-            {date}
+            {formatPostDate(date)}
           </span>
           <span className="text-zinc-700">·</span>
-          <span className="text-xs text-zinc-500 font-medium">{desc}</span>
+          <span className="text-xs text-zinc-500 font-medium">{tag}</span>
         </div>
         <h2 className="font-[Times_New_Roman] italic text-2xl sm:text-3xl text-zinc-100 group-hover:text-white transition-colors duration-200 leading-snug">
           {title}
@@ -103,7 +110,7 @@ const BlogPage = () => {
         {blogPosts.length > 0 ? (
           blogPosts.map((post, index) => (
             <motion.div
-              key={post.slug}
+              key={post.file}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -113,10 +120,9 @@ const BlogPage = () => {
               }}
             >
               <BlogCard
-                slug={post.slug}
                 title={post.title}
                 date={post.date}
-                desc={post.desc}
+                tag={post.tag}
                 banner={post.banner}
               />
             </motion.div>
