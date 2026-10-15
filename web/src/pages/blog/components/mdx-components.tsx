@@ -3,7 +3,7 @@ import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/pris
 import { CopyIcon } from "@/components/icons/copy";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { useToast } from "@/components/toast/toast-context";
-
+import { slugify } from "@/lib/slug.mjs";
 
 import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
 import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
@@ -16,16 +16,6 @@ type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
 interface PreComponentProps {
   children: React.ReactElement<{ className?: string; children: string }>;
   [key: string]: unknown;
-}
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9 -]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
 }
 
 const createHeadingClickHandler =
