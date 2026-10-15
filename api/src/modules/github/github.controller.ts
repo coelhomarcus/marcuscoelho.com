@@ -9,16 +9,8 @@ import {
 } from "./github.service";
 
 export async function handleGetContributions(req: Request, res: Response) {
-  let data = await getCachedContributions();
-
-  if (!data) {
-    data = await refreshGitHubContributions().then((calendar) => ({
-      id: 0,
-      totalContributions: calendar.totalContributions,
-      weeks: calendar.weeks,
-      cachedAt: new Date(),
-    }));
-  }
+  const data =
+    (await getCachedContributions()) ?? (await refreshGitHubContributions());
 
   res.json({
     totalContributions: data.totalContributions,
@@ -28,16 +20,7 @@ export async function handleGetContributions(req: Request, res: Response) {
 }
 
 export async function handleGetStats(req: Request, res: Response) {
-  let data = await getCachedStats();
-
-  if (!data) {
-    const stats = await refreshGitHubStats();
-    data = {
-      id: 0,
-      ...stats,
-      cachedAt: new Date(),
-    };
-  }
+  const data = (await getCachedStats()) ?? (await refreshGitHubStats());
 
   res.json({
     totalStars: data.totalStars,
@@ -53,16 +36,8 @@ export async function handleGetStats(req: Request, res: Response) {
 }
 
 export async function handleGetPullRequests(req: Request, res: Response) {
-  let data = await getCachedPullRequests();
-
-  if (!data) {
-    const pullRequests = await refreshGitHubPullRequests();
-    data = {
-      id: 0,
-      ...pullRequests,
-      cachedAt: new Date(),
-    };
-  }
+  const data =
+    (await getCachedPullRequests()) ?? (await refreshGitHubPullRequests());
 
   res.json({
     merged: data.merged,

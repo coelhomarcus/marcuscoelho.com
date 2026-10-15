@@ -127,7 +127,7 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 
 ### `GET /github/pull-requests`
 
-Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 20 most recent, newest first. `closed` only counts PRs closed without being merged.
+Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 20 most recently updated, newest first. `closed` only counts PRs closed without being merged.
 
 ```json
 {
@@ -165,8 +165,9 @@ Messages, logs and comments are in English. The only Portuguese is the contact e
 
 Hitting the GitHub GraphQL API on every page view would be slow and burn rate limit, so data is cached in Postgres:
 
-- `refreshGitHubContributions()`, `refreshGitHubStats()` and `refreshGitHubPullRequests()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** (update the latest row if one exists, otherwise insert).
-- `GET /github/*` reads the latest row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
+- `refreshGitHubContributions()`, `refreshGitHubStats()` and `refreshGitHubPullRequests()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** with `id = 1` (`insert … on conflict do update`, so concurrent refreshes never create a second row).
+- `GET /github/*` reads that row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
+- Concurrent refreshes share one in-flight request, and after a failed refresh the next attempt waits 60 seconds, so an empty cache can't turn every request into a GitHub call.
 - The cache is refreshed on boot and every 6 hours.
 
 ## Database
@@ -174,9 +175,9 @@ Hitting the GitHub GraphQL API on every page view would be slow and burn rate li
 | Table | Columns | Notes |
 | --- | --- | --- |
 | `contacts` | `id`, `name`, `email`, `message`, `created_at` | One row per submission |
-| `github_contributions` | `id`, `total_contributions`, `weeks` (jsonb), `cached_at` | Single cached row |
-| `github_stats` | `id`, `total_stars`, `merged_prs`, `closed_issues`, `current_streak`, `last_commit_date`, `last_commit_repo`, `languages` (jsonb), `repositories` (jsonb), `cached_at` | Single cached row |
-| `github_pull_requests` | `id`, `merged`, `open`, `closed` (jsonb, `{ totalCount, items }`), `cached_at` | Single cached row |
+| `github_contributions` | `id`, `total_contributions`, `weeks` (jsonb), `cached_at` | Single cached row (`id = 1`) |
+| `github_stats` | `id`, `total_stars`, `merged_prs`, `closed_issues`, `current_streak`, `last_commit_date`, `last_commit_repo`, `languages` (jsonb), `repositories` (jsonb), `cached_at` | Single cached row (`id = 1`) |
+| `github_pull_requests` | `id`, `merged`, `open`, `closed` (jsonb, `{ totalCount, items }`), `cached_at` | Single cached row (`id = 1`) |
 
 Schemas live in `src/modules/*/*.schema.ts`, and drizzle-kit picks them up through [`drizzle.config.ts`](drizzle.config.ts). Migrations are SQL files in [`drizzle/`](drizzle) and run automatically on startup.
 

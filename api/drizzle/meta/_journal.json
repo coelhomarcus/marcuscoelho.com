@@ -43,6 +43,13 @@
       "when": 1776124800000,
       "tag": "0005_github_pull_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792029466947,
+      "tag": "0006_github_cache_single_row",
+      "breakpoints": true
     }
   ]
 }

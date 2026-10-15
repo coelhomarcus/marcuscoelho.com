@@ -70,16 +70,16 @@ export const statsDataSchema = z.object({
   }),
 });
 
+const pullRequestNodeSchema = z.object({
+  title: z.string(),
+  url: z.string().url(),
+  createdAt: z.string().datetime({ offset: true }),
+  repository: z.object({ nameWithOwner: z.string() }),
+});
+
 const pullRequestSearchSchema = z.object({
   issueCount: z.number().int().nonnegative(),
-  nodes: z.array(
-    z.object({
-      title: z.string(),
-      url: z.string().url(),
-      createdAt: z.string().datetime({ offset: true }),
-      repository: z.object({ nameWithOwner: z.string() }),
-    }),
-  ),
+  nodes: z.array(pullRequestNodeSchema.nullable().catch(null)),
 });
 
 export const pullRequestsDataSchema = z.object({

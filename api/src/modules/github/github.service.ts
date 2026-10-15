@@ -3,8 +3,9 @@ import { env } from "../../config/env";
 import { githubContributions, githubPullRequests, githubStats } from "./github.schema";
 import { contributionsDataSchema, parseGitHubResponse, pullRequestsDataSchema, statsDataSchema, type ContributionsData, type PullRequestsData, type StatsData } from "./github.validation";
 import { AppError } from "../../shared/errors";
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import type { ZodType } from "zod";
+import type { PgInsertValue, PgUpdateSetSource } from "drizzle-orm/pg-core";
 
 const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 const GITHUB_USERNAME = "coelhomarcus";
@@ -75,7 +76,7 @@ const STATS_QUERY = `
 const PULL_REQUESTS_PER_STATE = 20;
 const pullRequestSearch = (alias: string, filter: string) => `
     ${alias}: search(
-      query: "author:${GITHUB_USERNAME} type:pr is:public ${filter} sort:created-desc"
+      query: "author:${GITHUB_USERNAME} type:pr is:public ${filter} sort:updated-desc"
       type: ISSUE
       first: ${PULL_REQUESTS_PER_STATE}
     ) {
@@ -99,6 +100,61 @@ const PULL_REQUESTS_QUERY = `
     ${pullRequestSearch("closed", "is:closed is:unmerged")}
   }
 `;
+
+const CACHE_ROW_ID = 1;
+const REFRESH_RETRY_AFTER_MS = 60_000;
+
+function dedupeRefresh<T>(refresh: () => Promise<T>) {
+  let pending: Promise<T> | null = null;
+  let failedAt = 0;
+  let lastError: unknown;
+
+  return () => {
+    if (pending) return pending;
+    if (Date.now() - failedAt < REFRESH_RETRY_AFTER_MS) {
+      return Promise.reject(lastError);
+    }
+
+    pending = refresh()
+      .catch((error: unknown) => {
+        failedAt = Date.now();
+        lastError = error;
+        throw error;
+      })
+      .finally(() => {
+        pending = null;
+      });
+    return pending;
+  };
+}
+
+type CacheTable =
+  | typeof githubContributions
+  | typeof githubStats
+  | typeof githubPullRequests;
+
+async function saveCacheRow<T extends CacheTable>(
+  table: T,
+  values: Omit<T["$inferInsert"], "id" | "cachedAt">,
+): Promise<T["$inferSelect"]> {
+  const row = { ...values, id: CACHE_ROW_ID, cachedAt: new Date() };
+  const [saved] = await db
+    .insert(table)
+    .values(row as PgInsertValue<T>)
+    .onConflictDoUpdate({ target: table.id, set: row as PgUpdateSetSource<T> })
+    .returning();
+  return saved as T["$inferSelect"];
+}
+
+async function getCacheRow<T extends CacheTable>(
+  table: T,
+): Promise<T["$inferSelect"] | null> {
+  const [row] = await db
+    .select()
+    .from(table as CacheTable)
+    .where(eq(table.id, CACHE_ROW_ID));
+  return (row as T["$inferSelect"] | undefined) ?? null;
+}
 
 function calculateStreak(
   weeks: { contributionDays: { date: string; contributionCount: number }[] }[],
@@ -230,7 +286,7 @@ function parseGitHubData<T>(
   }
 }
 
-export async function refreshGitHubContributions() {
+async function cacheGitHubContributions() {
   const payload = await fetchGitHub("contributions", CONTRIBUTIONS_QUERY);
   const data = parseGitHubData<ContributionsData>(
     payload,
@@ -238,35 +294,19 @@ export async function refreshGitHubContributions() {
     "contributions",
   );
   const calendar = data.user.contributionsCollection.contributionCalendar;
-  const values = {
+  const saved = await saveCacheRow(githubContributions, {
     totalContributions: calendar.totalContributions,
     weeks: calendar.weeks,
-    cachedAt: new Date(),
-  };
-
-  const [latest] = await db
-    .select({ id: githubContributions.id })
-    .from(githubContributions)
-    .orderBy(desc(githubContributions.id))
-    .limit(1);
-
-  if (latest) {
-    await db
-      .update(githubContributions)
-      .set(values)
-      .where(eq(githubContributions.id, latest.id));
-  } else {
-    await db.insert(githubContributions).values(values);
-  }
+  });
 
   console.log(
     `[GitHub] Contributions cache updated: ${calendar.totalContributions} contributions`,
   );
 
-  return calendar;
+  return saved;
 }
 
-export async function refreshGitHubStats() {
+async function cacheGitHubStats() {
   const payload = await fetchGitHub("stats", STATS_QUERY);
   const data = parseGitHubData<StatsData>(payload, statsDataSchema, "stats");
   const user = data.user;
@@ -339,32 +379,19 @@ export async function refreshGitHubStats() {
     repositories,
   };
 
-  const [latest] = await db
-    .select({ id: githubStats.id })
-    .from(githubStats)
-    .orderBy(desc(githubStats.id))
-    .limit(1);
-
-  if (latest) {
-    await db
-      .update(githubStats)
-      .set({ ...stats, cachedAt: new Date() })
-      .where(eq(githubStats.id, latest.id));
-  } else {
-    await db.insert(githubStats).values(stats);
-  }
+  const saved = await saveCacheRow(githubStats, stats);
 
   console.log(
     `[GitHub] Stats cache atualizado: ${totalStars} stars, ${mergedPRs} PRs, ${closedIssues} issues, ${currentStreak} streak`,
   );
 
-  return stats;
+  return saved;
 }
 
 function toPullRequestGroup(search: PullRequestsData["merged"]) {
   return {
     totalCount: search.issueCount,
-    items: search.nodes.map((pr) => ({
+    items: search.nodes.filter((pr) => pr !== null).map((pr) => ({
       title: pr.title,
       url: pr.url,
       repository: pr.repository.nameWithOwner,
@@ -373,7 +400,7 @@ function toPullRequestGroup(search: PullRequestsData["merged"]) {
   };
 }
 
-export async function refreshGitHubPullRequests() {
+async function cacheGitHubPullRequests() {
   const payload = await fetchGitHub("pull requests", PULL_REQUESTS_QUERY);
   const data = parseGitHubData<PullRequestsData>(
     payload,
@@ -386,54 +413,27 @@ export async function refreshGitHubPullRequests() {
     closed: toPullRequestGroup(data.closed),
   };
 
-  const [latest] = await db
-    .select({ id: githubPullRequests.id })
-    .from(githubPullRequests)
-    .orderBy(desc(githubPullRequests.id))
-    .limit(1);
-
-  if (latest) {
-    await db
-      .update(githubPullRequests)
-      .set({ ...pullRequests, cachedAt: new Date() })
-      .where(eq(githubPullRequests.id, latest.id));
-  } else {
-    await db.insert(githubPullRequests).values(pullRequests);
-  }
+  const saved = await saveCacheRow(githubPullRequests, pullRequests);
 
   console.log(
     `[GitHub] Pull requests cache updated: ${pullRequests.merged.totalCount} merged, ${pullRequests.open.totalCount} open, ${pullRequests.closed.totalCount} closed`,
   );
 
-  return pullRequests;
+  return saved;
 }
 
-export async function getCachedContributions() {
-  const [latest] = await db
-    .select()
-    .from(githubContributions)
-    .orderBy(desc(githubContributions.id))
-    .limit(1);
+export const refreshGitHubContributions = dedupeRefresh(cacheGitHubContributions);
+export const refreshGitHubStats = dedupeRefresh(cacheGitHubStats);
+export const refreshGitHubPullRequests = dedupeRefresh(cacheGitHubPullRequests);
 
-  return latest ?? null;
+export function getCachedContributions() {
+  return getCacheRow(githubContributions);
 }
 
-export async function getCachedStats() {
-  const [latest] = await db
-    .select()
-    .from(githubStats)
-    .orderBy(desc(githubStats.id))
-    .limit(1);
-
-  return latest ?? null;
+export function getCachedStats() {
+  return getCacheRow(githubStats);
 }
 
-export async function getCachedPullRequests() {
-  const [latest] = await db
-    .select()
-    .from(githubPullRequests)
-    .orderBy(desc(githubPullRequests.id))
-    .limit(1);
-
-  return latest ?? null;
+export function getCachedPullRequests() {
+  return getCacheRow(githubPullRequests);
 }
