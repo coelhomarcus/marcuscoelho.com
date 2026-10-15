@@ -127,7 +127,7 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 
 ### `GET /github/pull-requests`
 
-Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 20 most recently updated, newest first. `closed` only counts PRs closed without being merged.
+Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 5 most recently updated, newest first. `closed` only counts PRs closed without being merged.
 
 ```json
 {

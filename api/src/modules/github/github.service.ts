@@ -73,7 +73,7 @@ const STATS_QUERY = `
   }
 `;
 
-const PULL_REQUESTS_PER_STATE = 20;
+const PULL_REQUESTS_PER_STATE = 5;
 const pullRequestSearch = (alias: string, filter: string) => `
     ${alias}: search(
       query: "author:${GITHUB_USERNAME} type:pr is:public ${filter} sort:updated-desc"
