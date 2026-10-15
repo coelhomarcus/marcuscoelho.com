@@ -41,12 +41,12 @@ const BlogCard = ({
     >
       {banner && (
         <div
-          className="absolute right-0 top-0 w-[40%] h-full"
+          className="absolute right-0 top-0 w-[50%] h-full"
           style={{
             maskImage:
-              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.3) 30%, black)",
+              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.5) 50%, black)",
             WebkitMaskImage:
-              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.3) 30%, black)",
+              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.5) 50%, black)",
           }}
         >
           <img
