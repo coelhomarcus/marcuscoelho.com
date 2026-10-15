@@ -3,24 +3,13 @@ import type { BlogFrontmatter } from "@/types/posts";
 import { SectionRule } from "@/components/layout/stitch";
 import { blogPosts } from "@/data/blog-posts";
 import PageTitle from "@/components/page-title";
-import { motion, type Variants } from "motion/react";
-import { fadeUp } from "@/lib/motion";
+import { motion } from "motion/react";
+import { cardTransition, cardVariants, fadeUp } from "@/lib/motion";
 import { formatPostDate, slugify } from "@/lib/utils";
 
 const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
 
 const MotionLink = motion.create(Link);
-
-const cardVariants: Variants = {
-  rest: {
-    backgroundColor: "#09090b",
-    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.1)",
-  },
-  hover: {
-    backgroundColor: "#18181b",
-    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.2)",
-  },
-};
 
 const BlogCard = ({
   title,
@@ -36,7 +25,7 @@ const BlogCard = ({
       initial="rest"
       animate="rest"
       whileHover="hover"
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      transition={cardTransition}
       className="group block overflow-hidden relative rounded-xl"
     >
       {banner && (

@@ -1,21 +1,11 @@
 import { motion, type Variants } from "motion/react";
+import { cardTransition, cardVariants } from "@/lib/motion";
 import type { Project } from "@/types";
 import { projectAsset } from "@/lib/utils";
 import { techIcons } from "@/data/tech-icons";
 import { Tooltip } from "@/components/ui/tooltip";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
-
-const cardVariants: Variants = {
-  rest: {
-    backgroundColor: "#09090b",
-    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.1)",
-  },
-  hover: {
-    backgroundColor: "#18181b",
-    boxShadow: "0 0 0 1px rgba(244, 244, 245, 0.2)",
-  },
-};
 
 const imageVariants: Variants = {
   rest: { scale: 1 },
@@ -44,7 +34,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
       initial="rest"
       animate="rest"
       whileHover="hover"
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      transition={cardTransition}
       className="group flex h-full w-full cursor-pointer flex-col rounded-xl p-3 text-left"
     >
       {cover && (

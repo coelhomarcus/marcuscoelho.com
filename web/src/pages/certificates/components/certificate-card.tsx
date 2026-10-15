@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+import { cardTransition, cardVariants } from "@/lib/motion";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
@@ -11,9 +13,14 @@ const CertificateCard = ({ href, name, desc }: CertificateCardProps) => {
   const arrow = useAnimatedIcon();
 
   return (
-    <a
+    <motion.a
       href={href}
-      className="group card-surface flex items-center justify-between gap-3 p-4 hover:bg-zinc-900 hover:ring-foreground/20"
+      variants={cardVariants}
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
+      transition={cardTransition}
+      className="group flex items-center justify-between gap-3 rounded-xl p-4"
       rel="noreferrer noopener"
       target="_blank"
       {...arrow.hoverProps}
@@ -27,7 +34,7 @@ const CertificateCard = ({ href, name, desc }: CertificateCardProps) => {
         size={16}
         className="shrink-0 text-zinc-600 group-hover:text-zinc-400 transition-colors duration-200"
       />
-    </a>
+    </motion.a>
   );
 };
 
