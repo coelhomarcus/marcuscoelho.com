@@ -11,7 +11,7 @@ interface SectionHeadingProps {
 
 export function SectionHeading({ title, action }: SectionHeadingProps) {
   return (
-    <div className="flex items-baseline justify-between gap-3">
+    <div className="flex items-center justify-between gap-3">
       <h2 className="text-xl font-bold tracking-tight text-zinc-100">
         {title}
       </h2>
