@@ -183,7 +183,7 @@ const components = {
             lineHeight: "1.6",
             margin: 0,
           }}
-          className="!bg-black/60 scrollbar scrollbar-content !rounded-none !border-0"
+          className="bg-black/60! scrollbar scrollbar-content rounded-none! border-0!"
           {...rest}
         >
           {code}

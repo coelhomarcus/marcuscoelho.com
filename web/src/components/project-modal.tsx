@@ -134,7 +134,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               aria-label={project.name}
             >
               {images.length > 0 && (
-                <div className="relative isolate aspect-[8/5] overflow-hidden rounded-lg bg-zinc-900">
+                <div className="relative isolate aspect-8/5 overflow-hidden rounded-lg bg-zinc-900">
                   <AnimatePresence initial={false}>
                     <motion.img
                       key={images[index]}

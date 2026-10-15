@@ -29,7 +29,7 @@ function Stitch({ side }: { side: "left" | "right" }) {
 export function SectionRule() {
   return (
     <div aria-hidden className="pointer-events-none relative h-px">
-      <span className="dotted-x absolute top-0 -right-[100vw] -left-[100vw]" />
+      <span className="dotted-x absolute top-0 right-[-100vw] left-[-100vw]" />
       <Stitch side="left" />
       <Stitch side="right" />
     </div>

@@ -114,7 +114,7 @@ const PostPage = () => {
       >
         <div className="relative">
           <MDXProvider components={components}>
-            <article ref={articleRef} className="prose max-w-full [&>:last-child]:mb-0">
+            <article ref={articleRef} className="prose max-w-full *:last:mb-0">
               <ScrollToHashOnLoad />
               <MDXComponent />
             </article>

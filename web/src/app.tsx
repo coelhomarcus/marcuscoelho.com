@@ -36,7 +36,7 @@ const Shell = () => {
       <div
         id="app-scroll"
         className={cn(
-          "min-h-screen bg-background transition-[margin,border-radius,box-shadow] duration-300 ease-out md:min-h-0 md:flex-1 scrollbar md:[scrollbar-gutter:stable_both-edges]",
+          "min-h-screen bg-background transition-[margin,border-radius,box-shadow] duration-300 ease-out md:min-h-0 md:flex-1 scrollbar md:scrollbar-gutter-both",
           isOpen &&
             "md:m-2 md:mr-0 md:rounded-xl md:ring-1 md:ring-foreground/10",
         )}

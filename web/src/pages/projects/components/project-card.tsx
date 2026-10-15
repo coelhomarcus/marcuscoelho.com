@@ -48,7 +48,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
       className="group flex h-full w-full cursor-pointer flex-col rounded-xl p-3 text-left"
     >
       {cover && (
-        <div className="isolate aspect-[8/5] w-full overflow-hidden rounded-lg">
+        <div className="isolate aspect-8/5 w-full overflow-hidden rounded-lg">
           <motion.img
             src={projectAsset(cover)}
             alt={name}
