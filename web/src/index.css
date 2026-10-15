@@ -256,10 +256,6 @@ html {
   }
 }
 
-@utility card-surface {
-  @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-[color,background-color,border-color,box-shadow];
-}
-
 @utility dotted-x {
   height: 1px;
   background-color: rgb(255 255 255 / 0.15);
