@@ -10,17 +10,12 @@ import {
 } from "react";
 import { motion } from "motion/react";
 import { SectionHeading } from "@/components/section-heading";
-import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
-import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { cn } from "@/lib/utils";
-import config from "@/data/config";
 import {
   useGitHubPullRequests,
   type PullRequest,
   type PullRequestState,
 } from "../hooks/use-github-pull-requests";
-
-const PAGE_SIZE = 5;
 
 const TABS: { state: PullRequestState; label: string; dot: string }[] = [
   { state: "merged", label: "Merged", dot: "bg-violet-500" },
@@ -33,16 +28,6 @@ const EMPTY_MESSAGE: Record<PullRequestState, string> = {
   open: "Nenhum pull request aberto no momento.",
   closed: "Nenhum pull request fechado.",
 };
-
-const actionClass =
-  "inline-flex cursor-pointer items-center gap-1 text-[13px] font-medium text-zinc-500 transition-colors hover:text-zinc-200";
-
-function githubSearchUrl(state: PullRequestState) {
-  const filter =
-    state === "closed" ? "is:closed is:unmerged" : `is:${state}`;
-  const query = `is:pr author:${config.GITHUB_USERNAME} is:public ${filter}`;
-  return `https://github.com/search?q=${encodeURIComponent(query)}&type=pullrequests`;
-}
 
 interface PillRect {
   x: number;
@@ -218,47 +203,20 @@ function ListSkeleton() {
   );
 }
 
-function ViewAllLink({ state }: { state: PullRequestState }) {
-  const { ref, hoverProps } = useAnimatedIcon();
-
-  return (
-    <a
-      href={githubSearchUrl(state)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={actionClass}
-      {...hoverProps}
-    >
-      Ver todos no GitHub
-      <ArrowUpRightIcon ref={ref} size={13} />
-    </a>
-  );
-}
-
 function OpenSourceContributions() {
   const { data, isLoading } = useGitHubPullRequests();
   const baseId = useId();
   const [active, setActive] = useState<PullRequestState>("merged");
-  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const group = data?.[active];
   const { dot } = TABS.find((tab) => tab.state === active)!;
-  const shown = group?.items.slice(0, visible) ?? [];
-  const canShowMore = !!group && visible < group.items.length;
-  const hasMoreOnGitHub =
-    !!group && !canShowMore && group.totalCount > group.items.length;
-
-  function changeTab(state: PullRequestState) {
-    setActive(state);
-    setVisible(PAGE_SIZE);
-  }
 
   return (
     <section className="flex flex-col gap-4">
       <SectionHeading
         title="Últimos PRs"
         action={
-          <Tabs baseId={baseId} active={active} onChange={changeTab} />
+          <Tabs baseId={baseId} active={active} onChange={setActive} />
         }
       />
 
@@ -277,30 +235,14 @@ function OpenSourceContributions() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
-            {shown.length === 0 ? (
+            {group.items.length === 0 ? (
               <p className="pt-3.5 text-sm text-zinc-500">{EMPTY_MESSAGE[active]}</p>
             ) : (
               <ul>
-                {shown.map((pr) => (
+                {group.items.map((pr) => (
                   <PullRequestItem key={pr.url} pr={pr} dot={dot} />
                 ))}
               </ul>
-            )}
-
-            {(canShowMore || hasMoreOnGitHub) && (
-              <div className="flex justify-center pt-4">
-                {canShowMore ? (
-                  <button
-                    type="button"
-                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                    className={actionClass}
-                  >
-                    Mostrar mais
-                  </button>
-                ) : (
-                  <ViewAllLink state={active} />
-                )}
-              </div>
             )}
           </motion.div>
         )}
