@@ -12,11 +12,11 @@ const MIN_CELL = 10;
 const WEEKS_TOTAL = 53;
 
 const COLORS: Record<ContributionLevel, string> = {
-  NONE: "#181818",
-  FIRST_QUARTILE: "#0e4429",
-  SECOND_QUARTILE: "#006d32",
-  THIRD_QUARTILE: "#26a641",
-  FOURTH_QUARTILE: "#39d353",
+  NONE: "var(--color-zinc-900)",
+  FIRST_QUARTILE: "var(--color-zinc-700)",
+  SECOND_QUARTILE: "var(--color-zinc-500)",
+  THIRD_QUARTILE: "var(--color-zinc-300)",
+  FOURTH_QUARTILE: "var(--color-zinc-100)",
 };
 
 function CalendarSkeleton({
