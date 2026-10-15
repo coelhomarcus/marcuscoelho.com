@@ -114,7 +114,7 @@ function GitHubGraph() {
         }
       />
 
-      <div ref={containerRef} className="card-surface p-3">
+      <div ref={containerRef}>
         {isLoading && <CalendarSkeleton cellSize={cellSize} colors={colors} />}
 
         {error && !isLoading && (
