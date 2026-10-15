@@ -37,7 +37,7 @@ const ContactPage = () => {
     status === "idle" || status === "error" ? getButtonLabel() : null;
 
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100 space-y-4">
       <PageTitle title="Contato" suffix />
 
       <motion.div {...fadeUp}>

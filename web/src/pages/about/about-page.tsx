@@ -17,7 +17,7 @@ const AboutPage = () => {
   const [selected, setSelected] = useState<Project | null>(null);
 
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100 space-y-4">
       <PageTitle title="Marcus Coelho" />
 
       <motion.div {...fadeUp}>

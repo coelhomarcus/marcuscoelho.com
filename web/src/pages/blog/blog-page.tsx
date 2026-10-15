@@ -50,7 +50,7 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
 
 const BlogPage = () => {
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100 space-y-4">
       <PageTitle title="Blog" suffix />
 
       <motion.div {...fadeUp}>

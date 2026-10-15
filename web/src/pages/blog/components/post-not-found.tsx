@@ -4,7 +4,7 @@ import { fadeUp } from "@/lib/motion";
 
 const PostNotFound = () => {
   return (
-    <main className="text-zinc-100 space-y-6">
+    <main className="text-zinc-100 space-y-4">
       <motion.div {...fadeUp}>
         <div className="flex flex-col justify-center items-center gap-2">
           <h1 className="text-center text-2xl sm:text-3xl font-bold text-zinc-100">
