@@ -70,6 +70,24 @@ export const statsDataSchema = z.object({
   }),
 });
 
+const pullRequestSearchSchema = z.object({
+  issueCount: z.number().int().nonnegative(),
+  nodes: z.array(
+    z.object({
+      title: z.string(),
+      url: z.string().url(),
+      createdAt: z.string().datetime({ offset: true }),
+      repository: z.object({ nameWithOwner: z.string() }),
+    }),
+  ),
+});
+
+export const pullRequestsDataSchema = z.object({
+  merged: pullRequestSearchSchema,
+  open: pullRequestSearchSchema,
+  closed: pullRequestSearchSchema,
+});
+
 const graphqlEnvelopeSchema = z.object({
   data: z.unknown().optional(),
   errors: z
@@ -79,6 +97,7 @@ const graphqlEnvelopeSchema = z.object({
 
 export type ContributionsData = z.infer<typeof contributionsDataSchema>;
 export type StatsData = z.infer<typeof statsDataSchema>;
+export type PullRequestsData = z.infer<typeof pullRequestsDataSchema>;
 
 export function parseGitHubResponse<T>(
   payload: unknown,

@@ -5,6 +5,7 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "./config/database";
 import {
   refreshGitHubContributions,
+  refreshGitHubPullRequests,
   refreshGitHubStats,
 } from "./modules/github/github.service";
 
@@ -30,11 +31,13 @@ async function startServer() {
   cron.schedule("0 */6 * * *", () => {
     refreshWithLogging("contributions", refreshGitHubContributions);
     refreshWithLogging("stats", refreshGitHubStats);
+    refreshWithLogging("pull requests", refreshGitHubPullRequests);
   });
 
   // Initial fetch on startup
   refreshWithLogging("contributions", refreshGitHubContributions);
   refreshWithLogging("stats", refreshGitHubStats);
+  refreshWithLogging("pull requests", refreshGitHubPullRequests);
 }
 
 startServer().catch((error) => {

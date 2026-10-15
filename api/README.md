@@ -57,8 +57,8 @@ Each module follows the same layering:
 1. `env.ts` validates environment variables. Any failure throws and the process exits.
 2. Pending Drizzle migrations from `./drizzle` are applied.
 3. The HTTP server starts on `PORT`.
-4. A cron job (`0 */6 * * *`) refreshes the GitHub contributions and stats caches.
-5. Both caches are refreshed once immediately. Failures are logged and don't crash the server.
+4. A cron job (`0 */6 * * *`) refreshes the GitHub contributions, stats and pull requests caches.
+5. All three caches are refreshed once immediately. Failures are logged and don't crash the server.
 
 ## API reference
 
@@ -125,6 +125,22 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 | `repositories` | `{ name, nameWithOwner, url, stargazerCount, createdAt }[]` | Public repos only. The frontend uses them to show stars/creation date on projects |
 | `cachedAt` | `string` | When the cache row was last refreshed |
 
+### `GET /github/pull-requests`
+
+Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 20 most recent, newest first. `closed` only counts PRs closed without being merged.
+
+```json
+{
+  "merged": {
+    "totalCount": 78,
+    "items": [{ "title": "fix: ...", "url": "https://github.com/owner/repo/pull/1", "repository": "owner/repo", "createdAt": "2026-10-13T12:00:00Z" }]
+  },
+  "open": { "totalCount": 0, "items": [] },
+  "closed": { "totalCount": 1, "items": [] },
+  "cachedAt": "2026-10-13T12:00:00.000Z"
+}
+```
+
 ### Errors
 
 Every error goes through the global `errorHandler` and shares one shape (`details` only appears on validation errors):
@@ -149,7 +165,7 @@ Messages, logs and comments are in English. The only Portuguese is the contact e
 
 Hitting the GitHub GraphQL API on every page view would be slow and burn rate limit, so data is cached in Postgres:
 
-- `refreshGitHubContributions()` and `refreshGitHubStats()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** (update the latest row if one exists, otherwise insert).
+- `refreshGitHubContributions()`, `refreshGitHubStats()` and `refreshGitHubPullRequests()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** (update the latest row if one exists, otherwise insert).
 - `GET /github/*` reads the latest row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
 - The cache is refreshed on boot and every 6 hours.
 
@@ -160,6 +176,7 @@ Hitting the GitHub GraphQL API on every page view would be slow and burn rate li
 | `contacts` | `id`, `name`, `email`, `message`, `created_at` | One row per submission |
 | `github_contributions` | `id`, `total_contributions`, `weeks` (jsonb), `cached_at` | Single cached row |
 | `github_stats` | `id`, `total_stars`, `merged_prs`, `closed_issues`, `current_streak`, `last_commit_date`, `last_commit_repo`, `languages` (jsonb), `repositories` (jsonb), `cached_at` | Single cached row |
+| `github_pull_requests` | `id`, `merged`, `open`, `closed` (jsonb, `{ totalCount, items }`), `cached_at` | Single cached row |
 
 Schemas live in `src/modules/*/*.schema.ts`, and drizzle-kit picks them up through [`drizzle.config.ts`](drizzle.config.ts). Migrations are SQL files in [`drizzle/`](drizzle) and run automatically on startup.
 

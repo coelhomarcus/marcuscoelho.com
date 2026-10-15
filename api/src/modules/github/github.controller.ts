@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import {
   getCachedContributions,
+  getCachedPullRequests,
   getCachedStats,
   refreshGitHubContributions,
+  refreshGitHubPullRequests,
   refreshGitHubStats,
 } from "./github.service";
 
@@ -46,6 +48,26 @@ export async function handleGetStats(req: Request, res: Response) {
     lastCommitRepo: data.lastCommitRepo,
     languages: data.languages,
     repositories: data.repositories,
+    cachedAt: data.cachedAt,
+  });
+}
+
+export async function handleGetPullRequests(req: Request, res: Response) {
+  let data = await getCachedPullRequests();
+
+  if (!data) {
+    const pullRequests = await refreshGitHubPullRequests();
+    data = {
+      id: 0,
+      ...pullRequests,
+      cachedAt: new Date(),
+    };
+  }
+
+  res.json({
+    merged: data.merged,
+    open: data.open,
+    closed: data.closed,
     cachedAt: data.cachedAt,
   });
 }

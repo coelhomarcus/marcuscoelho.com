@@ -36,6 +36,13 @@
       "when": 1773446400000,
       "tag": "0004_github_repositories",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1776124800000,
+      "tag": "0005_github_pull_requests",
+      "breakpoints": true
     }
   ]
 }

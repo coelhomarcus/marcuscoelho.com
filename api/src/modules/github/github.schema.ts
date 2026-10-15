@@ -26,3 +26,11 @@ export const githubStats = pgTable("github_stats", {
   repositories: jsonb("repositories").notNull().default([]),
   cachedAt: timestamp("cached_at").defaultNow().notNull(),
 });
+
+export const githubPullRequests = pgTable("github_pull_requests", {
+  id: serial("id").primaryKey(),
+  merged: jsonb("merged").notNull(),
+  open: jsonb("open").notNull(),
+  closed: jsonb("closed").notNull(),
+  cachedAt: timestamp("cached_at").defaultNow().notNull(),
+});

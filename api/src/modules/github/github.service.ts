@@ -1,7 +1,7 @@
 import { db } from "../../config/database";
 import { env } from "../../config/env";
-import { githubContributions, githubStats } from "./github.schema";
-import { contributionsDataSchema, parseGitHubResponse, statsDataSchema, type ContributionsData, type StatsData } from "./github.validation";
+import { githubContributions, githubPullRequests, githubStats } from "./github.schema";
+import { contributionsDataSchema, parseGitHubResponse, pullRequestsDataSchema, statsDataSchema, type ContributionsData, type PullRequestsData, type StatsData } from "./github.validation";
 import { AppError } from "../../shared/errors";
 import { desc, eq } from "drizzle-orm";
 import type { ZodType } from "zod";
@@ -69,6 +69,35 @@ const STATS_QUERY = `
         }
       }
     }
+  }
+`;
+
+// PRs to public repositories (own or someone else's), newest first
+const PULL_REQUESTS_PER_STATE = 20;
+const pullRequestSearch = (alias: string, filter: string) => `
+    ${alias}: search(
+      query: "author:${GITHUB_USERNAME} type:pr is:public ${filter} sort:created-desc"
+      type: ISSUE
+      first: ${PULL_REQUESTS_PER_STATE}
+    ) {
+      issueCount
+      nodes {
+        ... on PullRequest {
+          title
+          url
+          createdAt
+          repository {
+            nameWithOwner
+          }
+        }
+      }
+    }`;
+
+const PULL_REQUESTS_QUERY = `
+  query {
+    ${pullRequestSearch("merged", "is:merged")}
+    ${pullRequestSearch("open", "is:open")}
+    ${pullRequestSearch("closed", "is:closed is:unmerged")}
   }
 `;
 
@@ -340,6 +369,53 @@ export async function refreshGitHubStats() {
   return stats;
 }
 
+function toPullRequestGroup(search: PullRequestsData["merged"]) {
+  return {
+    totalCount: search.issueCount,
+    items: search.nodes.map((pr) => ({
+      title: pr.title,
+      url: pr.url,
+      repository: pr.repository.nameWithOwner,
+      createdAt: pr.createdAt,
+    })),
+  };
+}
+
+export async function refreshGitHubPullRequests() {
+  const payload = await fetchGitHub("pull requests", PULL_REQUESTS_QUERY);
+  const data = parseGitHubData<PullRequestsData>(
+    payload,
+    pullRequestsDataSchema,
+    "pull requests",
+  );
+  const pullRequests = {
+    merged: toPullRequestGroup(data.merged),
+    open: toPullRequestGroup(data.open),
+    closed: toPullRequestGroup(data.closed),
+  };
+
+  const [latest] = await db
+    .select({ id: githubPullRequests.id })
+    .from(githubPullRequests)
+    .orderBy(desc(githubPullRequests.id))
+    .limit(1);
+
+  if (latest) {
+    await db
+      .update(githubPullRequests)
+      .set({ ...pullRequests, cachedAt: new Date() })
+      .where(eq(githubPullRequests.id, latest.id));
+  } else {
+    await db.insert(githubPullRequests).values(pullRequests);
+  }
+
+  console.log(
+    `[GitHub] Pull requests cache updated: ${pullRequests.merged.totalCount} merged, ${pullRequests.open.totalCount} open, ${pullRequests.closed.totalCount} closed`,
+  );
+
+  return pullRequests;
+}
+
 export async function getCachedContributions() {
   const [latest] = await db
     .select()
@@ -355,6 +431,16 @@ export async function getCachedStats() {
     .select()
     .from(githubStats)
     .orderBy(desc(githubStats.id))
+    .limit(1);
+
+  return latest ?? null;
+}
+
+export async function getCachedPullRequests() {
+  const [latest] = await db
+    .select()
+    .from(githubPullRequests)
+    .orderBy(desc(githubPullRequests.id))
     .limit(1);
 
   return latest ?? null;
