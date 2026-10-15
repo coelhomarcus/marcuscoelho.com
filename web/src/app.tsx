@@ -42,7 +42,7 @@ const Shell = () => {
         )}
       >
         <div className="overflow-x-clip md:flex md:min-h-full md:flex-col">
-          <div className="@container relative mx-auto min-h-screen max-w-3xl space-y-4 px-(--gutter) py-4 [--gutter:--spacing(4)] sm:py-8 md:min-h-0 md:w-full md:flex-1">
+          <div className="@container relative mx-auto min-h-screen max-w-3xl space-y-4 px-(--gutter) pb-4 [--gutter:--spacing(4)] md:min-h-0 md:w-full md:flex-1">
             <Rails />
             <ScrollToTop />
             <Header />
