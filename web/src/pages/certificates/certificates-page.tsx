@@ -7,11 +7,11 @@ import { fadeUp } from "@/lib/motion";
 
 const CertificatesPage = () => {
   return (
-    <main className="text-zinc-100 space-y-8">
+    <main className="text-zinc-100 space-y-6">
       <PageTitle title="Certificados" suffix />
 
       <motion.div {...fadeUp}>
-        <div className="flex flex-col gap-1 pt-4">
+        <div className="flex flex-col gap-1">
           <h1 className="text-2xl sm:text-3xl font-bold leading-tight">
             Certificados
           </h1>

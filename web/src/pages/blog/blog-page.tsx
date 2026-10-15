@@ -50,11 +50,11 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
 
 const BlogPage = () => {
   return (
-    <main className="text-zinc-100 space-y-8">
+    <main className="text-zinc-100 space-y-6">
       <PageTitle title="Blog" suffix />
 
       <motion.div {...fadeUp}>
-        <div className="flex flex-col gap-2 pt-4">
+        <div className="flex flex-col gap-2">
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
             Articles
             <br />

@@ -3,7 +3,7 @@
 const HeroSection = () => {
   return (
     <div className="min-h-[150px]">
-      <div className="flex flex-col justify-center gap-8 pt-10 pb-4">
+      <div className="flex flex-col justify-center gap-8">
         <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
           Desenvolvedor
           <br />

@@ -6,7 +6,7 @@ const PostNotFound = () => {
   return (
     <main className="text-zinc-100 space-y-6">
       <motion.div {...fadeUp}>
-        <div className="flex flex-col justify-center mt-10 items-center gap-2">
+        <div className="flex flex-col justify-center items-center gap-2">
           <h1 className="text-center text-2xl sm:text-3xl font-bold text-zinc-100">
             Esse post não existe!
           </h1>

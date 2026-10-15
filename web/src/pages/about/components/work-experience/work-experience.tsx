@@ -152,7 +152,7 @@ function WorkExperience() {
   return (
     <section className="flex flex-col gap-4">
       <SectionHeading title="Experiência" />
-      <div>
+      <div className="-my-4">
         {experience.map((work) => (
           <WorkItem key={work.company} work={work} />
         ))}

@@ -17,7 +17,7 @@ const ProjectsPage = () => {
       <PageTitle title="Projetos" suffix />
 
       <motion.div {...fadeUp}>
-        <div className="flex flex-col gap-1 pt-4">
+        <div className="flex flex-col gap-1">
           <h1 className="text-2xl sm:text-3xl font-bold leading-tight">
             Projetos
           </h1>

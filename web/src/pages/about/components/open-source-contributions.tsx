@@ -118,11 +118,11 @@ function Tabs({
 
 function Row({ children }: { children: ReactNode }) {
   return (
-    <li className="relative">
+    <li className="group/row relative">
       {children}
       <span
         aria-hidden
-        className="dotted-x absolute bottom-0 -right-(--gutter) -left-(--gutter)"
+        className="dotted-x absolute bottom-0 -right-(--gutter) -left-(--gutter) group-last/row:hidden"
       />
     </li>
   );
@@ -159,7 +159,7 @@ function PullRequestItem({ pr, dot }: { pr: PullRequest; dot: string }) {
 
 function ListSkeleton() {
   return (
-    <ul className="animate-pulse">
+    <ul className="-mb-3.5 animate-pulse">
       {Array.from({ length: 3 }, (_, i) => (
         <Row key={i}>
           <div className="flex items-start gap-3 py-3.5">
@@ -229,9 +229,9 @@ function OpenSourceContributions() {
           transition={{ duration: 0.2 }}
         >
           {shown.length === 0 ? (
-            <p className="py-6 text-sm text-zinc-500">{EMPTY_MESSAGE[active]}</p>
+            <p className="pt-3.5 text-sm text-zinc-500">{EMPTY_MESSAGE[active]}</p>
           ) : (
-            <ul>
+            <ul className="-mb-3.5">
               {shown.map((pr) => (
                 <PullRequestItem key={pr.url} pr={pr} dot={dot} />
               ))}

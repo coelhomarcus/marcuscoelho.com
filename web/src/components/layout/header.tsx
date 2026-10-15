@@ -12,7 +12,7 @@ import { navigation, socials } from "@/data/navigation";
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center pt-4 pb-2">
+    <header className="flex justify-between items-center pt-4">
       <Link
         to="/"
         className="text-zinc-100 font-medium text-sm hover:opacity-80 transition-opacity flex items-center rounded-sm"
