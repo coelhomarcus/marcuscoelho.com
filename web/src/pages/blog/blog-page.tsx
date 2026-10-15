@@ -15,7 +15,15 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
       className="group card-surface block overflow-hidden relative hover:bg-zinc-900 hover:ring-foreground/20"
     >
       {banner && (
-        <div className="absolute right-0 top-0 w-[40%] h-full">
+        <div
+          className="absolute right-0 top-0 w-[40%] h-full"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.3) 30%, black)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, rgb(0 0 0 / 0.3) 30%, black)",
+          }}
+        >
           <img
             src={banner}
             alt="Banner"
@@ -29,7 +37,6 @@ const BlogCard = ({ slug, title, date, desc, banner }: BlogFrontmatter) => {
               mixBlendMode: "multiply",
             }}
           />
-          <div className="absolute inset-0 bg-linear-to-r from-zinc-950 via-zinc-950/70 to-transparent transition-colors duration-200 group-hover:from-zinc-900 group-hover:via-zinc-900/70" />
         </div>
       )}
       <div className="relative flex flex-col gap-3 p-4 sm:p-5">
