@@ -8,11 +8,9 @@ import {
 type IconButtonProps = Omit<React.ComponentProps<typeof Button>, "children"> & {
   icon: AnimatedIcon;
   iconSize?: number;
-  /** Required: the button has no visible text. */
   "aria-label": string;
 };
 
-/** Icon-only Button whose icon animates when the button is hovered or focused. */
 function IconButton({
   icon: Icon,
   iconSize = 16,

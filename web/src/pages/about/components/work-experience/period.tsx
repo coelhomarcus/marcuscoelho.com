@@ -11,7 +11,6 @@ function Range({ from, to }: { from: string; to: string }) {
   );
 }
 
-/** "set 2025 → out 2026" with an icon arrow, or "desde out 2026" while ongoing. */
 export function Period({ start, end }: { start: string; end?: string }) {
   return end ? (
     <Range from={formatMonth(start)} to={formatMonth(end)} />

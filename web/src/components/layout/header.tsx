@@ -17,7 +17,6 @@ const Header = () => {
         to="/"
         className="text-zinc-100 font-medium text-sm hover:opacity-80 transition-opacity flex items-center rounded-sm"
       >
-        {/* Decorative: the link already reads "Marcus Coelho" */}
         <FluidOrb size={20} aria-hidden className="mr-2 shrink-0" />
         Marcus Coelho
       </Link>
@@ -56,7 +55,6 @@ function HeaderLink({ href, name, icon: Icon }: NavItem) {
     >
       {({ isActive }) => (
         <>
-          {/* One shared pill slides between tabs instead of cross-fading two */}
           {isActive && (
             <motion.span
               layoutId="header-active-tab"

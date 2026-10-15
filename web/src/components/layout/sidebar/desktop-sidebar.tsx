@@ -3,10 +3,6 @@ import { cn } from "@/lib/utils";
 import { SidebarContent } from "./sidebar-content";
 import { useSidebar } from "./sidebar-context";
 
-/**
- * Inset sidebar for md and up. It sits on the page frame, and the page itself
- * (see Shell in app.tsx) becomes a rounded card that makes room for it.
- */
 export function DesktopSidebar() {
   const { isOpen, close } = useSidebar();
 

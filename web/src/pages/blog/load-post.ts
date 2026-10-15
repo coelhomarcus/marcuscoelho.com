@@ -1,4 +1,3 @@
-// Posts live in the repo-level posts/ folder, outside the web app
 const mdxModules = import.meta.glob("@posts/*.mdx");
 
 export function loadPost(slug: string) {

@@ -1,9 +1,3 @@
-/**
- * The "stitched" frame: dotted rails on both edges of the page column and
- * full-bleed dotted rules between sections, with a small dot where they cross.
- * Both rely on --gutter, the column's horizontal padding (set in app.tsx).
- */
-
 export function Rails() {
   return (
     <>
@@ -32,7 +26,6 @@ function Stitch({ side }: { side: "left" | "right" }) {
   );
 }
 
-/** Dotted rule spanning the whole width of the page, not just the column. */
 export function SectionRule() {
   return (
     <div aria-hidden className="pointer-events-none relative h-px">

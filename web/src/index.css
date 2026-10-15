@@ -2,12 +2,10 @@
 
 @plugin "@tailwindcss/typography";
 
-/* Posts live outside the web app, so Tailwind has to be told to scan them */
 @source "../../posts";
 
 @custom-variant dark (&:is(.dark *));
 
-/* Width of the sidebar; the page is pushed by exactly this amount. */
 :root {
   --sidebar-w: 85vw;
 }
@@ -41,7 +39,6 @@
   --color-ring: var(--color-zinc-500);
 }
 
-/* shadcn radius scale (Nova), emitted even when only referenced via var() */
 @theme static {
   --radius: 0.625rem;
   --radius-sm: calc(var(--radius) * 0.6);
@@ -58,8 +55,6 @@ html {
   overflow-y: scroll;
 }
 
-/* On desktop the page card scrolls (see Shell in app.tsx), not the window,
-   so the scrollbar sits inside the card instead of next to the sidebar. */
 @media (min-width: 768px) {
   html,
   body {
@@ -261,14 +256,10 @@ html {
   }
 }
 
-/* Nova card surface: rounded-xl, ring-1 instead of a border */
 @utility card-surface {
-  /* box-shadow is listed because the ring is a box-shadow: with plain
-     transition-colors the ring snapped on hover while the background faded. */
   @apply rounded-xl bg-card text-card-foreground ring-1 ring-foreground/10 transition-[color,background-color,border-color,box-shadow];
 }
 
-/* "Stitched" lines: a 1px line masked to a dot every 6px */
 @utility dotted-x {
   height: 1px;
   background-color: rgb(255 255 255 / 0.15);

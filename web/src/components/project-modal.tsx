@@ -25,7 +25,6 @@ import { techIcons } from "@/data/tech-icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { LinkButton } from "@/components/ui/link-button";
 
-/** Text link with a trailing animated icon, the same idiom as "Ver projeto" on the card. */
 function ActionLink({
   href,
   icon: Icon,
@@ -127,10 +126,8 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               aria-modal="true"
               aria-label={project.name}
             >
-              {/* Same anatomy as the project card: inset image, then the text */}
               {images.length > 0 && (
                 <div className="relative isolate aspect-[8/5] overflow-hidden rounded-lg bg-zinc-900">
-                  {/* No mode="wait": images cross-fade instead of leaving a gap */}
                   <AnimatePresence initial={false}>
                     <motion.img
                       key={images[index]}

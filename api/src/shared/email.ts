@@ -14,7 +14,6 @@ function escapeHtml(value: string) {
 }
 
 export async function sendContactEmail(data: CreateContactInput) {
-  // Resend reports failures in the result instead of throwing
   const { error } = await resend.emails.send({
     from: env.CONTACT_FROM_EMAIL,
     to: env.CONTACT_TO_EMAIL,

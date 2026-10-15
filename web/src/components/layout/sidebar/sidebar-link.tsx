@@ -10,7 +10,6 @@ import {
 
 export type SidebarSize = "md" | "lg";
 
-// "lg" is the touch-friendly size used by the mobile sheet
 const sizes = {
   md: { row: "h-8 gap-2 px-2.5 text-sm", icon: 16, trailing: 14 },
   lg: { row: "h-11 gap-3 px-3 text-[15px]", icon: 20, trailing: 16 },
@@ -19,7 +18,6 @@ const sizes = {
 interface SidebarLinkProps {
   item: NavItem;
   size?: SidebarSize;
-  /** Called after a link is followed; the mobile sheet uses it to close. */
   onNavigate?: () => void;
 }
 

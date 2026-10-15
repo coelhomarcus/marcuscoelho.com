@@ -15,11 +15,9 @@ const RAIL_X = 5
 const LABEL_GAP = 14
 const TRAVEL_SPRING = { stiffness: 140, damping: 26, mass: 0.6 }
 const TURN_SPRING = { stiffness: 260, damping: 30 }
-// rail length the plane must back up before it turns around, so scroll jitter can't flip it
 const TURN_SLACK = 2
 
 const PLANE = "M12 2 20.5 21 12 17.5 3.5 21z"
-// the plane is narrower than a dot, so the rail and dots under it are cut away
 const PLANE_HOLE = 4
 
 const useIsoLayoutEffect =
@@ -42,7 +40,6 @@ function buildPath(nodes: Point[]) {
   return points.map((p, i) => `${i ? "L" : "M"}${p.x} ${p.y}`).join(" ")
 }
 
-// the rail only ever runs downward, so y is monotonic along its length
 function lengthAtY(path: SVGPathElement, total: number, y: number) {
   let lo = 0
   let hi = total
@@ -118,7 +115,6 @@ const RailToc = ({
         (Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180) / Math.PI +
         90 +
         (facing.current < 0 ? 180 : 0)
-      // unwrapped against the current heading so the turn spring takes the short way round
       const prev = heading.get()
       heading.set(angle + 360 * Math.round((prev - angle) / 360))
       filled.set(l / length)
@@ -146,7 +142,6 @@ const RailToc = ({
     const nodes = lengths.current
     if (!nodes.length) return
 
-    // a clicked heading holds the plane until the reader scrolls, since headings near the end can't scroll up to the anchor
     if (pinned.current !== null) {
       aim(nodes[pinned.current] ?? nodes[0])
       return
@@ -160,7 +155,6 @@ const RailToc = ({
       : document.documentElement.scrollHeight
     const originTop = scroller ? scroller.getBoundingClientRect().top : 0
 
-    // the anchor starts at the top edge and sweeps to the bottom near the end, so the first and last headings are both reachable
     const remaining = Math.max(0, scrollHeight - viewHeight - scrollTop)
     const line = Math.min(offset, scrollTop)
     const anchor = line + Math.max(0, viewHeight - line - remaining)
@@ -277,7 +271,6 @@ const RailToc = ({
   }
 
   const active = Math.max(0, reached - 1)
-  // this theme exposes its tokens as --color-*, not shadcn's bare --foreground
   const railColor =
     "[--rail:color-mix(in_oklab,var(--color-foreground)_45%,var(--color-background))]"
 

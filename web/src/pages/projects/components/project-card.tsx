@@ -6,8 +6,6 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
-// Background and ring animate together in one transition. With Tailwind the
-// ring (a box-shadow) jumped while the background faded, which read as a flicker.
 const cardVariants: Variants = {
   rest: {
     backgroundColor: "#09090b",
@@ -34,7 +32,6 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   const arrow = useAnimatedIcon();
   const cover = images?.[0];
 
-  // Only techs with an icon are drawn; the rest collapse into a "+N" hint
   const withIcon = tech.filter((t) => techIcons[t]);
   const withoutIcon = tech.filter((t) => !techIcons[t]);
 
@@ -51,7 +48,6 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
       className="group flex h-full w-full cursor-pointer flex-col rounded-xl p-3 text-left"
     >
       {cover && (
-        // isolate keeps the rounded clip stable while the image scales
         <div className="isolate aspect-[8/5] w-full overflow-hidden rounded-lg">
           <motion.img
             src={projectAsset(cover)}

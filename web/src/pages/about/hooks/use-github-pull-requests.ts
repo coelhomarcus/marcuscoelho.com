@@ -7,14 +7,12 @@ export type PullRequestState = "merged" | "open" | "closed";
 export interface PullRequest {
   title: string;
   url: string;
-  /** "owner/name" */
   repository: string;
   createdAt: string;
 }
 
 export interface PullRequestGroup {
   totalCount: number;
-  /** The most recent ones, newest first */
   items: PullRequest[];
 }
 
@@ -22,7 +20,6 @@ export type GitHubPullRequestsData = Record<PullRequestState, PullRequestGroup> 
   cachedAt: string;
 };
 
-/** True when there is at least one pull request to show in any state. */
 export function hasPullRequests(data: GitHubPullRequestsData | null) {
   return (
     !!data &&

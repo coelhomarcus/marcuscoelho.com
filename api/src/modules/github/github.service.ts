@@ -72,7 +72,6 @@ const STATS_QUERY = `
   }
 `;
 
-// PRs to public repositories (own or someone else's), newest first
 const PULL_REQUESTS_PER_STATE = 20;
 const pullRequestSearch = (alias: string, filter: string) => `
     ${alias}: search(
@@ -108,13 +107,11 @@ function calculateStreak(
     .flatMap((w) => w.contributionDays)
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  // Get today's date in YYYY-MM-DD
   const today = new Date().toISOString().split("T")[0];
 
   let streak = 0;
   let expectedDate = new Date(today + "T12:00:00");
 
-  // If today has no contributions yet, start checking from yesterday
   const firstDay = allDays[0];
   if (firstDay && firstDay.date === today && firstDay.contributionCount === 0) {
     expectedDate.setDate(expectedDate.getDate() - 1);
@@ -274,22 +271,18 @@ export async function refreshGitHubStats() {
   const data = parseGitHubData<StatsData>(payload, statsDataSchema, "stats");
   const user = data.user;
 
-  // Total stars
   const totalStars = user.repositories.nodes.reduce(
     (acc, repo) => acc + repo.stargazerCount,
     0,
   );
 
-  // PRs & Issues
   const mergedPRs = user.pullRequests.totalCount;
   const closedIssues = user.issues.totalCount;
 
-  // Last commit (most recently pushed repo)
   const lastRepo = user.repositories.nodes[0];
   const lastCommitDate = lastRepo?.pushedAt ?? new Date().toISOString();
   const lastCommitRepo = lastRepo?.isPrivate ? "" : (lastRepo?.name ?? "");
 
-  // Languages aggregated by size
   const langMap = new Map<string, { size: number; color: string }>();
   for (const repo of user.repositories.nodes) {
     for (const edge of repo.languages.edges) {
@@ -332,7 +325,6 @@ export async function refreshGitHubStats() {
       createdAt: repo.createdAt,
     }));
 
-  // Streak
   const calendarWeeks = user.contributionsCollection.contributionCalendar.weeks;
   const currentStreak = calculateStreak(calendarWeeks);
 

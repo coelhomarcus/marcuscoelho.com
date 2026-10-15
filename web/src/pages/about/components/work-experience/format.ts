@@ -15,7 +15,6 @@ const MONTHS = [
   "dez",
 ];
 
-/** "YYYY-MM" or "YYYY" */
 function parseDate(date: string) {
   const [year, month] = date.split("-");
   return { year: Number(year), month: month ? Number(month) : undefined };
@@ -26,7 +25,6 @@ export function formatMonth(date: string) {
   return month ? `${MONTHS[month - 1]} ${year}` : String(year);
 }
 
-/** Inclusive month count, e.g. "1 ano e 2 meses". An omitted `end` means today. */
 export function formatDuration(start: string, end?: string) {
   const from = parseDate(start);
   const now = new Date();
@@ -48,7 +46,6 @@ export function formatDuration(start: string, end?: string) {
     .join(" e ");
 }
 
-/** Whole stay at a company: first start to last end, open-ended if any role is ongoing. */
 export function getWorkRange(work: Work) {
   const first = work.positions[0];
   const last = work.positions[work.positions.length - 1];

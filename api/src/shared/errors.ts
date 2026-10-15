@@ -31,7 +31,6 @@ export const errorHandler: ErrorRequestHandler = (
   const code = isAppError ? error.code : "INTERNAL_ERROR";
   const message = isAppError ? error.message : "Internal server error";
 
-  // Client mistakes (4xx) are expected; only server failures need the stack
   const log = statusCode >= 500 ? console.error : console.warn;
   log("[API] Request failed", {
     method: req.method,

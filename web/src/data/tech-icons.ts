@@ -31,7 +31,6 @@ import {
 } from "react-icons/si";
 import { TbBrandVscode, TbBrandCSharp } from "react-icons/tb";
 
-/** Only techs with an accurate brand logo available get an entry here. */
 export const techIcons: Record<string, ComponentType<{ className?: string }>> = {
   React: SiReact,
   Typescript: SiTypescript,

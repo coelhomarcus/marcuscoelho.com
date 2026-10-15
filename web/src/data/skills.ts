@@ -30,7 +30,6 @@ type Skill = {
 };
 
 export const skills: Skill[] = [
-  // Frontend
   { icon: ReactIcon, name: "React", url: "https://react.dev" },
   { icon: NextJSIcon, name: "Next.js", url: "https://nextjs.org" },
   {
@@ -47,7 +46,6 @@ export const skills: Skill[] = [
   { icon: ShadcnIcon, name: "shadcn/ui", url: "https://ui.shadcn.com" },
   { icon: ViteIcon, name: "Vite", url: "https://vite.dev" },
 
-  // Backend
   { icon: NodeIcon, name: "Node.js", url: "https://nodejs.org" },
   { icon: BunIcon, name: "Bun", url: "https://bun.sh" },
   { icon: ExpressIcon, name: "Express", url: "https://expressjs.com" },
@@ -59,7 +57,6 @@ export const skills: Skill[] = [
   },
   { icon: DrizzleIcon, name: "Drizzle ORM", url: "https://orm.drizzle.team" },
 
-  // Tools
   { icon: GitIcon, name: "Git", url: "https://git-scm.com" },
   { icon: GitHubIcon, name: "GitHub", url: "https://github.com" },
   { icon: DockerIcon, name: "Docker", url: "https://www.docker.com" },
@@ -67,7 +64,6 @@ export const skills: Skill[] = [
   { icon: DokployIcon, name: "Dokploy", url: "https://dokploy.com" },
   { icon: FigmaIcon, name: "Figma", url: "https://www.figma.com" },
 
-  // AI
   { icon: ClaudeIcon, name: "Claude", url: "https://claude.ai" },
   { icon: OpenAIIcon, name: "ChatGPT", url: "https://chatgpt.com" },
 ];

@@ -16,9 +16,7 @@ export interface Project {
 export interface WorkPosition {
   title: string;
   period: {
-    /** "YYYY-MM" or "YYYY" */
     start: string;
-    /** "YYYY-MM" or "YYYY"; omit for ongoing roles */
     end?: string;
   };
   employmentType?: string;
@@ -30,7 +28,6 @@ export interface Work {
   company: string;
   logo: string;
   website?: string;
-  /** One entry per role held at this company, oldest first */
   positions: WorkPosition[];
 }
 
@@ -40,7 +37,6 @@ export interface Certificate {
   teacher: string;
 }
 
-/** A link in the header, sidebar or footer */
 export interface NavItem {
   name: string;
   href: string;

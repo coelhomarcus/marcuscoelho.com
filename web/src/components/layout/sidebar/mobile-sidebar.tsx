@@ -7,10 +7,6 @@ import { useSidebar } from "./sidebar-context";
 const CLOSE_DISTANCE = 90;
 const CLOSE_VELOCITY = 500;
 
-/**
- * Sheet for screens below md: slides over the page, bigger touch targets,
- * and can be dismissed by swiping it to the right.
- */
 export function MobileSidebar() {
   const { isOpen, close } = useSidebar();
 

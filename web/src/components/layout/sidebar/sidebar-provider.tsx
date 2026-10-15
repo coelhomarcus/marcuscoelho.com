@@ -21,7 +21,6 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       if (e.key === "Escape") close();
     };
 
-    // Only the mobile sheet covers the page, so only it locks scrolling
     if (window.matchMedia("(max-width: 767px)").matches) {
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";

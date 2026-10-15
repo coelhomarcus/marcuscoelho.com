@@ -6,11 +6,9 @@ import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
 interface SectionHeadingProps {
   title: string;
-  /** Optional link on the right, such as "Ver todos". */
   action?: ReactNode;
 }
 
-/** Title shared by the sections of a page (Skills, Experiência, GitHub...). */
 export function SectionHeading({ title, action }: SectionHeadingProps) {
   return (
     <div className="flex items-baseline justify-between gap-3">
@@ -25,7 +23,6 @@ export function SectionHeading({ title, action }: SectionHeadingProps) {
 const actionClass =
   "inline-flex shrink-0 items-center gap-1 text-[13px] font-medium text-zinc-500 transition-colors hover:text-zinc-200";
 
-/** Small link for the right side of a SectionHeading: internal with `to`, external with `href`. */
 export function SectionAction({
   to,
   href,

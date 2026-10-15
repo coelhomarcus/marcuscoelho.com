@@ -78,7 +78,6 @@ function WorkItem({ work }: { work: Work }) {
         </div>
       </button>
 
-      {/* Animating grid rows from 0fr to 1fr opens the panel to its natural height */}
       <div
         id={contentId}
         inert={!open}

@@ -36,7 +36,6 @@ function Group({
   );
 }
 
-/** Profile, navigation and footer, shared by the desktop and mobile sidebars. */
 export function SidebarContent({
   size = "md",
   onClose,

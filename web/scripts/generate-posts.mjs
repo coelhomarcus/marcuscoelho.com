@@ -27,7 +27,6 @@ function extractFrontmatter(filePath) {
   return fm;
 }
 
-// Expects date in DD.MM.YYYY format
 function sortByDateDesc(a, b) {
   const [da, ma, ya] = a.date.split(".").map(Number);
   const [db, mb, yb] = b.date.split(".").map(Number);

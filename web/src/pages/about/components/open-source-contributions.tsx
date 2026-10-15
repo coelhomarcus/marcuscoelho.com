@@ -51,9 +51,6 @@ function Tabs({
   const listRef = useRef<HTMLDivElement>(null);
   const [pill, setPill] = useState<PillRect | null>(null);
 
-  // Measured inside the tablist rather than shared with layoutId: a layout
-  // animation also picks up the scroll jump when the list below changes
-  // height, which sent the pill down out of the bar and back up.
   useLayoutEffect(() => {
     const list = listRef.current;
     if (!list) return;
@@ -70,7 +67,6 @@ function Tabs({
     };
 
     measure();
-    // Tab widths change once the web font loads
     const obs = new ResizeObserver(measure);
     obs.observe(list);
     return () => obs.disconnect();
@@ -83,7 +79,6 @@ function Tabs({
       aria-label="Estado dos pull requests"
       className="relative inline-flex h-8 w-fit shrink-0 items-center rounded-lg bg-black p-[3px] ring-1 ring-white/10"
     >
-      {/* Same sliding pill as the header nav, moving only along the bar */}
       {pill && (
         <motion.span
           aria-hidden
@@ -125,7 +120,6 @@ function Row({ children }: { children: ReactNode }) {
   return (
     <li className="relative">
       {children}
-      {/* Runs past the column by the page gutter, from rail to rail */}
       <span
         aria-hidden
         className="dotted-x absolute bottom-0 -right-(--gutter) -left-(--gutter)"

@@ -27,14 +27,12 @@ const Shell = () => {
   const { isOpen } = useSidebar();
 
   return (
-    // Page frame: darkens and makes room for the inset sidebar (md and up only)
     <div
       className={cn(
         "min-h-screen transition-[padding,background-color] duration-300 ease-out md:flex md:h-svh md:flex-col",
         isOpen && "md:bg-zinc-950 md:pr-(--sidebar-w)",
       )}
     >
-      {/* The page itself becomes a rounded card while the sidebar is open */}
       <div
         id="app-scroll"
         className={cn(
@@ -43,8 +41,6 @@ const Shell = () => {
             "md:m-2 md:mr-0 md:rounded-xl md:ring-1 md:ring-foreground/10",
         )}
       >
-        {/* clip (not hidden) cuts the full-bleed rules without creating anything
-            that can be scrolled sideways */}
         <div className="overflow-x-clip md:flex md:min-h-full md:flex-col">
           <div className="@container relative mx-auto min-h-screen max-w-3xl space-y-6 px-(--gutter) py-4 [--gutter:--spacing(4)] sm:py-8 sm:[--gutter:--spacing(6)] md:min-h-0 md:w-full md:flex-1">
             <Rails />

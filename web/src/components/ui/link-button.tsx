@@ -17,7 +17,6 @@ interface LinkButtonProps {
   className?: string;
 }
 
-/** Button rendered as an external link with a trailing animated icon (outline by default). */
 function LinkButton({
   href,
   icon: Icon,

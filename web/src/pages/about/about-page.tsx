@@ -20,7 +20,6 @@ import { fadeUp } from "@/lib/motion";
 const AboutPage = () => {
   const [selected, setSelected] = useState<Project | null>(null);
   const pullRequests = useGitHubPullRequests();
-  // Hidden when the request fails or there is nothing public to list yet
   const showPullRequests =
     pullRequests.isLoading || hasPullRequests(pullRequests.data);
 

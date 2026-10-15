@@ -8,7 +8,6 @@ import path from "path";
 // Posts live outside the web app, at the repo root
 const postsDir = path.resolve(__dirname, "../posts");
 
-// https://vite.dev/config/
 export default defineConfig({
   build: {
     rollupOptions: {
@@ -58,8 +57,6 @@ export default defineConfig({
     dedupe: ["react", "react-dom", "@mdx-js/react"],
   },
   server: {
-    // The production API only allows the production origins (CORS), so in dev
-    // the browser calls /api on localhost and Vite forwards it server-side
     proxy: {
       "/api": {
         target: "https://api.marcuscoelho.com",

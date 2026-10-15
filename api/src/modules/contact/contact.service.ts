@@ -6,7 +6,6 @@ import { sendContactEmail } from "../../shared/email";
 export async function createContact(data: CreateContactInput) {
   const [contact] = await db.insert(contacts).values(data).returning();
 
-  // Saved already, so a failed email shouldn't fail the request
   sendContactEmail(data).catch((error: unknown) => {
     console.error("[Contact] Failed to send email", {
       contactId: contact.id,
