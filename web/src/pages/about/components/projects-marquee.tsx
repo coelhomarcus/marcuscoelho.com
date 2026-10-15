@@ -2,6 +2,7 @@
 import { useProjects } from "@/hooks/use-projects";
 import { SectionAction, SectionHeading } from "@/components/section-heading";
 import { techIcons } from "@/data/tech-icons";
+import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/types";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
@@ -48,13 +49,10 @@ function MarqueeCard({
           {project.tech.slice(0, 3).map((t) => {
             const Icon = techIcons[t];
             return (
-              <span
-                key={t}
-                className="inline-flex items-center gap-1 text-[10px] text-white/90 bg-white/15 px-1.5 py-0.5 rounded"
-              >
-                {Icon && <Icon className="size-2.5" />}
+              <Badge key={t}>
+                {Icon && <Icon />}
                 {t}
-              </span>
+              </Badge>
             );
           })}
         </div>

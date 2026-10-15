@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { SectionHeading } from "@/components/section-heading";
+import { Badge } from "@/components/ui/badge";
+import { techIcons } from "@/data/tech-icons";
 import { Period } from "./period";
 import { getWorkRange } from "./format";
 
@@ -126,15 +128,16 @@ function WorkItem({ work }: { work: Work }) {
                 </ul>
 
                 {position.skills && position.skills.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {position.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="rounded-[4px] border border-zinc-800/50 bg-[#111111] px-2 py-0.5 text-[11px] font-medium text-zinc-400"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {position.skills.map((skill) => {
+                      const Icon = techIcons[skill];
+                      return (
+                        <Badge key={skill}>
+                          {Icon && <Icon />}
+                          {skill}
+                        </Badge>
+                      );
+                    })}
                   </div>
                 )}
               </div>

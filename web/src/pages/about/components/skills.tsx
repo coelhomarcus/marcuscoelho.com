@@ -9,7 +9,7 @@ function Skills() {
       <SectionHeading title="Skills & Tecnologias" />
       <div className="flex flex-wrap gap-1.5">
         {skills.map((skill, index) => (
-          <Badge key={index} asChild variant="muted">
+          <Badge key={index} asChild>
             <motion.a
               href={skill.url}
               target="_blank"

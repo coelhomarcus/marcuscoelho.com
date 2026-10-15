@@ -28,13 +28,25 @@ import {
   SiHtml5,
   SiCss3,
   SiJavascript,
+  SiNodedotjs,
+  SiPython,
+  SiMongodb,
+  SiZod,
+  SiReactquery,
+  SiReacthookform,
+  SiFastapi,
+  SiLeaflet,
 } from "react-icons/si";
 import { TbBrandVscode, TbBrandCSharp } from "react-icons/tb";
+import { BiLogoFigma } from "react-icons/bi";
+import { Bot, Database, FileSearch } from "lucide-react";
 
 export const techIcons: Record<string, ComponentType<{ className?: string }>> = {
   React: SiReact,
   Typescript: SiTypescript,
+  TypeScript: SiTypescript,
   Tailwind: SiTailwindcss,
+  "Tailwind CSS": SiTailwindcss,
   "shadcn/ui": SiShadcnui,
   Fastify: SiFastify,
   "Socket.io": SiSocketdotio,
@@ -62,4 +74,18 @@ export const techIcons: Record<string, ComponentType<{ className?: string }>> = 
   CSS: SiCss3,
   JavaScript: SiJavascript,
   VSCODE: TbBrandVscode,
+  "Node.js": SiNodedotjs,
+  Python: SiPython,
+  MongoDB: SiMongodb,
+  Zod: SiZod,
+  "TanStack Query": SiReactquery,
+  "React Hook Form": SiReacthookform,
+  FastAPI: SiFastapi,
+  Leaflet: SiLeaflet,
+  Figma: BiLogoFigma,
+  ChromaDB: Database,
+  Agents: Bot,
+  "Context RAG": FileSearch,
+  "Hybrid RAG": FileSearch,
+  "Self RAG": FileSearch,
 };

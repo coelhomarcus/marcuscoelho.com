@@ -22,6 +22,7 @@ import {
   type AnimatedIcon,
 } from "@/components/icons/use-animated-icon";
 import { techIcons } from "@/data/tech-icons";
+import { Badge } from "@/components/ui/badge";
 import { IconButton } from "@/components/ui/icon-button";
 import { LinkButton } from "@/components/ui/link-button";
 
@@ -253,16 +254,15 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     <p className="mb-2 text-xs font-medium text-zinc-500">
                       Tecnologias
                     </p>
-                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-[13px] text-zinc-400">
+                    <ul className="flex flex-wrap gap-1.5">
                       {project.tech.map((t) => {
                         const Icon = techIcons[t];
                         return (
-                          <li
-                            key={t}
-                            className="inline-flex items-center gap-1.5"
-                          >
-                            {Icon && <Icon className="size-4 text-zinc-300" />}
-                            {t}
+                          <li key={t}>
+                            <Badge>
+                              {Icon && <Icon />}
+                              {t}
+                            </Badge>
                           </li>
                         );
                       })}
