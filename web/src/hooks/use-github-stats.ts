@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import config from "@/data/config";
 import { createRequestCache } from "@/lib/request-cache";
+import { useCachedRequest } from "@/hooks/use-cached-request";
 
 export interface Language {
   name: string;
@@ -38,30 +38,5 @@ function loadGitHubStats() {
 }
 
 export function useGitHubStats() {
-  const [data, setData] = useState<GitHubStatsData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    loadGitHubStats()
-      .then((json) => {
-        if (!cancelled) setData(json);
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Falha ao buscar stats do GitHub");
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return { data, isLoading, error };
+  return useCachedRequest(loadGitHubStats);
 }

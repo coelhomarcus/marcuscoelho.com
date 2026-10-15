@@ -5,6 +5,7 @@ import {
   type ContributionLevel,
 } from "../hooks/use-github-calendar";
 import { Tooltip } from "@/components/ui/tooltip";
+import config from "@/data/config";
 
 const GAP = 3;
 const MIN_CELL = 10;
@@ -108,8 +109,8 @@ function GitHubGraph() {
       <SectionHeading
         title="GitHub"
         action={
-          <SectionAction href="https://github.com/coelhomarcus">
-            @coelhomarcus
+          <SectionAction href={`https://github.com/${config.GITHUB_USERNAME}`}>
+            @{config.GITHUB_USERNAME}
           </SectionAction>
         }
       />

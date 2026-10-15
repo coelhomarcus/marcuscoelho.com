@@ -36,13 +36,13 @@ function WorkItem({ work }: { work: Work }) {
   const latest = positions[0];
 
   return (
-    <div>
+    <div className="group/work">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls={contentId}
-        className="flex w-full cursor-pointer flex-col items-start gap-2.5 py-4 text-left"
+        className="flex w-full cursor-pointer flex-col items-start gap-2.5 py-4 text-left group-first/work:pt-0 group-last/work:pb-0"
       >
         <div className="flex min-w-0 items-start gap-4">
           <img
@@ -90,7 +90,7 @@ function WorkItem({ work }: { work: Work }) {
         <div className="overflow-hidden">
           <div
             className={cn(
-              "pb-5 pl-14 text-[13px] text-zinc-400 transition-[opacity,translate] duration-500",
+              "pb-5 pl-14 text-[13px] text-zinc-400 transition-[opacity,translate] duration-500 group-last/work:pt-4 group-last/work:pb-0",
               EASE,
               open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
             )}
@@ -152,7 +152,7 @@ function WorkExperience() {
   return (
     <section className="flex flex-col gap-4">
       <SectionHeading title="Experiência" />
-      <div className="-my-4">
+      <div>
         {experience.map((work) => (
           <WorkItem key={work.company} work={work} />
         ))}

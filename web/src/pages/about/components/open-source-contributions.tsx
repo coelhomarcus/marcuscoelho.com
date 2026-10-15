@@ -1,9 +1,19 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import { motion } from "motion/react";
 import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { cn } from "@/lib/utils";
+import config from "@/data/config";
 import {
   useGitHubPullRequests,
   type PullRequest,
@@ -30,8 +40,8 @@ const actionClass =
 function githubSearchUrl(state: PullRequestState) {
   const filter =
     state === "closed" ? "is:closed is:unmerged" : `is:${state}`;
-  const query = `is:pr author:coelhomarcus is:public ${filter}`;
-  return `https://github.com/pulls?q=${encodeURIComponent(query)}`;
+  const query = `is:pr author:${config.GITHUB_USERNAME} is:public ${filter}`;
+  return `https://github.com/search?q=${encodeURIComponent(query)}&type=pullrequests`;
 }
 
 interface PillRect {
@@ -41,42 +51,72 @@ interface PillRect {
   height: number;
 }
 
+const tabId = (baseId: string, state: PullRequestState) => `${baseId}-tab-${state}`;
+const panelId = (baseId: string) => `${baseId}-panel`;
+
 function Tabs({
+  baseId,
   active,
   onChange,
 }: {
+  baseId: string;
   active: PullRequestState;
   onChange: (state: PullRequestState) => void;
 }) {
   const listRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(active);
   const [pill, setPill] = useState<PillRect | null>(null);
 
+  const measure = useCallback(() => {
+    const tab = listRef.current?.querySelector<HTMLElement>(
+      `[data-tab="${activeRef.current}"]`,
+    );
+    if (!tab) return;
+    setPill({
+      x: tab.offsetLeft,
+      y: tab.offsetTop,
+      width: tab.offsetWidth,
+      height: tab.offsetHeight,
+    });
+  }, []);
+
   useLayoutEffect(() => {
+    activeRef.current = active;
+    measure();
+  }, [active, measure]);
+
+  useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-
-    const measure = () => {
-      const tab = list.querySelector<HTMLElement>(`[data-tab="${active}"]`);
-      if (!tab) return;
-      setPill({
-        x: tab.offsetLeft,
-        y: tab.offsetTop,
-        width: tab.offsetWidth,
-        height: tab.offsetHeight,
-      });
-    };
-
-    measure();
     const obs = new ResizeObserver(measure);
     obs.observe(list);
     return () => obs.disconnect();
-  }, [active]);
+  }, [measure]);
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const index = TABS.findIndex((tab) => tab.state === active);
+    const next = {
+      ArrowRight: (index + 1) % TABS.length,
+      ArrowLeft: (index - 1 + TABS.length) % TABS.length,
+      Home: 0,
+      End: TABS.length - 1,
+    }[event.key];
+    if (next === undefined) return;
+
+    event.preventDefault();
+    const state = TABS[next].state;
+    onChange(state);
+    listRef.current
+      ?.querySelector<HTMLElement>(`[data-tab="${state}"]`)
+      ?.focus();
+  }
 
   return (
     <div
       ref={listRef}
       role="tablist"
       aria-label="Estado dos pull requests"
+      onKeyDown={handleKeyDown}
       className="relative inline-flex h-8 w-fit shrink-0 items-center rounded-lg bg-black p-[3px] ring-1 ring-white/10"
     >
       {pill && (
@@ -96,10 +136,13 @@ function Tabs({
         return (
           <button
             key={state}
+            id={tabId(baseId, state)}
             type="button"
             role="tab"
             data-tab={state}
             aria-selected={selected}
+            aria-controls={panelId(baseId)}
+            tabIndex={selected ? 0 : -1}
             onClick={() => onChange(state)}
             className={cn(
               "relative inline-flex h-[calc(100%-1px)] cursor-pointer items-center rounded-md px-2 text-[13px] sm:px-2.5 font-medium whitespace-nowrap transition-colors",
@@ -135,7 +178,7 @@ function PullRequestItem({ pr, dot }: { pr: PullRequest; dot: string }) {
         href={pr.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-start gap-3 py-3.5"
+        className="group flex items-start gap-3 py-3.5 group-last/row:pb-0"
       >
         <span aria-hidden className={cn("mt-[7px] size-2 shrink-0 rounded-full", dot)} />
         <span className="flex min-w-0 flex-col gap-0.5">
@@ -159,10 +202,10 @@ function PullRequestItem({ pr, dot }: { pr: PullRequest; dot: string }) {
 
 function ListSkeleton() {
   return (
-    <ul className="-mb-3.5 animate-pulse">
+    <ul className="animate-pulse">
       {Array.from({ length: 3 }, (_, i) => (
         <Row key={i}>
-          <div className="flex items-start gap-3 py-3.5">
+          <div className="flex items-start gap-3 py-3.5 group-last/row:pb-0">
             <span className="mt-[7px] size-2 shrink-0 rounded-full bg-zinc-800" />
             <div className="flex flex-1 flex-col gap-2 pt-1">
               <span className="h-3 w-3/4 rounded bg-zinc-900" />
@@ -194,6 +237,7 @@ function ViewAllLink({ state }: { state: PullRequestState }) {
 
 function OpenSourceContributions() {
   const { data, isLoading } = useGitHubPullRequests();
+  const baseId = useId();
   const [active, setActive] = useState<PullRequestState>("merged");
   const [visible, setVisible] = useState(PAGE_SIZE);
 
@@ -213,48 +257,54 @@ function OpenSourceContributions() {
     <section className="flex flex-col gap-4">
       <SectionHeading
         title="Últimos PRs"
-        action={<Tabs active={active} onChange={changeTab} />}
+        action={
+          <Tabs baseId={baseId} active={active} onChange={changeTab} />
+        }
       />
 
-      <div aria-hidden className="dotted-x -mx-(--gutter) -mb-4" />
+      <div>
+        <div aria-hidden className="dotted-x -mx-(--gutter)" />
 
-      {isLoading || !group ? (
-        <ListSkeleton />
-      ) : (
-        <motion.div
-          key={active}
-          role="tabpanel"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          {shown.length === 0 ? (
-            <p className="pt-3.5 text-sm text-zinc-500">{EMPTY_MESSAGE[active]}</p>
-          ) : (
-            <ul className="-mb-3.5">
-              {shown.map((pr) => (
-                <PullRequestItem key={pr.url} pr={pr} dot={dot} />
-              ))}
-            </ul>
-          )}
+        {isLoading || !group ? (
+          <ListSkeleton />
+        ) : (
+          <motion.div
+            key={active}
+            id={panelId(baseId)}
+            role="tabpanel"
+            aria-labelledby={tabId(baseId, active)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            {shown.length === 0 ? (
+              <p className="pt-3.5 text-sm text-zinc-500">{EMPTY_MESSAGE[active]}</p>
+            ) : (
+              <ul>
+                {shown.map((pr) => (
+                  <PullRequestItem key={pr.url} pr={pr} dot={dot} />
+                ))}
+              </ul>
+            )}
 
-          {(canShowMore || hasMoreOnGitHub) && (
-            <div className="flex justify-center pt-4">
-              {canShowMore ? (
-                <button
-                  type="button"
-                  onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                  className={actionClass}
-                >
-                  Mostrar mais
-                </button>
-              ) : (
-                <ViewAllLink state={active} />
-              )}
-            </div>
-          )}
-        </motion.div>
-      )}
+            {(canShowMore || hasMoreOnGitHub) && (
+              <div className="flex justify-center pt-4">
+                {canShowMore ? (
+                  <button
+                    type="button"
+                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                    className={actionClass}
+                  >
+                    Mostrar mais
+                  </button>
+                ) : (
+                  <ViewAllLink state={active} />
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 }

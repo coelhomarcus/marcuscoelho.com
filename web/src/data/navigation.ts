@@ -1,3 +1,4 @@
+import config from "@/data/config";
 import type { NavItem } from "@/types";
 import { AtSignIcon } from "@/components/icons/at-sign";
 import { BookmarkIcon } from "@/components/icons/bookmark";
@@ -25,7 +26,7 @@ export const socials: NavItem[] = [
   },
   {
     name: "GitHub",
-    href: "https://github.com/coelhomarcus",
+    href: `https://github.com/${config.GITHUB_USERNAME}`,
     icon: GithubIcon,
     external: true,
   },
