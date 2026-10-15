@@ -20,15 +20,6 @@ export type GitHubPullRequestsData = Record<PullRequestState, PullRequestGroup> 
   cachedAt: string;
 };
 
-export function hasPullRequests(data: GitHubPullRequestsData | null) {
-  return (
-    !!data &&
-    (["merged", "open", "closed"] as const).some(
-      (state) => data[state].items.length > 0,
-    )
-  );
-}
-
 const pullRequestsCache = createRequestCache<GitHubPullRequestsData>();
 
 function loadGitHubPullRequests() {

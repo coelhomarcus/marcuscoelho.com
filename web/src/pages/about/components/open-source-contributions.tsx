@@ -4,10 +4,10 @@ import { SectionHeading } from "@/components/section-heading";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { cn } from "@/lib/utils";
-import type {
-  GitHubPullRequestsData,
-  PullRequest,
-  PullRequestState,
+import {
+  useGitHubPullRequests,
+  type PullRequest,
+  type PullRequestState,
 } from "../hooks/use-github-pull-requests";
 
 const PAGE_SIZE = 5;
@@ -192,12 +192,8 @@ function ViewAllLink({ state }: { state: PullRequestState }) {
   );
 }
 
-interface OpenSourceContributionsProps {
-  data: GitHubPullRequestsData | null;
-  isLoading: boolean;
-}
-
-function OpenSourceContributions({ data, isLoading }: OpenSourceContributionsProps) {
+function OpenSourceContributions() {
+  const { data, isLoading } = useGitHubPullRequests();
   const [active, setActive] = useState<PullRequestState>("merged");
   const [visible, setVisible] = useState(PAGE_SIZE);
 

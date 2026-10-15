@@ -7,10 +7,6 @@ import WorkExperience from "./components/work-experience/work-experience";
 import Skills from "./components/skills";
 import GitHubGraph from "./components/github-graph";
 import OpenSourceContributions from "./components/open-source-contributions";
-import {
-  hasPullRequests,
-  useGitHubPullRequests,
-} from "./hooks/use-github-pull-requests";
 import ProjectsMarquee from "./components/projects-marquee";
 import { SectionRule } from "@/components/layout/stitch";
 import ProjectModal from "@/components/project-modal";
@@ -19,9 +15,6 @@ import { fadeUp } from "@/lib/motion";
 
 const AboutPage = () => {
   const [selected, setSelected] = useState<Project | null>(null);
-  const pullRequests = useGitHubPullRequests();
-  const showPullRequests =
-    pullRequests.isLoading || hasPullRequests(pullRequests.data);
 
   return (
     <main className="text-zinc-100 space-y-8">
@@ -61,21 +54,11 @@ const AboutPage = () => {
         <GitHubGraph />
       </motion.div>
 
-      {showPullRequests && (
-        <>
-          <SectionRule />
+      <SectionRule />
 
-          <motion.div
-            {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.3 }}
-          >
-            <OpenSourceContributions
-              data={pullRequests.data}
-              isLoading={pullRequests.isLoading}
-            />
-          </motion.div>
-        </>
-      )}
+      <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.3 }}>
+        <OpenSourceContributions />
+      </motion.div>
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </main>
