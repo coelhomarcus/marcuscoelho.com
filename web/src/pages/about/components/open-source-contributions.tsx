@@ -14,8 +14,8 @@ const PAGE_SIZE = 5;
 
 const TABS: { state: PullRequestState; label: string; dot: string }[] = [
   { state: "merged", label: "Merged", dot: "bg-violet-500" },
-  { state: "open", label: "Abertos", dot: "bg-emerald-500" },
-  { state: "closed", label: "Fechados", dot: "bg-red-500" },
+  { state: "open", label: "Open", dot: "bg-emerald-500" },
+  { state: "closed", label: "Closed", dot: "bg-red-500" },
 ];
 
 const EMPTY_MESSAGE: Record<PullRequestState, string> = {
@@ -212,7 +212,7 @@ function OpenSourceContributions() {
   return (
     <section className="flex flex-col gap-4">
       <SectionHeading
-        title="Open Source"
+        title="Últimos PRs"
         action={<Tabs active={active} onChange={changeTab} />}
       />
 

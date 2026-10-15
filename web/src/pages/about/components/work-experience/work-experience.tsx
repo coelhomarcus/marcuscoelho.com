@@ -7,7 +7,7 @@ import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { SectionHeading } from "@/components/section-heading";
 import { Period } from "./period";
-import { formatDuration, getWorkRange } from "./format";
+import { getWorkRange } from "./format";
 
 const EASE = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 
@@ -73,7 +73,7 @@ function WorkItem({ work }: { work: Work }) {
             />
           </span>
           <span className="text-[13px] text-zinc-500 sm:text-sm">
-            {formatDuration(start, end)}
+            {work.workMode}
           </span>
         </div>
       </button>

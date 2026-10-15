@@ -28,6 +28,7 @@ export interface Work {
   company: string;
   logo: string;
   website?: string;
+  workMode: "Híbrido" | "Remoto" | "Presencial";
   positions: WorkPosition[];
 }
 

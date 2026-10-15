@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/section-heading";
 function Skills() {
   return (
     <div className="flex flex-col gap-4 cursor-default">
-      <SectionHeading title="Skills" />
+      <SectionHeading title="Skills & Tecnologias" />
       <div className="flex flex-wrap gap-1.5">
         {skills.map((skill, index) => (
           <Badge key={index} asChild variant="muted">

@@ -93,7 +93,7 @@ Almost all site content is static data in `src/data/`. Changing the site usually
 | File | Content |
 | --- | --- |
 | `projects.ts` | `Project[]`: name, description, tech, optional `link`, `repo`, `favicon`, `images` |
-| `experience.ts` | `Work[]`: companies, positions, periods, highlights, skills |
+| `experience.ts` | `Work[]`: companies, work mode, positions, periods, highlights, skills |
 | `skills.ts` | Skill icons and links |
 | `certificates.ts` | Certificates |
 | `config.ts` | Runtime config derived from `VITE_*` env vars |

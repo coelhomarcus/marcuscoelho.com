@@ -5,6 +5,7 @@ export const experience: Work[] = [
     company:
       "Logibot AI: Plataforma de Auxilio no Ensino de Lógica de Programação",
     logo: "/assets/works/logibot.svg",
+    workMode: "Híbrido",
     positions: [
       {
         title: "Full Stack Developer",
@@ -40,6 +41,7 @@ export const experience: Work[] = [
   {
     company: "PET-Saúde: Inovação e Saúde Digital no SUS",
     logo: "/assets/works/petsaude.webp",
+    workMode: "Híbrido",
     positions: [
       {
         title: "Front-end Developer",
@@ -66,6 +68,7 @@ export const experience: Work[] = [
   {
     company: "Exception Jr",
     logo: "/assets/works/exceptionjr.webp",
+    workMode: "Remoto",
     positions: [
       {
         title: "Full Stack Developer",
