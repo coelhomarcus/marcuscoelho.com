@@ -64,7 +64,7 @@ const PostPage = () => {
           className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors duration-200 mb-8"
           {...back.hoverProps}
         >
-          <ChevronLeftIcon ref={back.ref} size={16} /> Voltar aos articles
+          <ChevronLeftIcon ref={back.ref} size={16} /> Voltar
         </Link>
       </motion.div>
 
