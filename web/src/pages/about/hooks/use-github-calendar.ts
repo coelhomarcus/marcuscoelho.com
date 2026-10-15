@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import config from "@/data/config";
-import { getMockGitHubCalendar } from "./mock-github-calendar";
 import { createRequestCache } from "@/lib/request-cache";
 
 export type ContributionLevel =
@@ -30,8 +29,6 @@ const calendarCache = createRequestCache<GitHubCalendarData>();
 
 function loadGitHubCalendar() {
   return calendarCache.load(async () => {
-    if (config.isDev) return getMockGitHubCalendar();
-
     const res = await fetch(`${config.API_URL}/github/contributions`);
     if (!res.ok) throw new Error("Falha ao buscar dados do GitHub");
     return (await res.json()) as GitHubCalendarData;

@@ -58,6 +58,15 @@ export default defineConfig({
     dedupe: ["react", "react-dom", "@mdx-js/react"],
   },
   server: {
+    // The production API only allows the production origins (CORS), so in dev
+    // the browser calls /api on localhost and Vite forwards it server-side
+    proxy: {
+      "/api": {
+        target: "https://api.marcuscoelho.com",
+        changeOrigin: true,
+        rewrite: (url) => url.replace(/^\/api/, ""),
+      },
+    },
     fs: {
       allow: [searchForWorkspaceRoot(process.cwd()), postsDir],
     },

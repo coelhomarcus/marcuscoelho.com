@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import config from "@/data/config";
-import { getMockGitHubPullRequests } from "./mock-github-pull-requests";
 import { createRequestCache } from "@/lib/request-cache";
 
 export type PullRequestState = "merged" | "open" | "closed";
@@ -37,8 +36,6 @@ const pullRequestsCache = createRequestCache<GitHubPullRequestsData>();
 
 function loadGitHubPullRequests() {
   return pullRequestsCache.load(async () => {
-    if (config.isDev) return getMockGitHubPullRequests();
-
     const res = await fetch(`${config.API_URL}/github/pull-requests`);
     if (!res.ok) throw new Error("Falha ao buscar pull requests do GitHub");
     return (await res.json()) as GitHubPullRequestsData;

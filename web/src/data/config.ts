@@ -1,9 +1,8 @@
-const ENV = import.meta.env.VITE_ENV ?? "prod";
-
 const config = {
-  API_URL: import.meta.env.VITE_API_URL ?? "https://api.marcuscoelho.com",
-  ENV,
-  isDev: ENV === "dev",
+  // In dev, /api goes through the Vite proxy to the production API
+  API_URL:
+    import.meta.env.VITE_API_URL ??
+    (import.meta.env.DEV ? "/api" : "https://api.marcuscoelho.com"),
 };
 
 export default config;

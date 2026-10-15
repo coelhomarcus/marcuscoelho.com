@@ -153,12 +153,11 @@ Copy [`.env.example`](.env.example) to `.env`.
 
 | Variable | Description | Default |
 | --- | --- | --- |
-| `VITE_API_URL` | API base URL | production API |
-| `VITE_ENV` | `dev` or `prod`. In `dev`, the contribution graph uses mock data from `src/pages/about/hooks/mock-github-calendar.ts` instead of calling the API | `prod` |
+| `VITE_API_URL` | API base URL | `/api` in dev (proxied to the production API), `https://api.marcuscoelho.com` in builds |
 
 > `VITE_*` variables are inlined into the bundle at build time. Never put secrets here.
 
-The production API only accepts the production origins (CORS), so from `localhost` the endpoints that aren't mocked (stats, contact) fail. To work against real data, run the [API](../api) locally with `CORS_ORIGINS=http://localhost:5173` and set `VITE_API_URL=http://localhost:3000`.
+The production API only accepts the production origins (CORS), so in dev the site calls `/api` on its own origin and the Vite dev server forwards it to `https://api.marcuscoelho.com` (see `server.proxy` in [`vite.config.ts`](vite.config.ts)). That means local runs read real data, and the contact form really sends. To work against a local [API](../api) instead, run it with `CORS_ORIGINS=http://localhost:5173` and set `VITE_API_URL=http://localhost:3000`.
 
 ## Development
 
