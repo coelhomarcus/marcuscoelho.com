@@ -122,7 +122,7 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 | `lastCommitDate` | `string` | `pushedAt` of the most recently pushed repo |
 | `lastCommitRepo` | `string` | Name of that repo, or `""` if it's private |
 | `languages` | `{ name, percentage, color }[]` | Top 8 languages by byte size across repos |
-| `repositories` | `{ name, nameWithOwner, url, stargazerCount, createdAt }[]` | Public repos only. The frontend uses them to show stars/creation date on projects |
+| `repositories` | `{ name, nameWithOwner, url, stargazerCount, downloads, createdAt }[]` | Public repos only. `downloads` sums the download counts of every asset in the repo's 20 most recent releases. The frontend uses them to show stars, downloads and creation date on projects |
 | `cachedAt` | `string` | When the cache row was last refreshed |
 
 ### `GET /github/pull-requests`

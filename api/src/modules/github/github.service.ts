@@ -57,6 +57,15 @@ const STATS_QUERY = `
               }
             }
           }
+          releases(first: 20, orderBy: { field: CREATED_AT, direction: DESC }) {
+            nodes {
+              releaseAssets(first: 20) {
+                nodes {
+                  downloadCount
+                }
+              }
+            }
+          }
         }
       }
       contributionsCollection {
@@ -362,6 +371,15 @@ async function cacheGitHubStats() {
       nameWithOwner: repo.nameWithOwner,
       url: repo.url,
       stargazerCount: repo.stargazerCount,
+      downloads: repo.releases.nodes.reduce(
+        (total, release) =>
+          total +
+          release.releaseAssets.nodes.reduce(
+            (sum, asset) => sum + asset.downloadCount,
+            0,
+          ),
+        0,
+      ),
       createdAt: repo.createdAt,
     }));
 

@@ -46,6 +46,17 @@ const repositorySchema = z.object({
       }),
     ),
   }),
+  releases: z.object({
+    nodes: z.array(
+      z.object({
+        releaseAssets: z.object({
+          nodes: z.array(
+            z.object({ downloadCount: z.number().int().nonnegative() }),
+          ),
+        }),
+      }),
+    ),
+  }),
 });
 
 export const statsDataSchema = z.object({
