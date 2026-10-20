@@ -19,7 +19,7 @@ export const projects: Project[] = [
   },
   {
     name: "DBunny",
-    desc: "Cliente desktop leve para Banco de Dados, feito com Tauri e React, para gerenciar conexões, navegar schemas, editar dados e rodar queries.",
+    desc: "Cliente de banco de dados leve para desktop. Explore schemas, edite dados, rode queries e converse com um assistente de IA.",
     repo: "coelhomarcus/dbunny",
     tech: [
       "React",
@@ -32,7 +32,7 @@ export const projects: Project[] = [
       "TanStack Table",
     ],
     favicon: "dbunny/favicon.svg",
-    images: ["dbunny/01.webp"],
+    images: ["dbunny/01.webp", "dbunny/02.webp", "dbunny/03.webp", "dbunny/04.webp"],
   },
   {
     name: "Usagi-PKGJ",
