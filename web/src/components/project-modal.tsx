@@ -55,6 +55,12 @@ function ActionLink({
   );
 }
 
+const slideVariants = {
+  enter: (direction: number) => ({ x: direction >= 0 ? "100%" : "-100%" }),
+  center: { x: "0%" },
+  exit: (direction: number) => ({ x: direction >= 0 ? "-100%" : "100%" }),
+};
+
 interface ProjectModalProps {
   project: Project | null;
   onClose: () => void;
@@ -62,6 +68,7 @@ interface ProjectModalProps {
 
 const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
 
   const images = project?.images ?? [];
 
@@ -77,14 +84,17 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
     typeof project?.repoDownloads === "number" && project.repoDownloads > 0;
 
   const prev = useCallback(() => {
+    setDirection(-1);
     setIndex((i) => (i - 1 + images.length) % images.length);
   }, [images.length]);
 
   const next = useCallback(() => {
+    setDirection(1);
     setIndex((i) => (i + 1) % images.length);
   }, [images.length]);
 
   useEffect(() => {
+    setDirection(1);
     setIndex(0);
   }, [project]);
 
@@ -135,15 +145,17 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
             >
               {images.length > 0 && (
                 <div className="relative isolate aspect-8/5 overflow-hidden rounded-lg bg-zinc-900">
-                  <AnimatePresence initial={false}>
+                  <AnimatePresence initial={false} custom={direction}>
                     <motion.img
                       key={images[index]}
                       src={projectAsset(images[index])}
                       alt={project.name}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                       className="absolute inset-0 size-full object-cover"
                     />
                   </AnimatePresence>
@@ -156,7 +168,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         icon={ChevronLeftIcon}
                         onClick={prev}
                         aria-label="Imagem anterior"
-                        className="absolute top-1/2 left-2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
+                        className="absolute top-1/2 left-2 -translate-y-1/2 bg-background text-foreground hover:bg-zinc-900 dark:bg-background dark:hover:bg-zinc-900"
                       />
                       <IconButton
                         type="button"
@@ -164,7 +176,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         icon={ChevronRightIcon}
                         onClick={next}
                         aria-label="Próxima imagem"
-                        className="absolute top-1/2 right-2 -translate-y-1/2 bg-background/70 backdrop-blur-sm"
+                        className="absolute top-1/2 right-2 -translate-y-1/2 bg-background text-foreground hover:bg-zinc-900 dark:bg-background dark:hover:bg-zinc-900"
                       />
 
                       <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 gap-1.5">
@@ -172,7 +184,10 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                           <button
                             key={i}
                             type="button"
-                            onClick={() => setIndex(i)}
+                            onClick={() => {
+                              setDirection(i > index ? 1 : -1);
+                              setIndex(i);
+                            }}
                             aria-label={`Ir para imagem ${i + 1}`}
                             className={cn(
                               "size-1.5 cursor-pointer rounded-full transition-colors",
@@ -192,7 +207,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                     icon={XIcon}
                     onClick={onClose}
                     aria-label="Fechar"
-                    className="absolute top-2 right-2 bg-background/70 backdrop-blur-sm"
+                    className="absolute top-2 right-2 bg-background text-foreground hover:bg-zinc-900 dark:bg-background dark:hover:bg-zinc-900"
                   />
                 </div>
               )}
