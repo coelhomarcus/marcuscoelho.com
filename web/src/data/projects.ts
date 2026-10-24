@@ -55,7 +55,7 @@ export const projects: Project[] = [
     name: "Cropin",
     desc: "Ferramenta web para recortar imagens e GIFs animados, com preview em tempo real e sem perder a animação.",
     link: "https://crop.marcuscoelho.com",
-    repo: "coelhomarcus/Cropin",
+    repo: "alty-oss/cropin",
     tech: [
       "React",
       "Typescript",
