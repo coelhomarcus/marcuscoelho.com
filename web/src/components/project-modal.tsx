@@ -274,24 +274,24 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
                 {(project.link || project.repo) && (
                   <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-white/10 pt-4">
-                    {project.link && (
-                      <LinkButton
-                        href={project.link}
-                        icon={ArrowUpRightIcon}
-                        variant="outline"
-                        size="sm"
-                      >
-                        Ver projeto
-                      </LinkButton>
-                    )}
                     {project.repo && (
                       <LinkButton
                         href={githubRepoUrl(project.repo)}
                         icon={GithubIcon}
-                        variant="default"
+                        variant="outline"
                         size="sm"
                       >
                         Repositório
+                      </LinkButton>
+                    )}
+                    {project.link && (
+                      <LinkButton
+                        href={project.link}
+                        icon={ArrowUpRightIcon}
+                        variant="default"
+                        size="sm"
+                      >
+                        Ver projeto
                       </LinkButton>
                     )}
                   </div>
