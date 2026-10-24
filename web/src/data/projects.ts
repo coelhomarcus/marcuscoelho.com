@@ -20,6 +20,7 @@ export const projects: Project[] = [
   {
     name: "DBunny",
     desc: "Cliente de banco de dados leve para desktop. Explore schemas, edite dados, rode queries e converse com um assistente de IA.",
+    link: "https://dbunny.marcuscoelho.com",
     repo: "coelhomarcus/dbunny",
     tech: [
       "React",
