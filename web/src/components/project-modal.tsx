@@ -21,39 +21,10 @@ import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { GithubIcon } from "@/components/icons/github";
 import { XIcon } from "@/components/icons/x";
-import {
-  useAnimatedIcon,
-  type AnimatedIcon,
-} from "@/components/icons/use-animated-icon";
 import { techIcons } from "@/data/tech-icons";
 import { Badge } from "@/components/ui/badge";
 import { IconButton } from "@/components/ui/icon-button";
 import { LinkButton } from "@/components/ui/link-button";
-
-function ActionLink({
-  href,
-  icon: Icon,
-  children,
-}: {
-  href: string;
-  icon: AnimatedIcon;
-  children: React.ReactNode;
-}) {
-  const { ref, hoverProps } = useAnimatedIcon();
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer noopener"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-300 transition-colors hover:text-zinc-50"
-      {...hoverProps}
-    >
-      {children}
-      <Icon ref={ref} size={14} />
-    </a>
-  );
-}
 
 const slideVariants = {
   enter: (direction: number) => ({ x: direction >= 0 ? "100%" : "-100%" }),
@@ -302,11 +273,16 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 )}
 
                 {(project.link || project.repo) && (
-                  <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
+                  <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-white/10 pt-4">
                     {project.link && (
-                      <ActionLink href={project.link} icon={ArrowUpRightIcon}>
+                      <LinkButton
+                        href={project.link}
+                        icon={ArrowUpRightIcon}
+                        variant="outline"
+                        size="sm"
+                      >
                         Ver projeto
-                      </ActionLink>
+                      </LinkButton>
                     )}
                     {project.repo && (
                       <LinkButton
@@ -314,7 +290,6 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                         icon={GithubIcon}
                         variant="default"
                         size="sm"
-                        className="ml-auto"
                       >
                         Repositório
                       </LinkButton>
