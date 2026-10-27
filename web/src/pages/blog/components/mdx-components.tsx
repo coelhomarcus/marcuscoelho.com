@@ -1,7 +1,11 @@
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
-import { nightOwl as theme } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+  nightOwl,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CopyIcon } from "@/components/icons/copy";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
+import { useTheme } from "@/hooks/use-theme";
 import { useToast } from "@/components/toast/toast-context";
 import { slugify } from "@/lib/slug.mjs";
 
@@ -151,6 +155,7 @@ const components = {
   pre: function PreComponent({ children, ...rest }: PreComponentProps) {
     const { toast } = useToast();
     const copy = useAnimatedIcon();
+    const { theme } = useTheme();
     const child = children.props;
     const language = child.className?.replace("language-", "") || "text";
     const code = child.children.trim?.() || "";
@@ -175,7 +180,7 @@ const components = {
         </div>
         <SyntaxHighlighter
           language={language}
-          style={theme}
+          style={theme === "light" ? oneLight : nightOwl}
           customStyle={{
             background: "",
             padding: "1.25rem",
@@ -183,7 +188,7 @@ const components = {
             lineHeight: "1.6",
             margin: 0,
           }}
-          className="bg-black/60! scrollbar scrollbar-content rounded-none! border-0!"
+          className="bg-background/60! scrollbar scrollbar-content rounded-none! border-0!"
           {...rest}
         >
           {code}

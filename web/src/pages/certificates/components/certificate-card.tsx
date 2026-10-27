@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { cardTransition, cardVariants } from "@/lib/motion";
+import { cardTransition, useCardVariants } from "@/lib/motion";
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 
@@ -11,6 +11,7 @@ interface CertificateCardProps {
 
 const CertificateCard = ({ href, name, desc }: CertificateCardProps) => {
   const arrow = useAnimatedIcon();
+  const cardVariants = useCardVariants();
 
   return (
     <motion.a

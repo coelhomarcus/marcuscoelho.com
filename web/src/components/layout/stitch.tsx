@@ -19,8 +19,8 @@ function Stitch({ side }: { side: "left" | "right" }) {
       aria-hidden
       className={
         side === "left"
-          ? "absolute top-0 -left-(--gutter) hidden size-0.5 -translate-x-1/2 -translate-y-1/2 bg-white/25 md:block"
-          : "absolute top-0 -right-(--gutter) hidden size-0.5 translate-x-1/2 -translate-y-1/2 bg-white/25 md:block"
+          ? "absolute top-0 -left-(--gutter) hidden size-0.5 -translate-x-1/2 -translate-y-1/2 bg-foreground/25 md:block"
+          : "absolute top-0 -right-(--gutter) hidden size-0.5 translate-x-1/2 -translate-y-1/2 bg-foreground/25 md:block"
       }
     />
   );

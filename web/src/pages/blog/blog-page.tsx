@@ -4,7 +4,7 @@ import { SectionRule } from "@/components/layout/stitch";
 import { blogPosts } from "@/data/blog-posts";
 import PageTitle from "@/components/page-title";
 import { motion } from "motion/react";
-import { cardTransition, cardVariants, fadeUp } from "@/lib/motion";
+import { cardTransition, fadeUp, useCardVariants } from "@/lib/motion";
 import { formatPostDate, slugify } from "@/lib/utils";
 
 const DITHER_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='black'/%3E%3Crect x='2' y='2' width='2' height='2' fill='black'/%3E%3C/svg%3E")`;
@@ -18,6 +18,7 @@ const BlogCard = ({
   banner,
 }: Omit<BlogFrontmatter, "file">) => {
   const slug = slugify(title);
+  const cardVariants = useCardVariants();
   return (
     <MotionLink
       to={`/blog/${slug}`}
@@ -61,7 +62,7 @@ const BlogCard = ({
           <span className="text-zinc-700">·</span>
           <span className="text-xs text-zinc-500 font-medium">{tag}</span>
         </div>
-        <h2 className="font-[Times_New_Roman] italic text-2xl sm:text-3xl text-zinc-100 group-hover:text-white transition-colors duration-200 leading-snug">
+        <h2 className="font-[Times_New_Roman] italic text-2xl sm:text-3xl text-zinc-100 group-hover:text-zinc-50 transition-colors duration-200 leading-snug">
           {title}
         </h2>
       </div>

@@ -5,6 +5,7 @@
 @source "../../posts";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
 
 :root {
   --sidebar-w: 85vw;
@@ -50,9 +51,32 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html.light {
+  --color-zinc-50: #09090b;
+  --color-zinc-100: #18181b;
+  --color-zinc-200: #27272a;
+  --color-zinc-300: #3f3f46;
+  --color-zinc-400: #52525b;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #a1a1aa;
+  --color-zinc-700: #d4d4d8;
+  --color-zinc-800: #e4e4e7;
+  --color-zinc-900: #f4f4f5;
+  --color-zinc-950: #fafafa;
+  --color-background: #ffffff;
+  --color-destructive: var(--color-red-600);
+}
+
 html {
-  scrollbar-gutter: stable both-edges;
   overflow-y: scroll;
+}
+
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 768px) {
@@ -60,7 +84,6 @@ html {
   body {
     height: 100%;
     overflow: hidden;
-    scrollbar-gutter: auto;
   }
 }
 
@@ -94,31 +117,6 @@ html {
 
   .scrollbar {
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #3f3f46 transparent;
-  }
-
-  .scrollbar::-webkit-scrollbar {
-    width: 6px !important;
-    height: 6px !important;
-    display: block !important;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb {
-    background: #3f3f46 !important;
-    border-radius: 6px !important;
-  }
-
-  .scrollbar::-webkit-scrollbar-track {
-    background: transparent !important;
-  }
-
-  .github-calendar-scroll {
-    scrollbar-width: none;
-  }
-
-  .github-calendar-scroll::-webkit-scrollbar {
-    display: none;
   }
 
   .gh-cell {
@@ -137,7 +135,7 @@ html {
 
   .scrollbar-container {
     position: relative;
-    background-color: #000;
+    background-color: var(--color-background);
     height: auto;
     max-height: 40vh;
   }
@@ -146,16 +144,6 @@ html {
     overflow-y: auto;
     height: 100%;
     max-height: inherit;
-  }
-
-  .scrollbar-content::-webkit-scrollbar {
-    width: 6px;
-    display: block !important;
-  }
-
-  .scrollbar-content::-webkit-scrollbar-thumb {
-    background: #3f3f46;
-    border-radius: 6px;
   }
 }
 
@@ -171,7 +159,7 @@ html {
     position: absolute;
     opacity: 0;
     transition: opacity 0.2s;
-    color: #71717a;
+    color: var(--color-zinc-500);
   }
 
   h1 .heading-link::before {
@@ -217,14 +205,14 @@ html {
   .prose-content blockquote {
     margin: 1.5rem 0;
     padding: 1rem 1.25rem;
-    border-left: 4px solid #3f3f46;
-    background-color: #27272a;
+    border-left: 4px solid var(--color-zinc-700);
+    background-color: var(--color-zinc-800);
     font-style: italic;
   }
 
   .prose-content code {
     padding: 0.125rem 0.25rem;
-    background-color: #27272a;
+    background-color: var(--color-zinc-800);
     border-radius: 0.25rem;
     font-size: 0.875rem;
   }
@@ -249,7 +237,7 @@ html {
   [data-slot="dialog-overlay"] {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    background-color: rgba(0, 0, 0, 0.4) !important;
+    background-color: rgb(0 0 0 / 0.4) !important;
     transition:
       backdrop-filter 0.2s ease,
       background-color 0.2s ease;
@@ -258,12 +246,12 @@ html {
 
 @utility dotted-x {
   height: 1px;
-  background-color: rgb(255 255 255 / 0.15);
+  background-color: color-mix(in oklab, var(--color-foreground) 15%, transparent);
   mask-image: repeating-linear-gradient(to right, #000 0 1px, transparent 1px 6px);
 }
 
 @utility dotted-y {
   width: 1px;
-  background-color: rgb(255 255 255 / 0.15);
+  background-color: color-mix(in oklab, var(--color-foreground) 15%, transparent);
   mask-image: repeating-linear-gradient(to bottom, #000 0 1px, transparent 1px 6px);
 }

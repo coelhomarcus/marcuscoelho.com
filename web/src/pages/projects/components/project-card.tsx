@@ -1,5 +1,5 @@
 import { motion, type Variants } from "motion/react";
-import { cardTransition, cardVariants } from "@/lib/motion";
+import { cardTransition, useCardVariants } from "@/lib/motion";
 import type { Project } from "@/types";
 import { projectAsset } from "@/lib/utils";
 import { techIcons } from "@/data/tech-icons";
@@ -20,6 +20,7 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   const { name, desc, tech, images } = project;
   const arrow = useAnimatedIcon();
+  const cardVariants = useCardVariants();
   const cover = images?.[0];
 
   const withIcon = tech.filter((t) => techIcons[t]);

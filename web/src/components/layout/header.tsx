@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import Sidebar from "@/components/layout/sidebar/sidebar";
 
 import { SocialLink } from "@/components/social-link";
-import FluidOrb from "@/components/ui/fluid-orb";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { navigation, socials } from "@/data/navigation";
 
@@ -17,11 +17,10 @@ const Header = () => {
         to="/"
         className="text-zinc-100 font-medium text-sm hover:opacity-80 transition-opacity flex items-center rounded-sm"
       >
-        <FluidOrb size={20} aria-hidden className="mr-2 shrink-0" />
         Marcus Coelho
       </Link>
 
-      <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-black p-[3px] text-muted-foreground ring-1 ring-white/10">
+      <nav className="hidden @xl:inline-flex h-8 w-fit items-center justify-center rounded-lg bg-background p-[3px] text-muted-foreground ring-1 ring-foreground/10">
         {navigation.map((item) => (
           <HeaderLink key={item.href} {...item} />
         ))}
@@ -33,6 +32,7 @@ const Header = () => {
             <SocialLink key={link.name} {...link} />
           ))}
         </div>
+        <ThemeToggle />
         <Sidebar />
       </div>
     </header>
@@ -49,7 +49,7 @@ function HeaderLink({ href, name, icon: Icon }: NavItem) {
       className={({ isActive }) =>
         cn(
           "relative inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md border border-transparent pr-2.5 pl-2 py-0.5 text-sm font-medium whitespace-nowrap transition-colors",
-          isActive ? "text-black" : "text-foreground/60 hover:text-foreground",
+          isActive ? "text-background" : "text-foreground/60 hover:text-foreground",
         )
       }
     >
@@ -58,7 +58,7 @@ function HeaderLink({ href, name, icon: Icon }: NavItem) {
           {isActive && (
             <motion.span
               layoutId="header-active-tab"
-              className="absolute inset-0 bg-zinc-100"
+              className="absolute inset-0 bg-foreground"
               style={{ borderRadius: 8 }}
               transition={{ type: "spring", stiffness: 500, damping: 40 }}
             />

@@ -102,7 +102,7 @@ function Tabs({
       role="tablist"
       aria-label="Estado dos pull requests"
       onKeyDown={handleKeyDown}
-      className="relative inline-flex h-8 w-fit shrink-0 items-center rounded-lg bg-black p-[3px] ring-1 ring-white/10"
+      className="relative inline-flex h-8 w-fit shrink-0 items-center rounded-lg bg-background p-[3px] ring-1 ring-foreground/10"
     >
       {pill && (
         <motion.span
@@ -132,7 +132,7 @@ function Tabs({
             className={cn(
               "relative inline-flex h-[calc(100%-1px)] cursor-pointer items-center rounded-md px-2 text-[13px] sm:px-2.5 font-medium whitespace-nowrap transition-colors",
               selected
-                ? "text-black"
+                ? "text-background"
                 : "text-foreground/60 hover:text-foreground",
             )}
           >
@@ -167,7 +167,7 @@ function PullRequestItem({ pr, dot }: { pr: PullRequest; dot: string }) {
       >
         <span aria-hidden className={cn("mt-[7px] size-2 shrink-0 rounded-full", dot)} />
         <span className="flex min-w-0 flex-col gap-0.5">
-          <span className="truncate text-[15px] text-zinc-100 underline decoration-transparent underline-offset-4 transition-colors group-hover:text-white group-hover:decoration-zinc-600">
+          <span className="truncate text-[15px] text-zinc-100 underline decoration-transparent underline-offset-4 transition-colors group-hover:text-zinc-50 group-hover:decoration-zinc-600">
             {pr.title}
           </span>
           <span className="flex min-w-0 items-center gap-1.5 text-[13px] text-zinc-500">

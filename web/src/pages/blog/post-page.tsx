@@ -71,7 +71,7 @@ const PostPage = () => {
         {...fadeUp}
         transition={{ ...fadeUp.transition, delay: 0.06 }}
       >
-        <div className="relative mb-10 overflow-hidden rounded-xl bg-black">
+        <div className="relative mb-10 overflow-hidden rounded-xl bg-background">
           {post.banner && (
             <div className="absolute right-0 top-0 w-[50%] h-full">
               <img
@@ -79,7 +79,7 @@ const PostPage = () => {
                 alt="Banner"
                 className="absolute inset-0 w-full h-full object-cover object-right select-none"
               />
-              <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-black/90" />
+              <div className="absolute inset-0 bg-linear-to-r from-background via-background/80 to-background/90" />
             </div>
           )}
           <div className={cn("relative", post.banner ? "py-4" : undefined)}>

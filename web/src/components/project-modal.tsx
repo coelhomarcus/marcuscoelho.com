@@ -109,7 +109,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.97 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="pointer-events-auto scrollbar w-full max-w-2xl max-h-[92vh] rounded-xl bg-[#09090b] p-3 text-popover-foreground shadow-2xl ring-1 ring-foreground/10"
+              className="pointer-events-auto scrollbar w-full max-w-2xl max-h-[92vh] rounded-xl bg-card p-3 text-popover-foreground shadow-2xl ring-1 ring-foreground/10"
               role="dialog"
               aria-modal="true"
               aria-label={project.name}
@@ -273,7 +273,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                 )}
 
                 {(project.link || project.repo) && (
-                  <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-white/10 pt-4">
+                  <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-foreground/10 pt-4">
                     {project.repo && (
                       <LinkButton
                         href={githubRepoUrl(project.repo)}

@@ -13,7 +13,7 @@ function Badge({
     <Comp
       data-slot="badge"
       className={cn(
-        "inline-flex w-fit shrink-0 items-center gap-1 rounded-[4px] align-middle border border-zinc-800/50 bg-[#111111] px-2 py-0.5 text-[11px] font-medium whitespace-nowrap text-zinc-400 transition-colors [a]:hover:border-zinc-700 [a]:hover:text-zinc-200 [&>svg]:pointer-events-none [&>svg]:size-3 [&>svg]:shrink-0",
+        "inline-flex w-fit shrink-0 items-center gap-1 rounded-[4px] align-middle border border-zinc-800/50 bg-zinc-900 px-2 py-0.5 text-[11px] font-medium whitespace-nowrap text-zinc-400 transition-colors [a]:hover:border-zinc-700 [a]:hover:text-zinc-200 [&>svg]:pointer-events-none [&>svg]:size-3 [&>svg]:shrink-0",
         className,
       )}
       {...props}
