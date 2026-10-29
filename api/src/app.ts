@@ -72,7 +72,11 @@ if (hasWebBuild) {
       req.path.startsWith("/assets/") || path.extname(req.path) !== "";
 
     if (!acceptsHtml || isFileRequest) {
-      res.status(404).type("text/plain").send("Not found");
+      res
+        .status(404)
+        .setHeader("Cache-Control", "no-store")
+        .type("text/plain")
+        .send("Not found");
       return;
     }
 
