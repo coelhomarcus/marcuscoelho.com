@@ -1,4 +1,4 @@
-import config from "@/data/config";
+import { apiPath } from "@/lib/api";
 import { createRequestCache } from "@/lib/request-cache";
 import { useCachedRequest } from "@/hooks/use-cached-request";
 
@@ -29,7 +29,7 @@ const calendarCache = createRequestCache<GitHubCalendarData>();
 
 function loadGitHubCalendar() {
   return calendarCache.load(async () => {
-    const res = await fetch(`${config.API_URL}/github/contributions`);
+    const res = await fetch(apiPath("/github/contributions"));
     if (!res.ok) throw new Error("Falha ao buscar dados do GitHub");
     return (await res.json()) as GitHubCalendarData;
   });

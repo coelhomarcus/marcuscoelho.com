@@ -1,5 +1,5 @@
 import { useState } from "react";
-import config from "@/data/config";
+import { apiPath } from "@/lib/api";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 export type FieldState = "default" | "valid" | "invalid";
@@ -61,7 +61,7 @@ export const useContact = () => {
     setStatus("sending");
 
     try {
-      const res = await fetch(config.API_URL + "/contact", {
+      const res = await fetch(apiPath("/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

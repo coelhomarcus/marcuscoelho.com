@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { XIcon } from "@/components/icons/x";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { Button } from "@/components/ui/button";
-import { navigation, others, socials } from "@/data/navigation";
+import { hobbies, navigation, others, socials } from "@/data/navigation";
 import { SidebarLink, type SidebarSize } from "./sidebar-link";
 
 interface SidebarContentProps {
@@ -85,6 +85,16 @@ export function SidebarContent({
         </Group>
         <Group title="Contato" size={size}>
           {socials.map((item) => (
+            <SidebarLink
+              key={item.name}
+              item={item}
+              size={size}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </Group>
+        <Group title="Hobbies" size={size}>
+          {hobbies.map((item) => (
             <SidebarLink
               key={item.name}
               item={item}

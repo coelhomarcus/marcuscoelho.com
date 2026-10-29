@@ -15,6 +15,8 @@ const NotFoundPage = lazy(() => import("@/pages/not-found/not-found-page"));
 const CertificatesPage = lazy(
   () => import("@/pages/certificates/certificates-page"),
 );
+const AnimePage = lazy(() => import("@/pages/hobbies/anime-page"));
+const MangaPage = lazy(() => import("@/pages/hobbies/manga-page"));
 
 import AboutPage from "@/pages/about/about-page";
 import ProjectsPage from "@/pages/projects/projects-page";
@@ -60,6 +62,8 @@ const Shell = () => {
                       element={<CertificatesPage />}
                     />
                     <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/hobbies/animes" element={<AnimePage />} />
+                    <Route path="/hobbies/manga" element={<MangaPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                   </Routes>
                 </Suspense>

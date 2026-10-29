@@ -2,8 +2,6 @@ import { Resend } from "resend";
 import { env } from "../config/env";
 import { CreateContactInput } from "../modules/contact/contact.validation";
 
-const resend = new Resend(env.RESEND_API_KEY);
-
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, "&amp;")
@@ -14,6 +12,15 @@ function escapeHtml(value: string) {
 }
 
 export async function sendContactEmail(data: CreateContactInput) {
+  if (
+    !env.RESEND_API_KEY ||
+    !env.CONTACT_FROM_EMAIL ||
+    !env.CONTACT_TO_EMAIL
+  ) {
+    throw new Error("Contact email is not configured");
+  }
+
+  const resend = new Resend(env.RESEND_API_KEY);
   const { error } = await resend.emails.send({
     from: env.CONTACT_FROM_EMAIL,
     to: env.CONTACT_TO_EMAIL,

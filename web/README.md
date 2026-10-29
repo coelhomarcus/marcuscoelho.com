@@ -2,7 +2,7 @@
 
 ## web
 
-Frontend of my personal site: a statically built React SPA with an MDX blog, served by nginx.
+Frontend workspace of my personal site: a statically built React SPA with an MDX blog, served by the Express application in production.
 
 ## Stack
 
@@ -14,14 +14,13 @@ Frontend of my personal site: a statically built React SPA with an MDX blog, ser
 <img alt="React Router" src="https://img.shields.io/badge/-React%20Router-CA4245?style=plastic&logo=reactrouter&logoColor=white" />
 <img alt="Motion" src="https://img.shields.io/badge/-Motion-EE0000?style=plastic&logo=framer&logoColor=white" />
 <img alt="MDX" src="https://img.shields.io/badge/-MDX-1B1F24?style=plastic&logo=mdx&logoColor=white" />
-<img alt="nginx" src="https://img.shields.io/badge/-nginx-009639?style=plastic&logo=nginx&logoColor=white" />
 <p/>
 
 - **UI:** React 19, Tailwind CSS 4 (`@tailwindcss/vite` + typography plugin), shadcn/ui (Radix), Motion
 - **Routing:** React Router 7 (`BrowserRouter`)
 - **Content:** MDX 3 via `@mdx-js/rollup` + `remark-frontmatter`
 - **Build:** Vite, TypeScript 5.7 (`tsc -b` type check before bundling)
-- **Serving:** nginx (Alpine) in Docker
+- **Serving:** Express static middleware from the unified root image
 
 ## Routes
 
@@ -32,6 +31,8 @@ Frontend of my personal site: a statically built React SPA with an MDX blog, ser
 | `/blog` | `pages/blog/blog-page` | eager |
 | `/blog/:slug` | `pages/blog/post-page` | eager shell, post body lazy-loaded |
 | `/certificates` | `pages/certificates/certificates-page` | `React.lazy` |
+| `/hobbies/animes` | `pages/hobbies/anime-page` | `React.lazy` |
+| `/hobbies/mangas` | `pages/hobbies/manga-page` | `React.lazy` |
 | `/contact` | `pages/contact/contact-page` | eager |
 | `*` | `pages/not-found/not-found-page` | `React.lazy` |
 
@@ -44,7 +45,6 @@ web/
 ├── public/assets/           # static images: icons, projects/<name>/, posts/<date>/, works/
 ├── scripts/
 │   └── generate-posts.mjs   # builds src/data/blog-posts.ts from MDX frontmatter
-├── nginx.conf
 └── src/
     ├── main.tsx             # BrowserRouter + ToastProvider
     ├── app.tsx              # layout and route table
@@ -96,7 +96,7 @@ Almost all site content is static data in `src/data/`. Changing the site usually
 | `experience.ts` | `Work[]`: companies, work mode, positions, periods, highlights, skills |
 | `skills.ts` | Skill icons and links |
 | `certificates.ts` | Certificates |
-| `config.ts` | Runtime config derived from `VITE_*` env vars |
+| `config.ts` | Site-wide constants |
 | `blog-posts.ts` | **Generated**, don't edit by hand |
 
 Project assets are resolved relative to `public/assets/projects/`, so `favicon: "dbunny/favicon.svg"` maps to `public/assets/projects/dbunny/favicon.svg`.
@@ -129,14 +129,20 @@ Besides per-post chunks, `node_modules` is split into `react-icons`, `syntax-hig
 
 ## API integration
 
+The frontend has no environment variables and never knows an API hostname. All
+requests use same-origin paths under `/api`. During development Vite forwards
+that prefix to Express on port `3000`; in production Express handles the routes
+directly before serving the SPA.
+
 Data from the [API](../api) is fetched by hooks (shared ones in `src/hooks/`, page-specific ones in `src/pages/<Page>/hooks/`):
 
 | Hook | Endpoint | Used by |
 | --- | --- | --- |
-| `useGitHubCalendar` (`pages/about/hooks`) | `GET /github/contributions` | Contribution graph on `/` |
-| `useGitHubStats` | `GET /github/stats` | `useProjects` |
+| `useGitHubCalendar` (`pages/about/hooks`) | `GET /api/github/contributions` | Contribution graph on `/` |
+| `useGitHubStats` | `GET /api/github/stats` | `useProjects` |
 | `useProjects` | via `useGitHubStats` | Merges `repositories` into `projects.ts` by normalized repo URL, adding `repoStars` and `repoCreatedAt` |
-| `useContact` (`pages/contact/hooks`) | `POST /contact` | Contact form state, client-side validation (same rules as the API) and submit status |
+| `useContact` (`pages/contact/hooks`) | `POST /api/contact` | Contact form state, client-side validation (same rules as the API) and submit status |
+| `useCatalog` (`pages/hobbies`) | `GET /api/hobbies/:kind` | Locally cached anime and manga catalogs |
 
 GET requests go through `createRequestCache` ([`src/lib/request-cache.ts`](src/lib/request-cache.ts)), a module-level memoizer that:
 
@@ -146,25 +152,10 @@ GET requests go through `createRequestCache` ([`src/lib/request-cache.ts`](src/l
 
 The cache lives for the lifetime of the page, so navigating between routes doesn't refetch.
 
-## Environment variables
-
-Copy [`.env.example`](.env.example) to `.env`.
-
-| Variable | Description | Default |
-| --- | --- | --- |
-| `VITE_API_URL` | API base URL used by builds. Ignored in dev, where the site always calls `/api` | `https://api.marcuscoelho.com` |
-| `API_PROXY_TARGET` | Where the dev server forwards `/api` | production API |
-
-> `VITE_*` variables are inlined into the bundle at build time. Never put secrets here.
-
-The production API only accepts the production origins (CORS), so in dev the site calls `/api` on its own origin and the Vite dev server forwards it server-side (see `server.proxy` in [`vite.config.ts`](vite.config.ts)). Against production only `/api/github/*` is forwarded, so local runs read real GitHub data but the contact form can't write to the production database or send emails. To work against a local [API](../api), contact form included, set `API_PROXY_TARGET=http://localhost:3000`; the proxy forwards all of `/api` there, so the local API needs no CORS setup.
-
 ## Development
 
-```bash
-npm install
-npm run dev        # generate post index, start Vite dev server
-```
+Run `npm run dev` from the repository root to start both workspaces. Running
+`npm run dev --workspace @marcuscoelho/web` starts only Vite.
 
 | Script | Description |
 | --- | --- |
@@ -173,20 +164,11 @@ npm run dev        # generate post index, start Vite dev server
 | `npm run preview` | Serve `dist/` locally |
 | `npm run lint` | ESLint (typescript-eslint, react-hooks, react-refresh) |
 
-## Docker
+## Production
 
-The [`Dockerfile`](Dockerfile) builds from the **repo root**, so `posts/` is in the context (ignore rules live in [`Dockerfile.dockerignore`](Dockerfile.dockerignore)):
-
-```bash
-docker build -f web/Dockerfile .
-```
-
-It's a two-stage build:
-
-1. **build** (`node:20-alpine`): `npm ci` + `npm run build`
-2. **serve** (`nginx:alpine`): copies `dist/` to `/usr/share/nginx/html` along with [`nginx.conf`](nginx.conf)
-
-nginx listens on port `5189` and falls back to `index.html` for any unknown path (`try_files $uri $uri/ /index.html`), so client-side routes work on refresh.
+The root [`Dockerfile`](../Dockerfile) builds this workspace and copies `dist/`
+into the unified Node.js image. Express owns SPA fallback, compression and cache
+headers.
 
 Caching is split by how each file is named:
 

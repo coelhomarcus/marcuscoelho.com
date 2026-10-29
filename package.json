@@ -1,0 +1,24 @@
+{
+  "name": "marcuscoelho.com",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names api,web --prefix-colors cyan,magenta \"npm run dev --workspace @marcuscoelho/api\" \"npm run dev --workspace @marcuscoelho/web\"",
+    "build": "npm run build --workspace @marcuscoelho/web && npm run build --workspace @marcuscoelho/api",
+    "start": "npm run start --workspace @marcuscoelho/api",
+    "lint": "npm run lint --workspace @marcuscoelho/web",
+    "db:generate": "npm run db:generate --workspace @marcuscoelho/api",
+    "db:migrate": "npm run db:migrate --workspace @marcuscoelho/api",
+    "db:studio": "npm run db:studio --workspace @marcuscoelho/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

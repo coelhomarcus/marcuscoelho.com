@@ -206,6 +206,14 @@ function errorDetails(error: unknown) {
 }
 
 async function fetchGitHub(operation: string, query: string): Promise<unknown> {
+  if (!env.GITHUB_TOKEN) {
+    throw new AppError(
+      503,
+      "GITHUB_NOT_CONFIGURED",
+      "GitHub integration is not configured",
+    );
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(
     () => controller.abort(),

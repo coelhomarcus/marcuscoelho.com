@@ -1,4 +1,4 @@
-import config from "@/data/config";
+import { apiPath } from "@/lib/api";
 import { createRequestCache } from "@/lib/request-cache";
 import { useCachedRequest } from "@/hooks/use-cached-request";
 
@@ -32,7 +32,7 @@ const statsCache = createRequestCache<GitHubStatsData>();
 
 function loadGitHubStats() {
   return statsCache.load(async () => {
-    const res = await fetch(`${config.API_URL}/github/stats`);
+    const res = await fetch(apiPath("/github/stats"));
     if (!res.ok) throw new Error("Falha ao buscar stats do GitHub");
     return (await res.json()) as GitHubStatsData;
   });

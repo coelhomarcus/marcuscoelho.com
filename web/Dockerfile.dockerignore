@@ -1,8 +1,0 @@
-# Used by web/Dockerfile, whose build context is the repo root
-**/node_modules
-**/dist
-**/.git
-**/.gitignore
-**/.vscode
-**/*.md
-api

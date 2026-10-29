@@ -1,4 +1,4 @@
-import config from "@/data/config";
+import { apiPath } from "@/lib/api";
 import { createRequestCache } from "@/lib/request-cache";
 import { useCachedRequest } from "@/hooks/use-cached-request";
 
@@ -24,7 +24,7 @@ const pullRequestsCache = createRequestCache<GitHubPullRequestsData>();
 
 function loadGitHubPullRequests() {
   return pullRequestsCache.load(async () => {
-    const res = await fetch(`${config.API_URL}/github/pull-requests`);
+    const res = await fetch(apiPath("/github/pull-requests"));
     if (!res.ok) throw new Error("Falha ao buscar pull requests do GitHub");
     return (await res.json()) as GitHubPullRequestsData;
   });

@@ -1,5 +1,5 @@
 {
-  "name": "marcuscoelho",
+  "name": "@marcuscoelho/web",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -43,5 +43,13 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": ">=6.2.7"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-arm64-musl": "4.59.0",
+    "@rollup/rollup-linux-x64-musl": "4.59.0",
+    "@tailwindcss/oxide-linux-arm64-musl": "4.3.1",
+    "@tailwindcss/oxide-linux-x64-musl": "4.3.1",
+    "lightningcss-linux-arm64-musl": "1.32.0",
+    "lightningcss-linux-x64-musl": "1.32.0"
   }
 }

@@ -2,9 +2,9 @@
 
 ## api
 
-Backend of my personal site.
+Unified Express server for my personal site.
 
-It has two jobs: persist and forward contact form submissions, and keep a Postgres-backed cache of GitHub profile data so the frontend never talks to GitHub (or sees the token) directly.
+It serves the React SPA, persists and forwards contact form submissions, and keeps Postgres-backed caches of GitHub and MyAnimeList data. The browser only uses same-origin routes under `/api`.
 
 ## Stack
 
@@ -30,13 +30,14 @@ It has two jobs: persist and forward contact form submissions, and keep a Postgr
 ```
 src/
 ├── server.ts         # bootstrap: run migrations → listen → schedule cron → initial GitHub fetch
-├── app.ts            # Express app: CORS, JSON body parser, routers, error handler
+├── app.ts            # API routers, healthcheck, static SPA serving and error handler
 ├── config/
 │   ├── env.ts        # process.env parsed with Zod (fails fast on missing vars)
 │   └── database.ts   # pg Pool + Drizzle instance with all schemas
 ├── modules/
 │   ├── contact/      # *.routes → *.controller → *.service, *.schema (Drizzle), *.validation (Zod)
-│   └── github/
+│   ├── github/
+│   └── hobbies/      # MyAnimeList sync and public anime/manga catalog endpoints
 └── shared/
     ├── errors.ts     # AppError, asyncHandler, global errorHandler
     └── email.ts      # Resend client + HTML-escaped contact email
@@ -56,15 +57,13 @@ Each module follows the same layering:
 
 1. `env.ts` validates environment variables. Any failure throws and the process exits.
 2. Pending Drizzle migrations from `./drizzle` are applied.
-3. The HTTP server starts on `PORT`.
-4. A cron job (`0 */6 * * *`) refreshes the GitHub contributions, stats and pull requests caches.
-5. All three caches are refreshed once immediately. Failures are logged and don't crash the server.
+3. The HTTP server starts on `PORT` and serves both `/api/*` and the React build.
+4. A cron job (`0 */6 * * *`) refreshes the GitHub caches and the anime/manga catalogs.
+5. All caches are refreshed once immediately. Failures are logged and don't crash the server.
 
 ## API reference
 
-CORS only allows the origins in `CORS_ORIGINS` (by default, the production site origins).
-
-### `POST /contact`
+### `POST /api/contact`
 
 Request body:
 
@@ -95,7 +94,7 @@ Responses:
 
 After the insert, an email is sent via Resend with `replyTo` set to the sender. The send is fire-and-forget: it doesn't block the response and a failure is only logged (`[Contact] Failed to send email`, with the contact id). Resend returns failures as `{ error }` instead of throwing, so `sendContactEmail` turns them into a thrown error. User input is HTML-escaped before going into the email body.
 
-### `GET /github/contributions`
+### `GET /api/github/contributions`
 
 Contribution calendar for the last year, as returned by GitHub's `contributionCalendar`.
 
@@ -109,7 +108,7 @@ Contribution calendar for the last year, as returned by GitHub's `contributionCa
 }
 ```
 
-### `GET /github/stats`
+### `GET /api/github/stats`
 
 Aggregated profile stats, computed from the owner's 100 most recently pushed repositories.
 
@@ -125,7 +124,7 @@ Aggregated profile stats, computed from the owner's 100 most recently pushed rep
 | `repositories` | `{ name, nameWithOwner, url, stargazerCount, downloads, createdAt }[]` | Public repos only. `downloads` sums the download counts of every asset in the repo's 20 most recent releases. The frontend uses them to show stars, downloads and creation date on projects |
 | `cachedAt` | `string` | When the cache row was last refreshed |
 
-### `GET /github/pull-requests`
+### `GET /api/github/pull-requests`
 
 Pull requests authored by the user in public repositories (own or someone else's), grouped by state. Each group has the total count and the 5 most recently updated, newest first. `closed` only counts PRs closed without being merged.
 
@@ -140,6 +139,18 @@ Pull requests authored by the user in public repositories (own or someone else's
   "cachedAt": "2026-10-13T12:00:00.000Z"
 }
 ```
+
+### `GET /api/hobbies/anime`
+
+Returns the locally cached MyAnimeList anime library. Each item includes personal status, score, episode progress and dates, plus synopsis, ranking, popularity, studios, source, season, rating, duration and release metadata. The response also includes `syncedAt`.
+
+### `GET /api/hobbies/manga`
+
+Returns the locally cached manga library. Manga items include personal chapter/volume progress and dates, authors and rereading state, plus synopsis, ranking, popularity and shared release metadata.
+
+### `GET /api/health`
+
+Runs a lightweight PostgreSQL query and returns `{ "status": "ok" }`. Docker and Dokploy use this endpoint as the service healthcheck.
 
 ### Errors
 
@@ -166,7 +177,7 @@ Messages, logs and comments are in English. The only Portuguese is the contact e
 Hitting the GitHub GraphQL API on every page view would be slow and burn rate limit, so data is cached in Postgres:
 
 - `refreshGitHubContributions()`, `refreshGitHubStats()` and `refreshGitHubPullRequests()` each run one GraphQL query, validate the response with Zod, compute derived fields, and **upsert a single row** with `id = 1` (`insert … on conflict do update`, so concurrent refreshes never create a second row).
-- `GET /github/*` reads that row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
+- `GET /api/github/*` reads that row. If the table is empty (e.g. first boot before the initial fetch finished), the controller fetches from GitHub synchronously and returns that.
 - Concurrent refreshes share one in-flight request, and after a failed refresh the next attempt waits 60 seconds, so an empty cache can't turn every request into a GitHub call.
 - The cache is refreshed on boot and every 6 hours.
 
@@ -178,6 +189,8 @@ Hitting the GitHub GraphQL API on every page view would be slow and burn rate li
 | `github_contributions` | `id`, `total_contributions`, `weeks` (jsonb), `cached_at` | Single cached row (`id = 1`) |
 | `github_stats` | `id`, `total_stars`, `merged_prs`, `closed_issues`, `current_streak`, `last_commit_date`, `last_commit_repo`, `languages` (jsonb), `repositories` (jsonb), `cached_at` | Single cached row (`id = 1`) |
 | `github_pull_requests` | `id`, `merged`, `open`, `closed` (jsonb, `{ totalCount, items }`), `cached_at` | Single cached row (`id = 1`) |
+| `anime` | MAL id, title/cover metadata, list and release status, score, episode progress, genres, MAL update and sync timestamps | One row per title; replaced atomically on sync |
+| `manga` | MAL id, title/cover metadata, list and release status, score, chapter/volume progress, authors, genres, MAL update and sync timestamps | One row per title; replaced atomically on sync |
 
 Schemas live in `src/modules/*/*.schema.ts`, and drizzle-kit picks them up through [`drizzle.config.ts`](drizzle.config.ts). Migrations are SQL files in [`drizzle/`](drizzle) and run automatically on startup.
 
@@ -195,40 +208,40 @@ Copy [`.env.example`](.env.example) to `.env`. All variables are validated at st
 
 | Variable | Required | Description |
 | --- | --- | --- |
+| `NODE_ENV` | no | Runtime mode (`development` by default, `production` in Docker) |
 | `PORT` | no | HTTP port (default `3000`) |
 | `DATABASE_URL` | yes | Postgres connection string |
-| `GITHUB_TOKEN` | yes | GitHub token used for the GraphQL API |
-| `RESEND_API_KEY` | yes | Resend API key |
-| `CONTACT_FROM_EMAIL` | yes | Sender address (must be on a domain verified in Resend) |
-| `CONTACT_TO_EMAIL` | yes | Where contact emails are delivered |
-| `CORS_ORIGINS` | no | Comma-separated allowed origins. Empty or unset falls back to the production origins |
+| `GITHUB_TOKEN` | no | GitHub token used for the GraphQL API. Without it, GitHub refreshes are disabled |
+| `MAL_CLIENT_ID` | yes | Client identifier created in the MyAnimeList API panel |
+| `MAL_USERNAME` | yes | MyAnimeList username whose lists are synchronized |
+| `RESEND_API_KEY` | no | Resend API key; required for contact email delivery |
+| `CONTACT_FROM_EMAIL` | no | Sender address (must be on a domain verified in Resend) |
+| `CONTACT_TO_EMAIL` | no | Where contact emails are delivered |
 
 ## Development
 
-Requires Node.js 22+ and a reachable Postgres instance.
+Requires Node.js 22+ and a reachable Postgres instance. From the repository root, `docker compose up -d postgres` starts the development database on port `5433` (port `5432` is intentionally left free for other local projects).
 
 ```bash
-cp .env.example .env
+docker compose up -d postgres
+cp api/.env.example api/.env
 npm install
-npm run dev          # tsx watch src/server.ts
+npm run dev          # Express and Vite with hot reload
 ```
 
 | Script | Description |
 | --- | --- |
-| `npm run dev` | Run with `tsx` in watch mode |
-| `npm run build` | Compile TypeScript to `dist/` |
-| `npm start` | Run the compiled build |
+| `npm run dev` | Run Express and Vite in development |
+| `npm run build` | Build the frontend and compile the API |
+| `npm start` | Run the unified compiled service |
 | `npm run db:generate` | Generate a migration from schema changes |
 | `npm run db:migrate` | Apply migrations manually |
 | `npm run db:studio` | Open Drizzle Studio |
 
-> To call the API from the local frontend, set `CORS_ORIGINS=http://localhost:5173` here and `VITE_API_URL=http://localhost:3000` in `web/.env`.
+Vite automatically proxies `/api` to this server during local development.
 
 ## Docker
 
-The [`Dockerfile`](Dockerfile) is a two-stage build on `node:22-alpine`:
-
-1. **builder**: `npm ci` + `tsc`
-2. **runner**: production dependencies only (`npm ci --omit=dev`), `dist/` and `drizzle/`, `NODE_ENV=production`
-
-The container exposes port `3000` and runs `node dist/server.js`.
+The root [`Dockerfile`](../Dockerfile) builds both workspaces and produces one
+Node.js image containing this server, the migrations and `web/dist`. The
+container exposes port `3000` and reports health through `/api/health`.
