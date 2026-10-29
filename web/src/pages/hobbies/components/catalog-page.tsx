@@ -164,12 +164,11 @@ export function CatalogPage({
             <CatalogGridSkeleton />
           ) : filtered.length > 0 ? (
             <div className={CATALOG_GRID_CLASS}>
-              {filtered.map((item, index) => (
+              {filtered.map((item) => (
                 <CatalogCard
                   key={item.malId}
                   item={item}
                   kind={kind}
-                  index={index}
                   onSelect={() => setSelected(item)}
                 />
               ))}

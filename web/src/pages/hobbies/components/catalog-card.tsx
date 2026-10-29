@@ -1,21 +1,48 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BookOpen, Play } from "lucide-react";
-import { motion } from "motion/react";
+import { animate, motion, useMotionValue } from "motion/react";
 import { CARD_FRAME_CLASS } from "./catalog-skeleton";
 import type { AnimeItem, CatalogKind, MangaItem } from "../types";
+
+const loadedImages = new Set<string>();
 
 export function CatalogCard({
   item,
   kind,
-  index = 0,
   onSelect,
 }: {
   item: AnimeItem | MangaItem;
   kind: CatalogKind;
-  index?: number;
   onSelect: () => void;
 }) {
-  const [loaded, setLoaded] = useState(false);
+  const { imageUrl } = item;
+  const [loaded, setLoaded] = useState(
+    () => !imageUrl || loadedImages.has(imageUrl),
+  );
+  const [settled, setSettled] = useState(loaded);
+  const overlayOpacity = useMotionValue(1);
+
+  useEffect(() => {
+    if (!loaded || settled) return;
+    const controls = animate(overlayOpacity, 0, {
+      duration: 0.3,
+      ease: "easeOut",
+      onComplete: () => setSettled(true),
+    });
+    return () => controls.stop();
+  }, [loaded, settled, overlayOpacity]);
+
+  const markLoaded = useCallback(() => {
+    if (imageUrl) loadedImages.add(imageUrl);
+    setLoaded(true);
+  }, [imageUrl]);
+
+  const imageRef = useCallback(
+    (element: HTMLImageElement | null) => {
+      if (element?.complete) markLoaded();
+    },
+    [markLoaded],
+  );
 
   return (
     <motion.button
@@ -28,19 +55,26 @@ export function CatalogCard({
       className={`${CARD_FRAME_CLASS} group cursor-pointer text-left transition-shadow hover:shadow-xl focus-visible:ring-2 focus-visible:ring-zinc-400`}
     >
       {item.imageUrl ? (
-        <motion.img
-          ref={(element) => {
-            if (element?.complete) setLoaded(true);
-          }}
-          src={item.imageUrl}
-          alt=""
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          initial={false}
-          animate={{ opacity: loaded ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: "easeOut", delay: Math.min(index, 23) * 0.02 }}
-          className="size-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.035]"
-        />
+        <>
+          <img
+            ref={imageRef}
+            src={item.imageUrl}
+            alt=""
+            loading="lazy"
+            onLoad={markLoaded}
+            onError={markLoaded}
+            className="size-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.035]"
+          />
+          {!settled && (
+            <motion.span
+              style={{ opacity: overlayOpacity }}
+              aria-hidden
+              className="absolute inset-0"
+            >
+              <span className="block size-full animate-pulse bg-zinc-900" />
+            </motion.span>
+          )}
+        </>
       ) : (
         <span className="flex size-full flex-col items-center justify-center gap-2 p-3 text-center text-zinc-600">
           {kind === "anime" ? <Play size={22} /> : <BookOpen size={22} />}
