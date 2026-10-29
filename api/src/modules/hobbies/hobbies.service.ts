@@ -1,4 +1,4 @@
-import { asc, desc } from "drizzle-orm";
+import { asc, desc, sql } from "drizzle-orm";
 import type { ZodType } from "zod";
 import { env } from "../../config/env";
 import { db } from "../../config/database";
@@ -289,9 +289,23 @@ export function refreshManga() {
 }
 
 export function getCachedAnime() {
-  return db.select().from(anime).orderBy(desc(anime.malUpdatedAt), asc(anime.title));
+  return db
+    .select()
+    .from(anime)
+    .orderBy(
+      sql`${anime.personalFinishDate} desc nulls last`,
+      desc(anime.malUpdatedAt),
+      asc(anime.title),
+    );
 }
 
 export function getCachedManga() {
-  return db.select().from(manga).orderBy(desc(manga.malUpdatedAt), asc(manga.title));
+  return db
+    .select()
+    .from(manga)
+    .orderBy(
+      sql`${manga.personalFinishDate} desc nulls last`,
+      desc(manga.malUpdatedAt),
+      asc(manga.title),
+    );
 }
