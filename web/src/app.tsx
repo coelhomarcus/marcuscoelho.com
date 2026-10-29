@@ -23,6 +23,7 @@ import ProjectsPage from "@/pages/projects/projects-page";
 import BlogPage from "@/pages/blog/blog-page";
 import PostPage from "@/pages/blog/post-page";
 import ContactPage from "@/pages/contact/contact-page";
+import { CatalogPageFallback } from "@/pages/hobbies/components/catalog-skeleton";
 
 const Shell = () => {
   const location = useLocation();
@@ -62,8 +63,22 @@ const Shell = () => {
                       element={<CertificatesPage />}
                     />
                     <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/hobbies/animes" element={<AnimePage />} />
-                    <Route path="/hobbies/manga" element={<MangaPage />} />
+                    <Route
+                      path="/hobbies/animes"
+                      element={
+                        <Suspense fallback={<CatalogPageFallback kind="anime" />}>
+                          <AnimePage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="/hobbies/manga"
+                      element={
+                        <Suspense fallback={<CatalogPageFallback kind="manga" />}>
+                          <MangaPage />
+                        </Suspense>
+                      }
+                    />
                     <Route path="*" element={<NotFoundPage />} />
                   </Routes>
                 </Suspense>

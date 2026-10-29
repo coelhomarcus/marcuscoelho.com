@@ -1,16 +1,7 @@
 import { BookOpen, Play } from "lucide-react";
 import { motion } from "motion/react";
+import { CARD_FRAME_CLASS } from "./catalog-skeleton";
 import type { AnimeItem, CatalogKind, MangaItem } from "../types";
-
-export const CATALOG_GRID_CLASS =
-  "grid grid-cols-3 gap-2.5 @sm:grid-cols-4 @xl:grid-cols-5 @3xl:grid-cols-6";
-
-const CARD_FRAME_CLASS =
-  "relative block aspect-2/3 w-full overflow-hidden rounded-lg bg-zinc-900 shadow-sm ring-1 ring-foreground/10";
-
-export function CatalogCardSkeleton() {
-  return <div aria-hidden className={`${CARD_FRAME_CLASS} animate-pulse`} />;
-}
 
 export function CatalogCard({
   item,
