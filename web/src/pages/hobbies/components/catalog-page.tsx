@@ -6,7 +6,11 @@ import { SectionRule } from "@/components/layout/stitch";
 import { Input } from "@/components/ui/input";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { CatalogCard } from "./catalog-card";
+import {
+  CATALOG_GRID_CLASS,
+  CatalogCard,
+  CatalogCardSkeleton,
+} from "./catalog-card";
 import { CatalogModal } from "./catalog-modal";
 import type {
   AnimeItem,
@@ -34,53 +38,29 @@ const STATUS_LABELS: Record<CatalogKind, Record<string, string>> = {
 
 type CatalogItem = AnimeItem | MangaItem;
 
-function Summary({ items, kind }: { items: CatalogItem[]; kind: CatalogKind }) {
-  const completed = items.filter((item) => item.listStatus === "completed").length;
-  const scored = items.filter((item) => item.score > 0);
-  const average = scored.length
-    ? scored.reduce((total, item) => total + item.score, 0) / scored.length
-    : 0;
-  const progress = items.reduce(
-    (total, item) =>
-      total +
-      (kind === "anime"
-        ? (item as AnimeItem).episodesWatched
-        : (item as MangaItem).chaptersRead),
-    0,
-  );
-  const stats = [
-    { label: "No catálogo", value: items.length.toLocaleString("pt-BR") },
-    { label: "Concluídos", value: completed.toLocaleString("pt-BR") },
-    {
-      label: kind === "anime" ? "Episódios vistos" : "Capítulos lidos",
-      value: progress.toLocaleString("pt-BR"),
-    },
-    { label: "Nota média", value: average ? average.toFixed(1) : "—" },
-  ];
+const SKELETON_CHIP_LABELS = ["Todos 00", "Concluídos 00", "Em pausa 0", "Abandonados 0"];
 
+function LoadingCatalog() {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-zinc-800/70 ring-1 ring-zinc-800 @2xl:grid-cols-4">
-      {stats.map((stat) => (
-        <div key={stat.label} className="bg-background px-3 py-3.5">
-          <p className="text-lg font-semibold tracking-tight text-zinc-100">
-            {stat.value}
-          </p>
-          <p className="text-[11px] text-zinc-500">{stat.label}</p>
+    <div className="space-y-4" aria-busy="true" aria-label="Carregando catálogo">
+      <div className="space-y-3">
+        <div className="h-8 w-full animate-pulse rounded-lg border border-zinc-800 bg-zinc-950" />
+        <div className="flex gap-1.5 overflow-hidden pb-1">
+          {SKELETON_CHIP_LABELS.map((label) => (
+            <span
+              key={label}
+              className="shrink-0 animate-pulse rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-[11px] font-medium"
+            >
+              <span className="invisible">{label}</span>
+            </span>
+          ))}
         </div>
-      ))}
-    </div>
-  );
-}
-
-function LoadingCards() {
-  return (
-    <div className="grid grid-cols-3 gap-2.5 @sm:grid-cols-4 @xl:grid-cols-5 @3xl:grid-cols-6">
-      {Array.from({ length: 18 }).map((_, index) => (
-        <div
-          key={index}
-          className="aspect-2/3 animate-pulse rounded-lg bg-zinc-900 ring-1 ring-zinc-800"
-        />
-      ))}
+      </div>
+      <div className={CATALOG_GRID_CLASS}>
+        {Array.from({ length: 24 }).map((_, index) => (
+          <CatalogCardSkeleton key={index} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -154,7 +134,7 @@ export function CatalogPage({
       <SectionRule />
 
       {isLoading ? (
-        <LoadingCards />
+        <LoadingCatalog />
       ) : error ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-center">
           <p className="text-sm text-zinc-300">Não consegui abrir este catálogo.</p>
@@ -166,8 +146,6 @@ export function CatalogPage({
           transition={{ ...fadeUp.transition, delay: 0.08 }}
           className="space-y-4"
         >
-          <Summary items={items} kind={kind} />
-
           <div className="space-y-3">
             <div className="relative">
               <Search
@@ -194,18 +172,25 @@ export function CatalogPage({
                   className={cn(
                     "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
                     status === option.key
-                      ? "border-zinc-500 bg-zinc-800 text-zinc-100"
-                      : "border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300",
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200",
                   )}
                 >
-                  {option.label} <span className="text-zinc-600">{option.count}</span>
+                  {option.label}{" "}
+                  <span
+                    className={
+                      status === option.key ? "text-background/60" : "text-zinc-600"
+                    }
+                  >
+                    {option.count}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2.5 @sm:grid-cols-4 @xl:grid-cols-5 @3xl:grid-cols-6">
+            <div className={CATALOG_GRID_CLASS}>
               {filtered.map((item, index) => (
                 <motion.div
                   key={item.malId}
