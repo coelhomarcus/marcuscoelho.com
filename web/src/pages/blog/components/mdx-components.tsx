@@ -1,19 +1,18 @@
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
-import {
-  nightOwl,
-  oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { language as bashLanguage } from "@twinkleplop/bash";
+import { language as jsonLanguage } from "@twinkleplop/json";
+import "@twinkleplop/theme-night-owl";
 import { CopyIcon } from "@/components/icons/copy";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
-import { useTheme } from "@/hooks/use-theme";
 import { useToast } from "@/components/toast/toast-context";
 import { slugify } from "@/lib/slug.mjs";
 
-import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
-import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
+const highlighters = new Map<string, (code: string) => string>([
+  ["bash", bashLanguage()],
+  ["json", jsonLanguage()],
+]);
 
-SyntaxHighlighter.registerLanguage("bash", bash);
-SyntaxHighlighter.registerLanguage("json", json);
+const codeClassName =
+  "bg-background/60 text-zinc-300 [&_pre]:m-0 [&_pre]:overflow-x-auto [&_pre]:rounded-none [&_pre]:bg-transparent [&_pre]:text-inherit [&_pre]:p-5 [&_pre]:font-mono [&_pre]:text-sm [&_pre]:leading-[1.6]";
 
 type HeadingProps = React.HTMLProps<HTMLHeadingElement>;
 
@@ -152,13 +151,13 @@ const components = {
     />
   ),
 
-  pre: function PreComponent({ children, ...rest }: PreComponentProps) {
+  pre: function PreComponent({ children }: PreComponentProps) {
     const { toast } = useToast();
     const copy = useAnimatedIcon();
-    const { theme } = useTheme();
     const child = children.props;
     const language = child.className?.replace("language-", "") || "text";
     const code = child.children.trim?.() || "";
+    const html = highlighters.get(language)?.(code);
 
     const handleCopyCode = () => {
       navigator.clipboard.writeText(code);
@@ -178,21 +177,15 @@ const components = {
             <CopyIcon ref={copy.ref} size={14} />
           </button>
         </div>
-        <SyntaxHighlighter
-          language={language}
-          style={theme === "light" ? oneLight : nightOwl}
-          customStyle={{
-            background: "",
-            padding: "1.25rem",
-            fontSize: "0.875rem",
-            lineHeight: "1.6",
-            margin: 0,
-          }}
-          className="bg-background/60! scrollbar scrollbar-content rounded-none! border-0!"
-          {...rest}
-        >
-          {code}
-        </SyntaxHighlighter>
+        {html ? (
+          <div className={codeClassName} dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          <div className={codeClassName}>
+            <pre className="twinkleplop">
+              <code>{code}</code>
+            </pre>
+          </div>
+        )}
       </div>
     );
   },
