@@ -57,7 +57,10 @@ function requestHeaders() {
 
 function assertMalUrl(value: string) {
   const url = new URL(value);
-  if (url.origin !== "https://api.myanimelist.net" || !url.pathname.startsWith("/v2/")) {
+  if (
+    url.origin !== "https://api.myanimelist.net" ||
+    !url.pathname.startsWith("/v2/")
+  ) {
     throw new AppError(
       502,
       "MAL_INVALID_RESPONSE",
@@ -83,11 +86,7 @@ async function fetchPage<T>(url: string, schema: ZodType<T>): Promise<T> {
         status: response.status,
         responseBody: body.slice(0, 300),
       });
-      throw new AppError(
-        502,
-        "MAL_UNAVAILABLE",
-        "Could not reach MyAnimeList",
-      );
+      throw new AppError(502, "MAL_UNAVAILABLE", "Could not reach MyAnimeList");
     }
 
     const parsed = schema.safeParse(await response.json());
@@ -112,20 +111,15 @@ async function fetchPage<T>(url: string, schema: ZodType<T>): Promise<T> {
         "MyAnimeList took too long to respond",
       );
     }
-    throw new AppError(
-      502,
-      "MAL_UNAVAILABLE",
-      "Could not reach MyAnimeList",
-    );
+    throw new AppError(502, "MAL_UNAVAILABLE", "Could not reach MyAnimeList");
   } finally {
     clearTimeout(timeout);
   }
 }
 
-async function fetchAllPages<T extends { data: unknown[]; paging?: { next?: string } }>(
-  firstUrl: string,
-  schema: ZodType<T>,
-) {
+async function fetchAllPages<
+  T extends { data: unknown[]; paging?: { next?: string } },
+>(firstUrl: string, schema: ZodType<T>) {
   const items: T["data"] = [];
   let next: string | undefined = firstUrl;
   let pageCount = 0;
@@ -160,6 +154,7 @@ function listUrl(
     ].join(","),
     limit: "1000",
     sort: "list_updated_at",
+    nsfw: "1",
   });
   return `${MAL_API_URL}/users/${username}/${kind}list?${params}`;
 }
@@ -184,36 +179,38 @@ async function syncAnime() {
     animeListResponseSchema,
   );
   const syncedAt = new Date();
-  const rows: (typeof anime.$inferInsert)[] = items.map(({ node, list_status }) => ({
-    malId: node.id,
-    title: node.title,
-    englishTitle: node.alternative_titles?.en || null,
-    imageUrl: node.main_picture?.large ?? node.main_picture?.medium ?? null,
-    synopsis: node.synopsis ?? null,
-    listStatus: list_status.status,
-    score: list_status.score,
-    episodesWatched: list_status.num_episodes_watched,
-    totalEpisodes: node.num_episodes ?? 0,
-    isRewatching: list_status.is_rewatching,
-    personalStartDate: list_status.start_date ?? null,
-    personalFinishDate: list_status.finish_date ?? null,
-    mediaType: node.media_type ?? null,
-    releaseStatus: node.status ?? null,
-    meanScore: node.mean ?? null,
-    rank: node.rank ?? null,
-    popularity: node.popularity ?? null,
-    startDate: node.start_date ?? null,
-    endDate: node.end_date ?? null,
-    genres: node.genres?.map((genre) => genre.name) ?? [],
-    source: node.source ?? null,
-    season: node.start_season?.season ?? null,
-    seasonYear: node.start_season?.year ?? null,
-    rating: node.rating ?? null,
-    averageEpisodeDuration: node.average_episode_duration ?? null,
-    studios: node.studios?.map((studio) => studio.name) ?? [],
-    malUpdatedAt: list_status.updated_at,
-    syncedAt,
-  }));
+  const rows: (typeof anime.$inferInsert)[] = items.map(
+    ({ node, list_status }) => ({
+      malId: node.id,
+      title: node.title,
+      englishTitle: node.alternative_titles?.en || null,
+      imageUrl: node.main_picture?.large ?? node.main_picture?.medium ?? null,
+      synopsis: node.synopsis ?? null,
+      listStatus: list_status.status,
+      score: list_status.score,
+      episodesWatched: list_status.num_episodes_watched,
+      totalEpisodes: node.num_episodes ?? 0,
+      isRewatching: list_status.is_rewatching,
+      personalStartDate: list_status.start_date ?? null,
+      personalFinishDate: list_status.finish_date ?? null,
+      mediaType: node.media_type ?? null,
+      releaseStatus: node.status ?? null,
+      meanScore: node.mean ?? null,
+      rank: node.rank ?? null,
+      popularity: node.popularity ?? null,
+      startDate: node.start_date ?? null,
+      endDate: node.end_date ?? null,
+      genres: node.genres?.map((genre) => genre.name) ?? [],
+      source: node.source ?? null,
+      season: node.start_season?.season ?? null,
+      seasonYear: node.start_season?.year ?? null,
+      rating: node.rating ?? null,
+      averageEpisodeDuration: node.average_episode_duration ?? null,
+      studios: node.studios?.map((studio) => studio.name) ?? [],
+      malUpdatedAt: list_status.updated_at,
+      syncedAt,
+    }),
+  );
 
   await db.transaction(async (tx) => {
     await tx.delete(anime);
@@ -233,36 +230,38 @@ async function syncManga() {
     mangaListResponseSchema,
   );
   const syncedAt = new Date();
-  const rows: (typeof manga.$inferInsert)[] = items.map(({ node, list_status }) => ({
-    malId: node.id,
-    title: node.title,
-    englishTitle: node.alternative_titles?.en || null,
-    imageUrl: node.main_picture?.large ?? node.main_picture?.medium ?? null,
-    synopsis: node.synopsis ?? null,
-    listStatus: list_status.status,
-    score: list_status.score,
-    chaptersRead: list_status.num_chapters_read,
-    totalChapters: node.num_chapters ?? 0,
-    volumesRead: list_status.num_volumes_read,
-    totalVolumes: node.num_volumes ?? 0,
-    isRereading: list_status.is_rereading,
-    personalStartDate: list_status.start_date ?? null,
-    personalFinishDate: list_status.finish_date ?? null,
-    mediaType: node.media_type ?? null,
-    releaseStatus: node.status ?? null,
-    meanScore: node.mean ?? null,
-    rank: node.rank ?? null,
-    popularity: node.popularity ?? null,
-    startDate: node.start_date ?? null,
-    endDate: node.end_date ?? null,
-    genres: node.genres?.map((genre) => genre.name) ?? [],
-    authors:
-      node.authors?.map(({ node: author }) =>
-        [author.first_name, author.last_name].filter(Boolean).join(" "),
-      ) ?? [],
-    malUpdatedAt: list_status.updated_at,
-    syncedAt,
-  }));
+  const rows: (typeof manga.$inferInsert)[] = items.map(
+    ({ node, list_status }) => ({
+      malId: node.id,
+      title: node.title,
+      englishTitle: node.alternative_titles?.en || null,
+      imageUrl: node.main_picture?.large ?? node.main_picture?.medium ?? null,
+      synopsis: node.synopsis ?? null,
+      listStatus: list_status.status,
+      score: list_status.score,
+      chaptersRead: list_status.num_chapters_read,
+      totalChapters: node.num_chapters ?? 0,
+      volumesRead: list_status.num_volumes_read,
+      totalVolumes: node.num_volumes ?? 0,
+      isRereading: list_status.is_rereading,
+      personalStartDate: list_status.start_date ?? null,
+      personalFinishDate: list_status.finish_date ?? null,
+      mediaType: node.media_type ?? null,
+      releaseStatus: node.status ?? null,
+      meanScore: node.mean ?? null,
+      rank: node.rank ?? null,
+      popularity: node.popularity ?? null,
+      startDate: node.start_date ?? null,
+      endDate: node.end_date ?? null,
+      genres: node.genres?.map((genre) => genre.name) ?? [],
+      authors:
+        node.authors?.map(({ node: author }) =>
+          [author.first_name, author.last_name].filter(Boolean).join(" "),
+        ) ?? [],
+      malUpdatedAt: list_status.updated_at,
+      syncedAt,
+    }),
+  );
 
   await db.transaction(async (tx) => {
     await tx.delete(manga);
