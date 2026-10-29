@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { CatalogCard } from "./catalog-card";
@@ -52,6 +52,19 @@ export function CatalogPage({
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [selected, setSelected] = useState<CatalogItem | null>(null);
+  const reveal = useMotionValue(isLoading ? 0 : 1);
+  const skeletonOpacity = useTransform(reveal, (value) => 1 - value);
+  const [skeletonGone, setSkeletonGone] = useState(!isLoading);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const controls = animate(reveal, 1, {
+      duration: 0.3,
+      ease: "easeOut",
+      onComplete: () => setSkeletonGone(true),
+    });
+    return () => controls.stop();
+  }, [isLoading, reveal]);
   const items = useMemo(
     () => (data?.items ?? []) as CatalogItem[],
     [data?.items],
@@ -99,9 +112,7 @@ export function CatalogPage({
         <div className="space-y-4" aria-busy={isLoading}>
           <div className="grid">
             <motion.div
-              initial={false}
-              animate={{ opacity: isLoading ? 0 : 1 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              style={{ opacity: reveal }}
               inert={isLoading}
               className="col-start-1 row-start-1 space-y-3"
             >
@@ -146,18 +157,15 @@ export function CatalogPage({
                 ))}
               </div>
             </motion.div>
-            <AnimatePresence>
-              {isLoading && (
-                <motion.div
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  aria-hidden
-                  className="col-start-1 row-start-1"
-                >
-                  <CatalogControlsSkeleton />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {!skeletonGone && (
+              <motion.div
+                style={{ opacity: skeletonOpacity }}
+                aria-hidden
+                className="col-start-1 row-start-1"
+              >
+                <CatalogControlsSkeleton />
+              </motion.div>
+            )}
           </div>
 
           {isLoading ? (
