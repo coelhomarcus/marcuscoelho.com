@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import Sidebar from "@/components/layout/sidebar/sidebar";
 
 import { SocialLink } from "@/components/social-link";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { navigation, socials } from "@/data/navigation";
 
@@ -32,7 +31,6 @@ const Header = () => {
             <SocialLink key={link.name} {...link} />
           ))}
         </div>
-        <ThemeToggle />
         <Sidebar />
       </div>
     </header>

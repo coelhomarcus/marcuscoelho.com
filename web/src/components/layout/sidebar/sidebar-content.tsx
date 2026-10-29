@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { XIcon } from "@/components/icons/x";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { hobbies, navigation, others, socials } from "@/data/navigation";
 import { SidebarLink, type SidebarSize } from "./sidebar-link";
 
@@ -57,16 +58,19 @@ export function SidebarContent({
             <p className="text-xs text-zinc-500">@coelhomarcus</p>
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={onClose}
-          aria-label="Fechar menu"
-          className="text-muted-foreground"
-          {...closeIcon.hoverProps}
-        >
-          <XIcon ref={closeIcon.ref} size={16} />
-        </Button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle className="hover:bg-muted dark:hover:bg-muted/50" />
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            aria-label="Fechar menu"
+            className="text-muted-foreground"
+            {...closeIcon.hoverProps}
+          >
+            <XIcon ref={closeIcon.ref} size={16} />
+          </Button>
+        </div>
       </div>
 
       <nav
