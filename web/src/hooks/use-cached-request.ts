@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 
-export function useCachedRequest<T>(load: () => Promise<T>) {
-  const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export function useCachedRequest<T>(
+  load: () => Promise<T>,
+  peek?: () => T | null,
+) {
+  const [data, setData] = useState<T | null>(() => peek?.() ?? null);
+  const [isLoading, setIsLoading] = useState(data === null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { motion } from "motion/react";
+import { motion, type PanInfo } from "motion/react";
 import { cn } from "@/lib/utils";
 import { SidebarContent } from "./sidebar-content";
 import { useSidebar } from "./sidebar-context";
@@ -31,7 +31,7 @@ export function MobileSidebar() {
         dragDirectionLock
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={{ left: 0, right: 0.6 }}
-        onDragEnd={(_, { offset, velocity }) => {
+        onDragEnd={(_: unknown, { offset, velocity }: PanInfo) => {
           if (offset.x > CLOSE_DISTANCE || velocity.x > CLOSE_VELOCITY) close();
         }}
         className="fixed top-0 right-0 z-100 h-dvh w-[85vw] max-w-sm touch-pan-y rounded-l-2xl bg-popover pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] ring-1 ring-foreground/10"

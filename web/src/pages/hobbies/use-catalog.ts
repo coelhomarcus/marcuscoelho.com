@@ -22,5 +22,5 @@ function loadCatalog<T>(kind: CatalogKind, cache: ReturnType<typeof createReques
 const loadAnime = () => loadCatalog("anime", animeCache);
 const loadManga = () => loadCatalog("manga", mangaCache);
 
-export const useAnimeCatalog = () => useCachedRequest(loadAnime);
-export const useMangaCatalog = () => useCachedRequest(loadManga);
+export const useAnimeCatalog = () => useCachedRequest(loadAnime, animeCache.get);
+export const useMangaCatalog = () => useCachedRequest(loadManga, mangaCache.get);
