@@ -5,21 +5,13 @@ import { SendIcon } from "@/components/icons/send";
 import { useAnimatedIcon } from "@/components/icons/use-animated-icon";
 import { XIcon as AlertIcon } from "@/components/icons/x";
 import { motion } from "motion/react";
-import { useContact, type FieldState } from "./hooks/use-contact";
+import { useContact } from "./hooks/use-contact";
 import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-
-const inputStateClasses: Record<FieldState, string> = {
-  default: "",
-  valid:
-    "border-green-500/40 bg-green-900/10 focus-visible:border-green-500/60 focus-visible:ring-green-500/20 dark:bg-green-900/10",
-  invalid:
-    "border-red-500/40 bg-red-900/10 focus-visible:border-red-500/60 focus-visible:ring-red-500/20 dark:bg-red-900/10",
-};
 
 const ContactPage = () => {
   const submitIcon = useAnimatedIcon();
@@ -68,7 +60,7 @@ const ContactPage = () => {
               placeholder="Seu nome"
               value={form.name}
               onChange={(e) => setField("name", e.target.value)}
-              className={inputStateClasses[getFieldState("name")]}
+              aria-invalid={getFieldState("name") === "invalid"}
               required
               minLength={2}
             />
@@ -82,7 +74,7 @@ const ContactPage = () => {
               placeholder="seu@email.com"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
-              className={inputStateClasses[getFieldState("email")]}
+              aria-invalid={getFieldState("email") === "invalid"}
               required
             />
           </div>
@@ -95,10 +87,8 @@ const ContactPage = () => {
             placeholder="Sua mensagem (mínimo 10 caracteres)"
             value={form.message}
             onChange={(e) => setField("message", e.target.value)}
-            className={cn(
-              inputStateClasses[getFieldState("message")],
-              "min-h-28 resize-none",
-            )}
+            aria-invalid={getFieldState("message") === "invalid"}
+            className="min-h-28 resize-none"
             required
             minLength={10}
           />
