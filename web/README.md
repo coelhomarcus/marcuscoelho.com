@@ -119,13 +119,8 @@ Markdown / MDX content...
 1. **Index generation:** `scripts/generate-posts.mjs` runs before `dev` and `build`. It parses each file's frontmatter, sorts by `date` (`DD/MM/YYYY`, newest first) and writes `src/data/blog-posts.ts`. The blog listing only imports this file, never the MDX itself.
 2. **Compilation:** `@mdx-js/rollup` (with `enforce: "pre"`) compiles MDX to React components. `remark-frontmatter` strips the YAML block from the output. Elements are mapped to styled components through `MDXProvider` and [`pages/blog/components/mdx-components.tsx`](src/pages/blog/components/mdx-components.tsx).
 3. **Loading:** [`blog/load-post.ts`](src/pages/blog/load-post.ts) uses `import.meta.glob("@posts/*.mdx")` and `loadPost(file)` resolves the module whose **file name** matches the post's generated `file` field. Because the folder sits outside `web/`, [`vite.config.ts`](vite.config.ts) also allows it in `server.fs.allow`, dedupes `react` / `@mdx-js/react` so compiled MDX resolves them from `web/node_modules`, and [`index.css`](src/index.css) adds it as a Tailwind `@source`.
-4. **Chunking:** `manualChunks` in [`vite.config.ts`](vite.config.ts) puts every post in its own chunk at `assets/posts/<name>-[hash].js`, so a post is only downloaded when it's opened.
 
 The slug is derived from `title` (lowercased, accents and punctuation stripped, spaces → `-`; e.g. `Omarchy é tudo isso?` → `omarchy-e-tudo-isso`), and the post is served at `/blog/<slug>`. The `.mdx` file can have any name: the generator records it in the `file` field of `blog-posts.ts`, which `loadPost` uses to find the module. The UI displays the date as `19.09.2026`.
-
-### Bundle splitting
-
-Besides per-post chunks, `node_modules` is split into `react-icons`, `syntax-highlighter` (`react-syntax-highlighter`) and a shared `vendor` chunk.
 
 ## API integration
 
