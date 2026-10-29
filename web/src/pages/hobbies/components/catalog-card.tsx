@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BookOpen, Play } from "lucide-react";
 import { motion } from "motion/react";
 import { CARD_FRAME_CLASS } from "./catalog-skeleton";
@@ -6,12 +7,16 @@ import type { AnimeItem, CatalogKind, MangaItem } from "../types";
 export function CatalogCard({
   item,
   kind,
+  index = 0,
   onSelect,
 }: {
   item: AnimeItem | MangaItem;
   kind: CatalogKind;
+  index?: number;
   onSelect: () => void;
 }) {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <motion.button
       type="button"
@@ -23,11 +28,18 @@ export function CatalogCard({
       className={`${CARD_FRAME_CLASS} group cursor-pointer text-left transition-shadow hover:shadow-xl focus-visible:ring-2 focus-visible:ring-zinc-400`}
     >
       {item.imageUrl ? (
-        <img
+        <motion.img
+          ref={(element) => {
+            if (element?.complete) setLoaded(true);
+          }}
           src={item.imageUrl}
           alt=""
           loading="lazy"
-          className="size-full object-cover transition duration-300 ease-out group-hover:scale-[1.035]"
+          onLoad={() => setLoaded(true)}
+          initial={false}
+          animate={{ opacity: loaded ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: Math.min(index, 23) * 0.02 }}
+          className="size-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.035]"
         />
       ) : (
         <span className="flex size-full flex-col items-center justify-center gap-2 p-3 text-center text-zinc-600">

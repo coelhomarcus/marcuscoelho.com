@@ -1,16 +1,16 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Input } from "@/components/ui/input";
-import { fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { CatalogCard } from "./catalog-card";
 import { CatalogModal } from "./catalog-modal";
 import {
   CATALOG_COPY,
   CATALOG_GRID_CLASS,
+  CatalogControlsSkeleton,
+  CatalogGridSkeleton,
   CatalogHeading,
-  LoadingCatalog,
 } from "./catalog-skeleton";
 import type {
   AnimeItem,
@@ -90,77 +90,88 @@ export function CatalogPage({
     <main className="space-y-4 text-zinc-100">
       <CatalogHeading kind={kind} />
 
-      {isLoading ? (
-        <LoadingCatalog />
-      ) : error ? (
+      {!isLoading && error ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-center">
           <p className="text-sm text-zinc-300">Não consegui abrir este catálogo.</p>
           <p className="mt-1 text-xs text-zinc-600">{error}</p>
         </div>
       ) : (
-        <motion.div
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.08 }}
-          className="space-y-4"
-        >
-          <div className="space-y-3">
-            <div className="relative">
-              <Search
-                size={14}
-                aria-hidden
-                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-zinc-600"
-              />
-              <Input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={`Buscar em ${title.toLocaleLowerCase("pt-BR")}...`}
-                aria-label={`Buscar em ${title}`}
-                className="pl-8"
-              />
-            </div>
+        <div className="space-y-4" aria-busy={isLoading}>
+          <div className="grid">
+            <motion.div
+              initial={false}
+              animate={{ opacity: isLoading ? 0 : 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              inert={isLoading}
+              className="col-start-1 row-start-1 space-y-3"
+            >
+              <div className="relative">
+                <Search
+                  size={14}
+                  aria-hidden
+                  className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-zinc-600"
+                />
+                <Input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder={`Buscar em ${title.toLocaleLowerCase("pt-BR")}...`}
+                  aria-label={`Buscar em ${title}`}
+                  className="pl-8"
+                />
+              </div>
 
-            <div className="flex gap-1.5 overflow-x-auto pb-1" aria-label="Filtrar por status">
-              {[{ key: "all", label: "Todos", count: allCount }, ...statuses].map((option) => (
-                <button
-                  key={option.key}
-                  type="button"
-                  onClick={() => setStatus(option.key)}
-                  aria-pressed={status === option.key}
-                  className={cn(
-                    "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
-                    status === option.key
-                      ? "border-foreground bg-foreground text-background"
-                      : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200",
-                  )}
-                >
-                  {option.label}{" "}
-                  <span
-                    className={
-                      status === option.key ? "text-background/60" : "text-zinc-600"
-                    }
+              <div className="flex gap-1.5 overflow-x-auto pb-1" aria-label="Filtrar por status">
+                {[{ key: "all", label: "Todos", count: allCount }, ...statuses].map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => setStatus(option.key)}
+                    aria-pressed={status === option.key}
+                    className={cn(
+                      "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
+                      status === option.key
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200",
+                    )}
                   >
-                    {option.count}
-                  </span>
-                </button>
-              ))}
-            </div>
+                    {option.label}{" "}
+                    <span
+                      className={
+                        status === option.key ? "text-background/60" : "text-zinc-600"
+                      }
+                    >
+                      {option.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+            <AnimatePresence>
+              {isLoading && (
+                <motion.div
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  aria-hidden
+                  className="col-start-1 row-start-1"
+                >
+                  <CatalogControlsSkeleton />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {filtered.length > 0 ? (
+          {isLoading ? (
+            <CatalogGridSkeleton />
+          ) : filtered.length > 0 ? (
             <div className={CATALOG_GRID_CLASS}>
               {filtered.map((item, index) => (
-                <motion.div
+                <CatalogCard
                   key={item.malId}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: Math.min(index * 0.025, 0.3) }}
-                >
-                  <CatalogCard
-                    item={item}
-                    kind={kind}
-                    onSelect={() => setSelected(item)}
-                  />
-                </motion.div>
+                  item={item}
+                  kind={kind}
+                  index={index}
+                  onSelect={() => setSelected(item)}
+                />
               ))}
             </div>
           ) : (
@@ -169,7 +180,7 @@ export function CatalogPage({
             </p>
           )}
 
-          {data?.syncedAt && (
+          {!isLoading && data?.syncedAt && (
             <p className="text-center text-[10px] text-zinc-700">
               Sincronizado com o MyAnimeList em{" "}
               {new Intl.DateTimeFormat("pt-BR", {
@@ -189,7 +200,7 @@ export function CatalogPage({
             }
             onClose={() => setSelected(null)}
           />
-        </motion.div>
+        </div>
       )}
     </main>
   );

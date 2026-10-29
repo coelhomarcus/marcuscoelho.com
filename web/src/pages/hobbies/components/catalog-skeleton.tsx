@@ -52,27 +52,39 @@ export function CatalogHeading({ kind }: { kind: CatalogKind }) {
   );
 }
 
+export function CatalogControlsSkeleton() {
+  return (
+    <div className="space-y-3">
+      <div className="h-8 w-full animate-pulse rounded-lg border border-zinc-800 bg-zinc-950" />
+      <div className="flex gap-1.5 overflow-hidden pb-1">
+        {SKELETON_CHIP_LABELS.map((label) => (
+          <span
+            key={label}
+            className="shrink-0 animate-pulse rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-[11px] font-medium"
+          >
+            <span className="invisible">{label}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CatalogGridSkeleton() {
+  return (
+    <div className={CATALOG_GRID_CLASS}>
+      {Array.from({ length: 24 }).map((_, index) => (
+        <CatalogCardSkeleton key={index} />
+      ))}
+    </div>
+  );
+}
+
 export function LoadingCatalog() {
   return (
     <div className="space-y-4" aria-busy="true" aria-label="Carregando catálogo">
-      <div className="space-y-3">
-        <div className="h-8 w-full animate-pulse rounded-lg border border-zinc-800 bg-zinc-950" />
-        <div className="flex gap-1.5 overflow-hidden pb-1">
-          {SKELETON_CHIP_LABELS.map((label) => (
-            <span
-              key={label}
-              className="shrink-0 animate-pulse rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-[11px] font-medium"
-            >
-              <span className="invisible">{label}</span>
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className={CATALOG_GRID_CLASS}>
-        {Array.from({ length: 24 }).map((_, index) => (
-          <CatalogCardSkeleton key={index} />
-        ))}
-      </div>
+      <CatalogControlsSkeleton />
+      <CatalogGridSkeleton />
     </div>
   );
 }
