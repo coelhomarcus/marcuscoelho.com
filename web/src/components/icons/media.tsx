@@ -91,6 +91,18 @@ export const AnimeIcon = createMediaIcon(
   { rotate: [0, -4, 4, 0], scale: [1, 1.08, 1] },
 );
 
+export const GameIcon = createMediaIcon(
+  "GameIcon",
+  <>
+    <line x1="6" x2="10" y1="11" y2="11" />
+    <line x1="8" x2="8" y1="9" y2="13" />
+    <line x1="15" x2="15.01" y1="12" y2="12" />
+    <line x1="18" x2="18.01" y1="10" y2="10" />
+    <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
+  </>,
+  { rotate: [0, 6, -6, 0], scale: [1, 1.08, 1] },
+);
+
 export const MangaIcon = createMediaIcon(
   "MangaIcon",
   <>
@@ -98,4 +110,21 @@ export const MangaIcon = createMediaIcon(
     <path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H13v18h6.5A2.5 2.5 0 0 1 22 22Z" />
   </>,
   { y: [0, -2, 0], scale: [1, 1.06, 1] },
+);
+
+export const CyberpunkIcon = createMediaIcon(
+  "CyberpunkIcon",
+  <>
+    <rect width="16" height="16" x="4" y="4" rx="2" />
+    <rect width="6" height="6" x="9" y="9" rx="1" />
+    <path d="M9 2v2" />
+    <path d="M15 2v2" />
+    <path d="M9 20v2" />
+    <path d="M15 20v2" />
+    <path d="M2 9h2" />
+    <path d="M2 15h2" />
+    <path d="M20 9h2" />
+    <path d="M20 15h2" />
+  </>,
+  { rotate: [0, -4, 4, 0], scale: [1, 1.08, 1] },
 );

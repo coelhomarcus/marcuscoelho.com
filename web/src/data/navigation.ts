@@ -9,7 +9,12 @@ import { LinkedinIcon } from "@/components/icons/linkedin";
 import { MessageCircleIcon } from "@/components/icons/message-circle";
 import { RocketIcon } from "@/components/icons/rocket";
 import { UserIcon } from "@/components/icons/user";
-import { AnimeIcon, MangaIcon } from "@/components/icons/media";
+import {
+  AnimeIcon,
+  CyberpunkIcon,
+  GameIcon,
+  MangaIcon,
+} from "@/components/icons/media";
 
 export const navigation: NavItem[] = [
   { name: "Sobre", href: "/", icon: UserIcon },
@@ -21,6 +26,8 @@ export const navigation: NavItem[] = [
 export const hobbies: NavItem[] = [
   { name: "Animes", href: "/hobbies/animes", icon: AnimeIcon },
   { name: "Mangá", href: "/hobbies/manga", icon: MangaIcon },
+  { name: "Jogos", href: "/hobbies/jogos", icon: GameIcon },
+  { name: "Cyberpunk", href: "/hobbies/cyberpunk", icon: CyberpunkIcon },
 ];
 
 export const socials: NavItem[] = [

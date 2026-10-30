@@ -21,8 +21,12 @@ export const CATALOG_COPY: Record<
 export const CATALOG_GRID_CLASS =
   "grid grid-cols-3 gap-2.5 @sm:grid-cols-4 @xl:grid-cols-5 @3xl:grid-cols-6";
 
-export const CARD_FRAME_CLASS =
-  "relative block aspect-2/3 w-full overflow-hidden rounded-lg bg-zinc-900 shadow-sm ring-1 ring-foreground/10";
+const CARD_FRAME_BASE =
+  "relative block w-full overflow-hidden rounded-lg bg-zinc-900 shadow-sm ring-1 ring-foreground/10";
+
+export const CARD_FRAME_CLASS = `${CARD_FRAME_BASE} aspect-2/3`;
+
+export const GAME_CARD_FRAME_CLASS = `${CARD_FRAME_BASE} aspect-[264/352]`;
 
 const SKELETON_CHIP_LABELS = ["Todos 00", "Concluídos 00", "Em pausa 0", "Abandonados 0"];
 
