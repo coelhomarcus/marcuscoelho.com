@@ -59,7 +59,7 @@ function buildGradient(pos: number, colors: string[], textColor: string) {
 function DiaTextReveal({
   text,
   colors = DEFAULT_COLORS,
-  textColor = "#f4f4f5",
+  textColor = "var(--color-zinc-100)",
   duration = 1.5,
   delay = 0,
   startOnView = true,
